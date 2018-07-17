@@ -131,7 +131,7 @@ class Getter:
                     Logger.pl('{*} {O}Error loading %s{W}' % url)
                 pass
 
-            try_cnt + try_cnt+1
+            try_cnt = try_cnt+1
 
     def chech_if_rise(self, url, status_code, size, internal_not_found, check_dir=True):
         if (status_code == internal_not_found) and status_code != 404:
