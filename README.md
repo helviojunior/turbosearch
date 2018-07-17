@@ -1,3 +1,7 @@
+# Turbo Search
+
+An alternative mult-theading and python to dirbuster
+
 HHHHHH           →→HHH
 HHHHHH           →→→→HH
 HHHHHH           →→→→→→
@@ -8,7 +12,6 @@ HHHHHH           →→→→→→
 HHHHHH           →→→→HH
 HHHHHH           →→HHH
 
-    
     
 optional arguments:
   -h, --help          show this help message and exit
@@ -23,4 +26,3 @@ SETTINGS:
 CUSTOM:
   --forward-location  Forward to Location response address (default: yes)
   -x [extensions]     Append each request with this extensions (comma-separated values)
-
