@@ -2,6 +2,7 @@
 
 An alternative mult-theading and python to dirbuster
 
+```
 HHHHHH           →→HHH
 HHHHHH           →→→→HH
 HHHHHH           →→→→→→
@@ -26,3 +27,4 @@ SETTINGS:
 CUSTOM:
   --forward-location  Forward to Location response address (default: yes)
   -x [extensions]     Append each request with this extensions (comma-separated values)
+```
