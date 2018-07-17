@@ -3,45 +3,66 @@
 
 from ..util.tools import Tools
 
-import os, subprocess, socket, re, requests, queue, threading, sys
+import os, subprocess, socket, re, queue, threading, sys
 
 from ..config import Configuration
 from ..util.logger import Logger
+from ..util.getter import Getter
 
-class Getter:
+class PathGetter:
 
     words = []
     q = queue.Queue()
-    base_url = ''
-    path_found = []
+    added = []
 
-    def __init__(self, words_list):
-        self.words = words_list
-        requests.packages.urllib3.disable_warnings()
+    #.has_key("a"):
+
+    def __init__(self):
         pass
 
-    def run(self, base_url):
-        self.path_found = []
-        self.base_url = base_url
-        for i in range(Configuration.tasks):
-            t = threading.Thread(target=self.worker)
-            t.daemon = True
-            t.start()
+    def load_wordlist(self):
+        with open(Configuration.word_list, 'r') as f:
+            line = f.readline()
+            while line:
+                if line.endswith('\n'):
+                    line = line[:-1]
+                if line.endswith('\r'):
+                    line = line[:-1]
+                self.words.append(line)
+                try:
+                    line = f.readline()
+                except:
+                    pass
 
-        for item in self.words:
-            self.q.put(item)
+    def len(self):
+        return len(self.words)
+
+
+    def run(self):
+
+
+        t = threading.Thread(target=self.worker)
+        t.daemon = True
+        t.start()
+
+        self.added.append(Configuration.target)
+        self.q.put(Configuration.target)
 
         self.q.join()  # block until all tasks are done
         sys.stdout.write("\033[K")  # Clear to the end of line
-
-        return self.path_found
 
 
     def worker(self):
         try:
             while True:
                 item = self.q.get()
-                self.do_work(item)
+                get = Getter(self.words)
+                paths_found = get.run(item)
+                for u in paths_found:
+                    if not self.added.has_key(u):
+                        self.added.append(u)
+                        self.q.put(u)
+
                 self.q.task_done()
         except KeyboardInterrupt:
             pass

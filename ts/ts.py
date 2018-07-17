@@ -11,7 +11,7 @@ import sys, datetime, time, os, requests
 from .util.color import Color
 from .util.logger import Logger
 from .util.process import Process
-from .util.getter import Getter
+from .util.pathgetter import PathGetter
 from .util.tools import Tools
 
 class TurboSearch(object):
@@ -64,7 +64,7 @@ class TurboSearch(object):
 
 
         try:
-            get = Getter()
+            get = PathGetter()
             get.load_wordlist()
 
             now = time.time()
@@ -86,6 +86,7 @@ class TurboSearch(object):
 
             Logger.pl('     ')
 
+            Logger.pl('{+} {W}Scanning url {C}%s{W} ' % Configuration.target)
             get.run()
             Logger.pl('     ')
 

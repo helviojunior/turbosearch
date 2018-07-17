@@ -1,6 +1,8 @@
 # Turbo Search
 
-An alternative mult-theading and python to dirbuster
+An python application to look for URL based on word list.
+
+This application supports multi-threading requests.
 
 ```
 HHHHHH           →→HHH
