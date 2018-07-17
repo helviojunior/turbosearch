@@ -42,7 +42,7 @@ HHHHHH           →→→→HH
 HHHHHH           →→→→→→
 →→-→→→→→→→→→→→→→→→→→→→→→→          Turbo Search vx.x.x by Helvio Junior
 →→|→→→→→→→→→→→→→→→→→→→→→→→→        automated url finder
-→→-→→→→→→→→→→→→→→→→→→→→→→          https://gitlab.com/helvio_junior/overflow
+→→-→→→→→→→→→→→→→→→→→→→→→→          https://github.com/helviojunior/turbosearch
 HHHHHH           →→→→→→
 HHHHHH           →→→→HH
 HHHHHH           →→HHH
