@@ -61,6 +61,10 @@ class PathGetter:
 
                 get = Getter(self.words, False)
                 paths_found = get.run(item)
+
+                if Configuration.verbose > 0:
+                    Logger.pl('{*} {W}We got {O}%d{W} new directories to check from url %s{W}' % (len(paths_found), item))
+
                 for u in paths_found:
                     if u.endswith('/'):
                         u = u[:-1]
