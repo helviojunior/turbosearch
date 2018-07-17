@@ -6,7 +6,7 @@ A Ferramenta foi desenvolvida em Python, tem seu código fonte aberto e suporta 
 
 ## Informações gerais
 
-Quando NÃO utilizado o parâmetro **-x** a ferramenta realizará a busca com base na lista de palavras, poré não colocando nenhuma extensão as requisições.
+Quando NÃO utilizado o parâmetro **-x** a ferramenta realizará a busca com base na lista de palavras, mas não colocando nenhuma extensão as requisições.
 
 Porém quando utilizado o parâmetro **-x** a ferramenta irá realizar a busca padrão, ou seja, sem extensão e adicionalmente irá realizar a busca com as extensões informadas, trazendo desta forma um resultado mais completo.
 
@@ -23,6 +23,7 @@ This application supports multi-threading requests.
 
 When you no use **-x** paramter this tool will search url based on wordlist, but without extensions.
 Usinig **-x** paramter, the tool will do standard search (without extension) + extented search with extensions, so i strongly recommend to you **-x** paramters in all utilizations
+
 
 
 # Utilization samples/exemplos de utilização
