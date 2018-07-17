@@ -60,7 +60,7 @@ class Getter:
 
     def get_uri(self, url):
         sys.stdout.write("\033[K")  # Clear to the end of line
-        print(("%s" % url), end='\r', flush=True)
+        print(("Testing: %s" % url), end='\r', flush=True)
 
         try:
 

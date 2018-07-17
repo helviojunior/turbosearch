@@ -54,6 +54,11 @@ class PathGetter:
         try:
             while True:
                 item = self.q.get()
+
+                if item != Configuration.target:
+                    Logger.pl('  ')
+                    Logger.pl('{+} {W}Entering directory: {C}%s{W} ' % item)
+
                 get = Getter(self.words, False)
                 paths_found = get.run(item)
                 for u in paths_found:

@@ -9,7 +9,7 @@ from .util.logger import Logger
 
 class Configuration(object):
     ''' Stores configuration variables and functions for Turbo Search. '''
-    version = '0.0.1'
+    version = '0.0.5'
 
     initialized = False # Flag indicating config has been initialized
     verbose = 0
