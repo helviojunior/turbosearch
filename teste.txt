@@ -1,0 +1,15 @@
+!
+otrs
+!_archives
+!_images
+!backup
+!images
+!res
+!textove_diskuse
+!ut
+.bash_history
+html5
+assets
+LICENSE
+README
+index

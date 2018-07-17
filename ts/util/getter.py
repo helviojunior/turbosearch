@@ -14,22 +14,26 @@ class Getter:
     q = queue.Queue()
     base_url = ''
     path_found = []
+    check_himself = False
 
-    def __init__(self, words_list):
+    def __init__(self, words_list, check_himself = True):
         self.words = words_list
+        self.check_himself = check_himself
         requests.packages.urllib3.disable_warnings()
         pass
 
     def run(self, base_url):
         self.path_found = []
         self.base_url = base_url
+        if  self.base_url.endswith('/'):
+            self.base_url = self.base_url [:-1]
         for i in range(Configuration.tasks):
             t = threading.Thread(target=self.worker)
             t.daemon = True
             t.start()
 
         for item in self.words:
-            self.q.put(item)
+            self.q.put("%s/%s" % (self.base_url, item))
 
         self.q.join()  # block until all tasks are done
         sys.stdout.write("\033[K")  # Clear to the end of line
@@ -47,9 +51,12 @@ class Getter:
             pass
 
     def do_work(self, item):
-        self.get_uri("%s/%s/" % (self.base_url, item))
+        if not self.check_himself and item == self.base_url:
+            pass
+        else:
+            self.get_uri("%s/" % (item))
         for ex in Configuration.extensions:
-            self.get_uri("%s/%s%s" % (self.base_url, item, ex))
+            self.get_uri("%s%s" % (item, ex))
 
     def get_uri(self, url):
         sys.stdout.write("\033[K")  # Clear to the end of line
