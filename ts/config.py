@@ -9,7 +9,7 @@ from .util.logger import Logger
 
 class Configuration(object):
     ''' Stores configuration variables and functions for Turbo Search. '''
-    version = '0.0.6'
+    version = '0.0.7'
 
     initialized = False # Flag indicating config has been initialized
     verbose = 0
@@ -17,6 +17,8 @@ class Configuration(object):
     word_list = ''
     out_file = ''
     extensions = []
+    full_log = False
+    forward_location = True
 
     @staticmethod
     def initialize():
@@ -84,6 +86,13 @@ class Configuration(object):
         if config_check == 1:
             Configuration.mandatory()
 
+        if args.full_log:
+            Configuration.full_log = args.full_log
+
+        if args.no_forward_location:
+            Configuration.forward_location = False
+
+
         regex = re.compile(
             r'^(?:http|ftp)s?://'  # http:// or https://
             r'(?:(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\.)+(?:[A-Z]{2,6}\.?|[A-Z0-9-]{2,}\.?)|'  # domain...
@@ -145,9 +154,9 @@ class Configuration(object):
 
         Logger.pl('     {C}word list:{O} %s{W}' % Configuration.word_list)
 
-        if args.forward_location:
-            Configuration.forward_location = True
+        if Configuration.forward_location:
             Logger.pl('     {C}forward location redirects:{O} yes{W}')
+
 
         if args.extensions != '':
             ext_list = args.extensions.split(",")

@@ -74,10 +74,15 @@ class Arguments(object):
 
 
     def _add_custom_args(self, custom):
-        custom.add_argument('--forward-location',
+        custom.add_argument('--full-log',
             action='store_true',
-            dest='forward_location',
-            help=Color.s('Forward to Location response address (default: {G}yes{W})'))
+            dest='full_log',
+            help=Color.s('Print full requested URLs (default: {G}no{W})'))
+
+        custom.add_argument('--no-forward-location',
+            action='store_true',
+            dest='no_forward_location',
+            help=Color.s('Disable forward to Location response address (default: {G}no{W})'))
 
         custom.add_argument('-x',
             action='store',

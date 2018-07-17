@@ -91,28 +91,53 @@ class Getter:
             self.get_uri("%s%s" % (queue_item.url, ex), queue_item, False)
 
     def get_uri(self, url, queue_item, check_dir=True):
-        sys.stdout.write("\033[K")  # Clear to the end of line
-        print(("Testing: %s" % url), end='\r', flush=True)
 
-        try:
+        if not Configuration.full_log:
+            sys.stdout.write("\033[K")  # Clear to the end of line
+            print(("Testing: %s" % url), end='\r', flush=True)
 
-            r = requests.get(url, verify=False, timeout=30)
+        try_cnt = 0
+        while try_cnt < 3:
+            try:
 
-            self.chech_if_rise(url, r.status_code, len(r.text), queue_item.not_found, check_dir)
+                r = requests.get(url, verify=False, timeout=30, allow_redirects=False)
+                if Configuration.full_log:
+                    self.raise_url(url, r.status_code, len(r.text))
+                else:
+                    self.chech_if_rise(url, r.status_code, len(r.text), queue_item.not_found, check_dir)
 
-        except Exception as e:
+                if Configuration.forward_location and (r.status_code == 302 or r.status_code == 301):
+                    location = ''
+                    try:
+                        location = r.headers['Location']
 
-            if Configuration.verbose > 0:
-                Logger.pl('{*} {O}Error loading %s: %s{W}' % (url, e))
-            else:
-                Logger.pl('{*} {O}Error loading %s{W}' % url)
-            pass
+                        if Configuration.verbose > 0:
+                            Logger.pl('{*} {O}Forwarding to location %s from url %s{W}' % (location, url))
+
+                        self.get_uri(location, QueueItem(queue_item.base_url,location,queue_item.not_found), check_dir)
+
+                    except Exception as ef:
+
+                        if Configuration.verbose > 0:
+                            Logger.pl('{*} {O}Error forwarding to location %s from url %s: %s{W}' % (location, url, ef))
+                        pass
+
+                try_cnt = 4
+            except Exception as e:
+
+                if Configuration.verbose > 0:
+                    Logger.pl('{*} {O}Error loading %s: %s{W}' % (url, e))
+                else:
+                    Logger.pl('{*} {O}Error loading %s{W}' % url)
+                pass
+
+            try_cnt + try_cnt+1
 
     def chech_if_rise(self, url, status_code, size, internal_not_found, check_dir=True):
         if (status_code == internal_not_found) and status_code != 404:
 
             '''Double check'''
-            r2 = requests.get(url + '_', verify=False, timeout=30)
+            r2 = requests.get(url + '_', verify=False, timeout=30, allow_redirects=False)
             if status_code != r2.status_code:
                 self.raise_url(url, r2.status_code, size)
                 return
@@ -135,13 +160,13 @@ class Getter:
     def raise_url(self, url, status, len):
 
         if url.endswith('/'):
-            if status == 403:
-                Logger.pl('==> DIRECTORY: %s (CODE:%d|SIZE:%d)' % (
-                url, status, len))
-                Getter.path_found.append(url)
-            else:
-                Logger.pl('==> DIRECTORY: %s ' % url)
-                Getter.path_found.append(url)
+            '''if status == 403:'''
+            Logger.pl('==> DIRECTORY: %s (CODE:%d|SIZE:%d)' % (
+            url, status, len))
+            Getter.path_found.append(url)
+            '''else:
+            Logger.pl('==> DIRECTORY: %s ' % url)
+            Getter.path_found.append(url)'''
         else:
             Logger.pl('+ %s (CODE:%d|SIZE:%d) ' % (
                 url, status, len))
