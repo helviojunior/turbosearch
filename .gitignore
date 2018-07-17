@@ -1,3 +1,6 @@
+*.log
+.idea
+
 # Compiled source #
 ###################
 *.com
