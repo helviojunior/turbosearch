@@ -73,7 +73,8 @@ class Getter:
             + http://10.11.1.219/server-status (CODE:403|SIZE:215) 
             '''
 
-            if (r.status_code >= 200 and r.status_code < 400) or (r.status_code >= 500 and r.status_code <= 599):
+            #if (r.status_code >= 200 and r.status_code < 400) or (r.status_code >= 500 and r.status_code <= 599) or r.status_code == 403:
+            if r.status_code != 404:
 
                 if url.endswith('/'):
                     Logger.pl('==> DIRECTORY: %s ' % url)
