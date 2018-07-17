@@ -178,7 +178,7 @@ class Configuration(object):
 {G}HHHHHH{W}           {R}→→→→→→{W}
 {R}→→{W}-{R}→→→→→→→→→→→→→→→→→→→→→→          {G}Turbo Search {D}v%s{W}{G} by Helvio Junior{W}
 {R}→→{W}|{R}→→→→→→→→→→→→→→→→→→→→→→→→        {W}{D}automated url finder{W}
-{R}→→{W}-{R}→→→→→→→→→→→→→→→→→→→→→→          {C}{D}https://gitlab.com/helvio_junior/overflow{W}
+{R}→→{W}-{R}→→→→→→→→→→→→→→→→→→→→→→          {C}{D}https://github.com/helviojunior/turbosearch{W}
 {G}HHHHHH{W}           {R}→→→→→→{W}
 {G}HHHHHH{W}           {R}→→→→{G}HH{W}  
 {G}HHHHHH{W}           {R}→→{G}HHH{W}
