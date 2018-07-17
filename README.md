@@ -40,7 +40,7 @@ Usinig **-x** paramter, the tool will do standard search (without extension) + e
 HHHHHH           →→HHH
 HHHHHH           →→→→HH
 HHHHHH           →→→→→→
-→→-→→→→→→→→→→→→→→→→→→→→→→          Turbo Search v0.0.1 by Helvio Junior
+→→-→→→→→→→→→→→→→→→→→→→→→→          Turbo Search vx.x.x by Helvio Junior
 →→|→→→→→→→→→→→→→→→→→→→→→→→→        automated url finder
 →→-→→→→→→→→→→→→→→→→→→→→→→          https://gitlab.com/helvio_junior/overflow
 HHHHHH           →→→→→→

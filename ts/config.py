@@ -9,7 +9,7 @@ from .util.logger import Logger
 
 class Configuration(object):
     ''' Stores configuration variables and functions for Turbo Search. '''
-    version = '0.0.5'
+    version = '0.0.6'
 
     initialized = False # Flag indicating config has been initialized
     verbose = 0
@@ -155,12 +155,17 @@ class Configuration(object):
                 if ex.strip() != '':
                     Configuration.extensions.append(ex.strip())
 
+        ext_txt = ''
         if len(Configuration.extensions) > 0:
             ext_txt = ''
             for ex in Configuration.extensions:
                 ext_txt += '(%s)' % ex
 
-        Logger.pl('     {C}extension list:{O} %s{W}' % ext_txt)
+        if ext_txt != '':
+            Logger.pl('     {C}extension list:{O} %s{W}' % ext_txt)
+
+        if Configuration.out_file != '':
+            Logger.pl('     {C}output file:{O} %s{W}' % Configuration.out_file)
 
 
     @staticmethod
