@@ -3,36 +3,42 @@
 
 from ..util.tools import Tools
 
-import os, subprocess, socket, re, requests, queue, threading, sys
+import os, subprocess, socket, re, requests, queue, threading, sys, operator
 
 from ..config import Configuration
 from ..util.logger import Logger
 
 class Getter:
 
-    words = []
-    q = queue.Queue()
-    base_url = ''
+    '''Static variables'''
     path_found = []
     check_himself = False
-    not_found = 404
+    dir_not_found = 404
+
+
+    '''Local non-static variables'''
+    q = queue.Queue()
+    words = []
+    base_url = ''
 
     def __init__(self, words_list, check_himself = True):
         self.words = words_list
-        self.check_himself = check_himself
+        Getter.check_himself = check_himself
+
         requests.packages.urllib3.disable_warnings()
         pass
 
     def run(self, base_url):
         Getter.path_found = []
-        self.base_url = base_url
-        if  self.base_url.endswith('/'):
-            self.base_url = self.base_url [:-1]
+        Getter.base_url = base_url
 
-        self.not_found = Getter.calc_not_fount(self.base_url)
+        if  Getter.base_url.endswith('/'):
+            Getter.base_url = Getter.base_url [:-1]
+
+        Getter.dir_not_found = Getter.calc_not_fount(Getter.base_url)
 
         if Configuration.verbose > 0:
-            Logger.pl('{*} {W}Calculated default not found http code to this folder is {O}%d{W}' % self.not_found)
+            Logger.pl('{*} {W}Calculated default not found http code to this folder is {O}%d{W}' % Getter.dir_not_found)
 
         for i in range(Configuration.tasks):
             t = threading.Thread(target=self.worker)
@@ -40,15 +46,19 @@ class Getter:
             t.start()
 
         for item in self.words:
-            self.q.put(QueueItem("%s" % self.base_url, "%s/%s" % (self.base_url, item), self.not_found))
+            if item.strip() != '':
+                self.q.put(QueueItem("%s/%s" % (Getter.base_url, item), Getter.dir_not_found))
 
         self.q.join()  # block until all tasks are done
-        sys.stdout.write("\033[K")  # Clear to the end of line
+        Tools.clear_line()
 
         return Getter.path_found
 
     @staticmethod
     def calc_not_fount(url):
+
+        extensions_not_found = {}
+        extensions_not_found["__root__"] = 404
 
         try:
 
@@ -60,18 +70,59 @@ class Getter:
             r2 = requests.get("%s/HJR%s" % (url, Tools.random_generator(10)), verify=False, timeout=30)
 
             if r1.status_code == r2.status_code:
-                return r1.status_code
+                extensions_not_found["__root__"] =  r1.status_code
             else:
-                return 404
+                extensions_not_found["__root__"] = 404
 
         except Exception as e:
+            extensions_not_found["__root__"] = 404
 
             if Configuration.verbose > 0:
                 Logger.pl('{*} {O}Error calculating default not found code to the folder %s: %s{W}' % (url, e))
 
-            return 404
+
+        if Configuration.verbose > 4:
+            Logger.pl('{?} {G}Checking not found: %s {O}%s - %d{W}' % (url, "__root__", extensions_not_found["__root__"]))
 
 
+        for ex in Configuration.extensions:
+            extensions_not_found[ex] = 404
+            rurl = "%s/HJR%s%s" %  (url, Tools.random_generator(10), ex)
+            try:
+
+                if url.endswith('/'):
+                    url = url[:-1]
+
+                r1 = requests.get("%s/HrandfileJR%s" % (url, ex), verify=False, timeout=30)
+
+                r2 = requests.get(rurl, verify=False, timeout=30)
+
+                if r1.status_code == r2.status_code:
+                    extensions_not_found[ex] = r1.status_code
+                else:
+                    extensions_not_found[ex] = 404
+
+            except Exception as e:
+
+                extensions_not_found[ex] = 404
+
+                if Configuration.verbose > 0:
+                    Logger.pl('{*} {O}Error calculating default not found code to the folder %s: %s{W}' % (rurl, e))
+
+
+            if Configuration.verbose > 4:
+                Logger.pl('{?} {G}Checking not found: %s {O}%s - %d{W}' % (rurl, ex, extensions_not_found[ex]))
+
+
+        '''Calculate and order by quantity'''
+        codes = {}
+        for ex, v in extensions_not_found.items():
+            if v in codes:
+                codes[v] += 1
+            else:
+                codes[v] = 1
+
+        return max(codes.items(), key=operator.itemgetter(1))[0]
 
     def worker(self):
         try:
@@ -83,7 +134,13 @@ class Getter:
             pass
 
     def do_work(self, queue_item):
-        if not self.check_himself and queue_item.url == queue_item.base_url:
+
+
+        if Configuration.verbose > 4:
+            Logger.pl('{?} {G}Starting worker to: {O}%s{W}' % queue_item.url)
+
+
+        if not Getter.check_himself and queue_item.url == Getter.base_url:
             pass
         else:
             self.get_uri("%s/" % (queue_item.url), queue_item)
@@ -92,8 +149,12 @@ class Getter:
 
     def get_uri(self, url, queue_item, check_dir=True):
 
+        if Configuration.verbose > 4:
+            Tools.clear_line()
+            Logger.pl('{?} {G}Testing: {O}%s{W}' % url)
+
         if not Configuration.full_log:
-            sys.stdout.write("\033[K")  # Clear to the end of line
+            Tools.clear_line()
             print(("Testing: %s" % url), end='\r', flush=True)
 
         try_cnt = 0
@@ -104,7 +165,7 @@ class Getter:
                 if Configuration.full_log:
                     self.raise_url(url, r.status_code, len(r.text))
                 else:
-                    self.chech_if_rise(url, r.status_code, len(r.text), queue_item.not_found, check_dir)
+                    self.chech_if_rise(url, r.status_code, len(r.text), queue_item.dir_not_found, check_dir)
 
                 if Configuration.forward_location and (r.status_code == 302 or r.status_code == 301):
                     location = ''
@@ -114,17 +175,19 @@ class Getter:
                         if Configuration.verbose > 0:
                             Logger.pl('{*} {O}Forwarding to location %s from url %s{W}' % (location, url))
 
-                        self.get_uri(location, QueueItem(queue_item.base_url,location,queue_item.not_found), check_dir)
+                        self.get_uri(location, QueueItem(location,queue_item.dir_not_found), check_dir)
 
                     except Exception as ef:
 
                         if Configuration.verbose > 0:
+                            Tools.clear_line()
                             Logger.pl('{*} {O}Error forwarding to location %s from url %s: %s{W}' % (location, url, ef))
                         pass
 
                 try_cnt = 4
             except Exception as e:
 
+                Tools.clear_line()
                 if Configuration.verbose > 0:
                     Logger.pl('{*} {O}Error loading %s: %s{W}' % (url, e))
                 else:
@@ -175,10 +238,8 @@ class Getter:
 class QueueItem:
 
     url = ''
-    base_url = ''
-    not_found = 404
+    dir_not_found = 404
 
-    def __init__(self, base_url, url, not_found):
-        self.base_url = base_url
+    def __init__(self, url, dir_not_found):
         self.url = url
-        self.not_found = not_found
+        self.dir_not_found = dir_not_found

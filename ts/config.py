@@ -9,7 +9,7 @@ from .util.logger import Logger
 
 class Configuration(object):
     ''' Stores configuration variables and functions for Turbo Search. '''
-    version = '0.0.8'
+    version = '0.0.9'
 
     initialized = False # Flag indicating config has been initialized
     verbose = 0
@@ -92,7 +92,6 @@ class Configuration(object):
         if args.no_forward_location:
             Configuration.forward_location = False
 
-
         regex = re.compile(
             r'^(?:http|ftp)s?://'  # http:// or https://
             r'(?:(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\.)+(?:[A-Z]{2,6}\.?|[A-Z0-9-]{2,}\.?)|'  # domain...
@@ -161,7 +160,8 @@ class Configuration(object):
         if args.extensions != '':
             ext_list = args.extensions.split(",")
             for ex in ext_list:
-                if ex.strip() != '':
+                ex1 = ex.strip()
+                if ex1 != '' and ex1 not in Configuration.extensions:
                     Configuration.extensions.append(ex.strip())
 
         ext_txt = ''

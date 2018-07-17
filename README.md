@@ -47,20 +47,20 @@ HHHHHH           →→→→→→
 HHHHHH           →→→→HH
 HHHHHH           →→HHH
 
-        
+    
 optional arguments:
   -h, --help             show this help message and exit
 
 SETTINGS:
-  -v, --verbose          Shows more options (-h -v). Prints commands and outputs. (default: quiet)
   -t [target url]        target url (ex: http://10.10.10.10/path)
   -w [word list]         word list to be tested
   -T [tasks]             number of connects in parallel (per host, default: 16)
   -o [output file]       save output to disk (default: none)
+  -x [extensions]        Append each request with this extensions (comma-separated values)
 
 CUSTOM:
+  -v, --verbose          Shows more options (-h -v). Prints commands and outputs. (default: quiet)
   --full-log             Print full requested URLs (default: no)
   --no-forward-location  Disable forward to Location response address (default: no)
-  -x [extensions]        Append each request with this extensions (comma-separated values)
 
 ```

@@ -35,13 +35,6 @@ class Arguments(object):
 
 
     def _add_global_args(self, glob):
-        glob.add_argument('-v',
-            '--verbose',
-            action='count',
-            default=0,
-            dest='verbose',
-            help=Color.s('Shows more options ({C}-h -v{W}). Prints commands and outputs. (default: {G}quiet{W})'))
-
         glob.add_argument('-t',
             action='store',
             dest='target',
@@ -72,8 +65,23 @@ class Arguments(object):
             type=str,
             help=Color.s('save output to disk (default: {G}none{W})'))
 
+        glob.add_argument('-x',
+            action='store',
+            dest='extensions',
+            metavar='[extensions]',
+            default='',
+            type=str,
+            help=Color.s('Append each request with this extensions (comma-separated values)'))
+
 
     def _add_custom_args(self, custom):
+        custom.add_argument('-v',
+            '--verbose',
+            action='count',
+            default=0,
+            dest='verbose',
+            help=Color.s('Shows more options ({C}-h -v{W}). Prints commands and outputs. (default: {G}quiet{W})'))
+
         custom.add_argument('--full-log',
             action='store_true',
             dest='full_log',
@@ -83,15 +91,6 @@ class Arguments(object):
             action='store_true',
             dest='no_forward_location',
             help=Color.s('Disable forward to Location response address (default: {G}no{W})'))
-
-        custom.add_argument('-x',
-            action='store',
-            dest='extensions',
-            metavar='[extensions]',
-            default='',
-            type=str,
-            help=Color.s('Append each request with this extensions (comma-separated values)'))
-
 
 if __name__ == '__main__':
     from .util.color import Color
