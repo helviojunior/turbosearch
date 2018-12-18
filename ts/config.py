@@ -49,7 +49,12 @@ class Configuration(object):
 
         args = Arguments(Configuration).args
 
+        for a in sys.argv:
+            Configuration.cmd_line += "%s " % a
+
         Color.pl('{+} {W}Startup parameters')
+
+        Logger.pl('     {C}command line:{O} %s{W}' % Configuration.cmd_line)
 
         if args.target:
             Configuration.target = args.target

@@ -19,10 +19,10 @@ class TurboSearch(object):
     def main(self):
         ''' Either performs action based on arguments, or starts attack scanning '''
 
-        if os.getuid() != 0:
-            Color.pl('{!} {R}error: {O}TurboSearch{R} must be run as {O}root{W}')
-            Color.pl('{!} {O}re-run as: sudo ./turbosearch.py{W}')
-            Configuration.exit_gracefully(0)
+        #if os.getuid() != 0:
+        #    Color.pl('{!} {R}error: {O}TurboSearch{R} must be run as {O}root{W}')
+        #    Color.pl('{!} {O}re-run as: sudo ./turbosearch.py{W}')
+        #    Configuration.exit_gracefully(0)
 
         self.dependency_check()
 
