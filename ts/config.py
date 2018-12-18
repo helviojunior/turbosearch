@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 # -*- coding: UTF-8 -*-
 
-import os, subprocess, socket, re, requests, errno
+import os, subprocess, socket, re, requests, errno, sys
 
 from .args import Arguments
 from .util.color import Color
@@ -19,6 +19,7 @@ class Configuration(object):
     extensions = []
     full_log = False
     forward_location = True
+    cmd_line =''
 
     @staticmethod
     def initialize():
