@@ -237,7 +237,7 @@ class Getter:
                         elif  len(r2.text) - 50 <= len(r.text) <= len(r2.text) + 50:
                             self.raise_url(url, r2.status_code, len(r2.text))'''
 
-        if status_code != directory_info.dir_not_found:
+        if status_code != directory_info.dir_not_found and status_code != 404:
             #if url.endswith('/') and check_dir:
             #    tmp_nf = Getter.calc_not_fount(url)
             #    self.chech_if_rise(url, status_code, size, tmp_nf, False)
