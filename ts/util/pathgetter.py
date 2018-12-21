@@ -152,7 +152,7 @@ class PathGetter:
                     with open("turbosearch.restore", "w") as text_file:
                         text_file.write(json.dumps(dt))
                 except:
-                    raise
+                    pass
                 time.sleep(10)
         except KeyboardInterrupt:
             pass
