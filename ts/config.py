@@ -55,36 +55,39 @@ class Configuration(object):
         config_check = 0
 
         force_restore = any(['-R' in word for word in sys.argv])
+        help = any(['-h' in word for word in sys.argv])
 
-
-        if not force_restore and os.path.exists("turbosearch.restore"):
-            ignore = any(['-I' in word for word in sys.argv])
-            if not ignore:
-                Color.pl('{!} {W}Restorefile (you have 10 seconds to abort... (use option -I to skip waiting)) from a previous session found, to prevent overwriting, ./turbosearch.restore')
-                time.sleep(10)
-            os.remove("turbosearch.restore")
-
-        args = {}
-        if os.path.exists("turbosearch.restore"):
-            try:
-                with open("turbosearch.restore", 'r') as f:
-                    restore_data = json.load(f)
-                    Configuration.cmd_line = restore_data["command"]
-                    Configuration.threads_data = restore_data["threads"]
-                    Configuration.restored_uri = restore_data["current_path"]
-                    Configuration.restored_paths = restore_data["paths"]
-
-            except Exception as e:
-                Color.pl('{!} {R}error: invalid restore file\r\n')
-                raise
-
-            args = Arguments(Configuration.cmd_line).args
-
-        else:
+        if help:
             args = Arguments().args
-            for a in sys.argv:
-                if a != "-I":
-                    Configuration.cmd_line += "%s " % a
+        else:
+            if not force_restore and os.path.exists("turbosearch.restore"):
+                ignore = any(['-I' in word for word in sys.argv])
+                if not ignore:
+                    Color.pl('{!} {W}Restorefile (you have 10 seconds to abort... (use option -I to skip waiting)) from a previous session found, to prevent overwriting, ./turbosearch.restore')
+                    time.sleep(10)
+                os.remove("turbosearch.restore")
+
+            args = {}
+            if os.path.exists("turbosearch.restore"):
+                try:
+                    with open("turbosearch.restore", 'r') as f:
+                        restore_data = json.load(f)
+                        Configuration.cmd_line = restore_data["command"]
+                        Configuration.threads_data = restore_data["threads"]
+                        Configuration.restored_uri = restore_data["current_path"]
+                        Configuration.restored_paths = restore_data["paths"]
+
+                except Exception as e:
+                    Color.pl('{!} {R}error: invalid restore file\r\n')
+                    raise
+
+                args = Arguments(Configuration.cmd_line).args
+
+            else:
+                args = Arguments().args
+                for a in sys.argv:
+                    if a != "-I":
+                        Configuration.cmd_line += "%s " % a
 
 
 
