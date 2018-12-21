@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 # -*- coding: UTF-8 -*-
 
-import os, subprocess, socket, re, requests, errno, sys, time, json
+import os, subprocess, socket, re, requests, errno, sys, time, json, signal
 
 from .args import Arguments
 from .util.color import Color
@@ -246,6 +246,14 @@ class Configuration(object):
         ''' Deletes temp and exist with the given code '''
 
         exit(code)
+
+
+    @staticmethod
+    def kill(code=0):
+        ''' Deletes temp and exist with the given code '''
+
+        os.kill(os.getpid(),signal.SIGTERM)
+
 
     @staticmethod
     def dump():

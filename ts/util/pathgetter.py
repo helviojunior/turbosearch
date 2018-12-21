@@ -18,7 +18,7 @@ class PathGetter:
     ingore_until = ''
     current_gettter = None
     current_uri = ''
-
+    running=True
 
     def __init__(self):
         pass
@@ -96,7 +96,7 @@ class PathGetter:
 
     def worker(self):
         try:
-            while True:
+            while self.running:
                 item = self.q.get()
 
                 if item != Configuration.target:
@@ -151,8 +151,15 @@ class PathGetter:
 
                     with open("turbosearch.restore", "w") as text_file:
                         text_file.write(json.dumps(dt))
+
+                    if Getter.error_count >= 50:
+                        self.current_gettter.stop()
+                        self.running=False
+                        Logger.pl('{!} {R}FATAL: Too many errors connecting to host, exiting...{W}\r\n')
+                        Configuration.kill(0)
+
                 except:
-                    pass
+                    raise
                 time.sleep(10)
         except KeyboardInterrupt:
             pass

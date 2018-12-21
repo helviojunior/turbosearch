@@ -18,12 +18,16 @@ class Getter:
     checked = 0
     total = 0
     ingore_until = ''
+    error_count = 0
+
 
     '''Local non-static variables'''
     q = queue.Queue()
     words = []
     base_url = ''
     last = {}
+    running=True
+    
 
     def __init__(self, words_list, check_himself = True):
         self.words = words_list
@@ -41,6 +45,9 @@ class Getter:
     def add_checked(self):
         if Getter.checked < Getter.total:
             Getter.checked += 1
+
+    def stop(self):
+        self.running=False
 
     def run(self, base_url):
         Getter.path_found = []
@@ -68,7 +75,7 @@ class Getter:
 
         Getter.total = len(self.words)
         for item in self.words:
-            if item.strip() != '':
+            if self.running and item.strip() != '':
                 if not insert and item == self.ingore_until:
                     insert = True
                 if insert:
@@ -163,12 +170,17 @@ class Getter:
 
     def worker(self, index):
         try:
-            while True:
+            while self.running:
                 item = self.q.get()
-                self.do_work(item)
-                text = item.url.replace(Getter.base_url,"").lstrip("/").lstrip()
-                if not text == '':
-                    self.last[index] = text
+                ret_ok = self.do_work(item)
+                if ret_ok:
+                    text = item.url.replace(Getter.base_url,"").lstrip("/").lstrip()
+                    if not text == '':
+                        self.last[index] = text
+                    Getter.error_count = 0
+                else:
+                    Getter.error_count += 1
+
                 self.q.task_done()
         except KeyboardInterrupt:
             pass
@@ -181,17 +193,20 @@ class Getter:
             Logger.pl('{?} {G}Starting worker to: {O}%s{W}' % directory_info.url)
 
 
+        ret_ok =False  
         if not Getter.check_himself and directory_info.url == Getter.base_url:
             pass
         else:
-            self.get_uri("%s/" % (directory_info.url), directory_info)
+            ret_ok = self.get_uri("%s/" % (directory_info.url), directory_info)
         for ex in Configuration.extensions:
-            self.get_uri("%s%s" % (directory_info.url, ex), directory_info, False)
+            ret_ok = self.get_uri("%s%s" % (directory_info.url, ex), directory_info, False)
 
+        return ret_ok
         
 
     def get_uri(self, url, directory_info, check_dir=True):
 
+        ret_ok = False
         if Configuration.verbose > 4:
             Tools.clear_line()
             Logger.pl('{?} {G}Testing [%d/%d]: {O}%s{W}' % (Getter.checked,Getter.total,url))
@@ -205,6 +220,9 @@ class Getter:
             try:
 
                 r = requests.get(url, verify=False, timeout=30, allow_redirects=False)
+                if r is not None and r.status_code > 0:
+                    ret_ok = True
+
                 if Configuration.full_log:
                     self.raise_url(url, r.status_code, len(r.text))
                 else:
@@ -240,6 +258,8 @@ class Getter:
             if try_cnt >= 3:
                 time.sleep( 0.2 * (try_cnt+1))
             try_cnt = try_cnt+1
+
+            return ret_ok
 
     def chech_if_rise(self, url, status_code, size, directory_info, check_dir=True):
         if (status_code == directory_info.dir_not_found) and status_code != 404:
