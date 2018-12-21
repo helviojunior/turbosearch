@@ -9,7 +9,7 @@ from .util.logger import Logger
 
 class Configuration(object):
     ''' Stores configuration variables and functions for Turbo Search. '''
-    version = '0.0.11'
+    version = '0.0.12'
 
     initialized = False # Flag indicating config has been initialized
     verbose = 0
@@ -23,6 +23,9 @@ class Configuration(object):
     restore = ''
     ignore = ''
     threads_data = None
+    restored_uri=''
+    restored_paths=[]
+    threads_data={}
 
     @staticmethod
     def initialize():
@@ -68,6 +71,9 @@ class Configuration(object):
                     restore_data = json.load(f)
                     Configuration.cmd_line = restore_data["command"]
                     Configuration.threads_data = restore_data["threads"]
+                    Configuration.restored_uri = restore_data["current_path"]
+                    Configuration.restored_paths = restore_data["paths"]
+
             except Exception as e:
                 Color.pl('{!} {R}error: invalid restore file\r\n')
                 raise

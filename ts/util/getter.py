@@ -17,6 +17,7 @@ class Getter:
     not_found_lenght = -1
     checked = 0
     total = 0
+    ingore_until = ''
 
     '''Local non-static variables'''
     q = queue.Queue()
@@ -27,6 +28,12 @@ class Getter:
     def __init__(self, words_list, check_himself = True):
         self.words = words_list
         Getter.check_himself = check_himself
+        Getter.checked = 0
+        Getter.total = 0
+        Getter.ingore_until = ''
+        Getter.dir_not_found = 404
+        Getter.not_found_lenght = -1
+        Getter.path_found = []
 
         requests.packages.urllib3.disable_warnings()
         pass
@@ -44,11 +51,10 @@ class Getter:
 
         (Getter.dir_not_found, Getter.not_found_lenght) = Getter.calc_not_fount(Getter.base_url)
 
-        Logger.pl('{*} {W}Calculated default not found http code for this folder is {O}%d{W} with content size {O}%d{W}' % (Getter.dir_not_found, Getter.not_found_lenght))
-
-        t_status = threading.Thread(target=self.status_worker)
-        t_status.daemon = True
-        t_status.start()
+        if Getter.not_found_lenght > 0:
+            Logger.pl('{*} {W}Calculated default not found http code for this folder is {O}%d{W} with content size {O}%d{W}' % (Getter.dir_not_found, Getter.not_found_lenght))
+        else:
+            Logger.pl('{*} {W}Calculated default not found http code for this folder is {O}%d{W} with no content' % (Getter.dir_not_found))
 
         for i in range(Configuration.tasks):
             self.last[i] = ''
@@ -56,29 +62,25 @@ class Getter:
             t.daemon = True
             t.start()
 
+        insert = True
+        if self.ingore_until != '':
+            insert = False
+
         Getter.total = len(self.words)
         for item in self.words:
             if item.strip() != '':
-                self.q.put(DirectoryInfo("%s/%s" % (Getter.base_url, item), Getter.dir_not_found))
+                if not insert and item == self.ingore_until:
+                    insert = True
+                if insert:
+                    self.q.put(DirectoryInfo("%s/%s" % (Getter.base_url, item), Getter.dir_not_found))
+                else:
+                    self.add_checked()
 
         self.q.join()  # block until all tasks are done
         Tools.clear_line()
 
         return Getter.path_found
 
-    def status_worker(self):
-        try:
-            while True:
-                try:
-                    dt = { "command" : Configuration.cmd_line, "threads": self.last }
-
-                    with open("turbosearch.restore", "w") as text_file:
-                        text_file.write(json.dumps(dt))
-                except:
-                    raise
-                time.sleep(10)
-        except KeyboardInterrupt:
-            pass
 
     @staticmethod
     def calc_not_fount(url):

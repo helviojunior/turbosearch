@@ -87,8 +87,16 @@ class TurboSearch(object):
             Logger.pl('     ')
 
             Logger.pl('{+} {W}Scanning url {C}%s{W} ' % Configuration.target)
+
+            get.added = Configuration.restored_paths
+            get.current_uri = Configuration.restored_uri
+            
             get.run()
             Logger.pl('     ')
+
+            
+            if os.path.exists("turbosearch.restore"): 
+                os.remove("turbosearch.restore")
 
         except Exception as e:
             Color.pl("\n{!} {R}Error: {O}%s" % str(e))
@@ -112,6 +120,7 @@ class TurboSearch(object):
 
 
         Logger.pl("{+} Finished tests against {C}%s{W}, exiting" % Configuration.target)
+
 
         #Configuration.delete_temp()
 

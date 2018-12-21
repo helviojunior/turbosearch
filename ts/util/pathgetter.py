@@ -3,7 +3,7 @@
 
 from ..util.tools import Tools
 
-import os, subprocess, socket, re, queue, threading, sys
+import os, subprocess, socket, re, queue, threading, sys, time, json
 
 from ..config import Configuration
 from ..util.logger import Logger
@@ -15,6 +15,10 @@ class PathGetter:
     q = queue.Queue()
     added = []
     last_start = []
+    ingore_until = ''
+    current_gettter = None
+    current_uri = ''
+
 
     def __init__(self):
         pass
@@ -28,10 +32,6 @@ class PathGetter:
             except:
                 pass
 
-        insert = True
-        if len(self.last_start) > 0:
-            insert = False
-
         with open(Configuration.word_list, 'r', encoding="ascii", errors="surrogateescape") as f:
             line = f.readline()
             while line:
@@ -42,11 +42,10 @@ class PathGetter:
 
                 line = ''.join(filter(self.permited_char, line))
 
-                if not insert and line in self.last_start:
-                    insert = True                        
+                if self.ingore_until == '' and line in self.last_start:
+                    self.ingore_until = line     
 
-                if insert:
-                    self.words.append(line.strip())
+                self.words.append(line.strip())
 
                 try:
                     line = f.readline()
@@ -75,8 +74,21 @@ class PathGetter:
         t.daemon = True
         t.start()
 
-        self.added.append(Configuration.target)
-        self.q.put(Configuration.target)
+
+        t_status = threading.Thread(target=self.status_worker)
+        t_status.daemon = True
+        t_status.start()
+
+        if self.current_uri != '':
+            insert = False
+            for u in self.added:
+                if not insert and u == self.current_uri:
+                    insert = True
+                if insert:
+                    self.q.put(u)
+        else:
+            self.added.append(Configuration.target)
+            self.q.put(Configuration.target)
 
         self.q.join()  # block until all tasks are done
         sys.stdout.write("\033[K")  # Clear to the end of line
@@ -91,8 +103,10 @@ class PathGetter:
                     Logger.pl('  ')
                     Logger.pl('{+} {W}Entering directory: {C}%s{W} ' % item)
 
-                get = Getter(self.words, False)
-                paths_found = get.run(item)
+                self.current_uri = item
+                self.current_gettter = Getter(self.words, False)
+                self.current_gettter.ingore_until = self.ingore_until
+                paths_found = self.current_gettter.run(item)
 
                 if Configuration.verbose > 0:
                     Logger.pl('{*} {W}We got {O}%d{W} new directories to check from url %s{W}' % (len(paths_found), item))
@@ -104,6 +118,41 @@ class PathGetter:
                         self.added.append(u)
                         self.q.put(u)
 
+                self.ingore_until = ''
                 self.q.task_done()
+        except KeyboardInterrupt:
+            pass
+
+
+    def status_worker(self):
+        try:
+            while True:
+                try:
+                    if self.current_gettter is None:
+                        time.sleep(1)
+                        continue
+
+                    paths_found = self.current_gettter.path_found
+
+                    for u in paths_found:
+                        if u.endswith('/'):
+                            u = u[:-1]
+                        if u not in self.added:
+                            self.added.append(u)
+                            self.q.put(u)
+
+
+                    dt = { 
+                    "command" : Configuration.cmd_line,
+                    "current_path" : self.current_uri,
+                    "paths": self.added,
+                    "threads": self.current_gettter.last 
+                     }
+
+                    with open("turbosearch.restore", "w") as text_file:
+                        text_file.write(json.dumps(dt))
+                except:
+                    raise
+                time.sleep(10)
         except KeyboardInterrupt:
             pass
