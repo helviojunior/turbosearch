@@ -7,11 +7,12 @@ import argparse, sys, os
 
 class Arguments(object):
     ''' Holds arguments used by the Turbo Search '''
+    restore = False
 
-    def __init__(self, configuration):
+    def __init__(self, custom_args=''):
         self.verbose = any(['-v' in word for word in sys.argv])
-        self.config = configuration
-        self.args = self.get_arguments()
+        self.restore = any(['-R' in word for word in sys.argv])
+        self.args = self.get_arguments(custom_args)
 
     def _verbose(self, msg):
         if self.verbose:
@@ -19,7 +20,7 @@ class Arguments(object):
         else:
             return argparse.SUPPRESS
 
-    def get_arguments(self):
+    def get_arguments(self, custom_args=''):
         ''' Returns parser.args() containing all program arguments '''
 
         parser = argparse.ArgumentParser(usage=argparse.SUPPRESS,
@@ -31,7 +32,12 @@ class Arguments(object):
         custom_group = parser.add_argument_group('CUSTOM')
         self._add_custom_args(custom_group)
 
-        return parser.parse_args()
+        if self.restore and not custom_args == "":
+            targs = custom_args.split()
+            targs.pop(0) # remove o path do arquivo python, mantendo somente os parametros
+            return parser.parse_args(targs)
+        else:
+            return parser.parse_args()
 
 
     def _add_global_args(self, glob):
@@ -75,6 +81,20 @@ class Arguments(object):
 
 
     def _add_custom_args(self, custom):
+        custom.add_argument('-R',
+            '--restore',
+            action='store_true',
+            default=False,
+            dest='restore',
+            help=Color.s('restore a previous aborted/crashed session'))
+
+        custom.add_argument('-I',
+            '--ignore',
+            action='store_true',
+            default=False,
+            dest='ignore',
+            help=Color.s('ignore an existing restore file (don\'t wait 10 seconds)'))
+
         custom.add_argument('-v',
             '--verbose',
             action='count',
@@ -92,6 +112,7 @@ class Arguments(object):
             dest='no_forward_location',
             help=Color.s('Disable forward to Location response address (default: {G}no{W})'))
 
+'''
 if __name__ == '__main__':
     from .util.color import Color
     from config import Configuration
@@ -100,3 +121,4 @@ if __name__ == '__main__':
     args = a.args
     for (key,value) in sorted(args.__dict__.items()):
         Color.pl('{C}%s: {G}%s{W}' % (key.ljust(21),value))
+'''

@@ -14,11 +14,24 @@ class PathGetter:
     words = []
     q = queue.Queue()
     added = []
+    last_start = []
 
     def __init__(self):
         pass
 
     def load_wordlist(self):
+
+        if Configuration.threads_data is not None:
+            try:
+                for i in Configuration.threads_data:
+                    self.last_start.append(Configuration.threads_data[i])
+            except:
+                pass
+
+        insert = True
+        if len(self.last_start) > 0:
+            insert = False
+
         with open(Configuration.word_list, 'r', encoding="ascii", errors="surrogateescape") as f:
             line = f.readline()
             while line:
@@ -28,7 +41,12 @@ class PathGetter:
                     line = line[:-1]
 
                 line = ''.join(filter(self.permited_char, line))
-                self.words.append(line.strip())
+
+                if not insert and line in self.last_start:
+                    insert = True                        
+
+                if insert:
+                    self.words.append(line.strip())
 
                 try:
                     line = f.readline()

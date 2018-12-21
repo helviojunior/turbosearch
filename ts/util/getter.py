@@ -3,7 +3,7 @@
 
 from ..util.tools import Tools
 
-import os, subprocess, socket, re, requests, queue, threading, sys, operator, time
+import os, subprocess, socket, re, requests, queue, threading, sys, operator, time, json
 
 from ..config import Configuration
 from ..util.logger import Logger
@@ -22,6 +22,7 @@ class Getter:
     q = queue.Queue()
     words = []
     base_url = ''
+    last = {}
 
     def __init__(self, words_list, check_himself = True):
         self.words = words_list
@@ -45,8 +46,13 @@ class Getter:
 
         Logger.pl('{*} {W}Calculated default not found http code for this folder is {O}%d{W} with content size {O}%d{W}' % (Getter.dir_not_found, Getter.not_found_lenght))
 
+        t_status = threading.Thread(target=self.status_worker)
+        t_status.daemon = True
+        t_status.start()
+
         for i in range(Configuration.tasks):
-            t = threading.Thread(target=self.worker)
+            self.last[i] = ''
+            t = threading.Thread(target=self.worker, kwargs=dict(index=i))
             t.daemon = True
             t.start()
 
@@ -59,6 +65,20 @@ class Getter:
         Tools.clear_line()
 
         return Getter.path_found
+
+    def status_worker(self):
+        try:
+            while True:
+                try:
+                    dt = { "command" : Configuration.cmd_line, "threads": self.last }
+
+                    with open("turbosearch.restore", "w") as text_file:
+                        text_file.write(json.dumps(dt))
+                except:
+                    raise
+                time.sleep(10)
+        except KeyboardInterrupt:
+            pass
 
     @staticmethod
     def calc_not_fount(url):
@@ -139,11 +159,14 @@ class Getter:
 
         return (ret_item, code_len[ret_item])
 
-    def worker(self):
+    def worker(self, index):
         try:
             while True:
                 item = self.q.get()
                 self.do_work(item)
+                text = item.url.replace(Getter.base_url,"").lstrip("/").lstrip()
+                if not text == '':
+                    self.last[index] = text
                 self.q.task_done()
         except KeyboardInterrupt:
             pass
@@ -162,6 +185,8 @@ class Getter:
             self.get_uri("%s/" % (directory_info.url), directory_info)
         for ex in Configuration.extensions:
             self.get_uri("%s%s" % (directory_info.url, ex), directory_info, False)
+
+        
 
     def get_uri(self, url, directory_info, check_dir=True):
 
