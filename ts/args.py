@@ -26,11 +26,15 @@ class Arguments(object):
         parser = argparse.ArgumentParser(usage=argparse.SUPPRESS,
                 formatter_class=lambda prog: argparse.HelpFormatter(prog, max_help_position=80, width=130))
 
-        glob = parser.add_argument_group('SETTINGS')
+        glob = parser.add_argument_group('General Setting')
         self._add_global_args(glob)
 
-        custom_group = parser.add_argument_group('CUSTOM')
+        custom_group = parser.add_argument_group('Custom Settings')
         self._add_custom_args(custom_group)
+
+        wl_group = parser.add_argument_group('Word List Options')
+        self._add_wl_args(wl_group)
+
 
         if self.restore and not custom_args == "":
             targs = custom_args.split()
@@ -111,6 +115,33 @@ class Arguments(object):
             action='store_true',
             dest='no_forward_location',
             help=Color.s('Disable forward to Location response address (default: {G}no{W})'))
+
+
+    def _add_wl_args(self, custom):
+        custom.add_argument('--md5-search',
+            action='store_true',
+            default=False,
+            dest='md5_search',
+            help=Color.s('Search for a MD5 Hash version of each word (default: {G}no{W})'))
+
+        custom.add_argument('--sha1-search',
+            action='store_true',
+            default=False,
+            dest='sha1_search',
+            help=Color.s('Search for a SHA1 Hash version of each word (default: {G}no{W})'))
+
+        custom.add_argument('--sha256-search',
+            action='store_true',
+            default=False,
+            dest='sha256_search',
+            help=Color.s('Search for a SHA256 Hash version of each word (default: {G}no{W})'))
+
+        custom.add_argument('--hash-upper',
+            action='store_true',
+            default=False,
+            dest='hash_upper',
+            help=Color.s('In case of Hash Search be enabled, also search by Uppercase of Hash Hex Text (default: {G}no{W})'))
+
 
 '''
 if __name__ == '__main__':

@@ -3,7 +3,7 @@
 
 from ..util.tools import Tools
 
-import os, subprocess, socket, re, queue, threading, sys, time, json
+import os, subprocess, socket, re, queue, threading, sys, time, json, hashlib
 
 from ..config import Configuration
 from ..util.logger import Logger
@@ -32,6 +32,11 @@ class PathGetter:
             except:
                 pass
 
+        md5 = hashlib.md5()
+        sha1 = hashlib.sha1()
+        sha256 = hashlib.sha256()
+        
+
         with open(Configuration.word_list, 'r', encoding="ascii", errors="surrogateescape") as f:
             line = f.readline()
             while line:
@@ -46,6 +51,30 @@ class PathGetter:
                     self.ingore_until = line     
 
                 self.words.append(line.strip())
+
+
+                if Configuration.md5_search:
+                    md5.update(line.strip().encode())
+                    hash = md5.hexdigest()
+                    self.words.append(hash)
+                    if Configuration.hash_upper:
+                        self.words.append(hash.upper())
+                    
+                if Configuration.sha1_search:
+                    sha1.update(line.strip().encode())
+                    hash = sha1.hexdigest()
+                    self.words.append(hash)
+                    if Configuration.hash_upper:
+                        self.words.append(hash.upper())
+                    
+                if Configuration.sha256_search:
+                    sha256.update(line.strip().encode())
+                    hash = sha256.hexdigest()
+                    self.words.append(hash)
+                    if Configuration.hash_upper:
+                        self.words.append(hash.upper())
+
+                    
 
                 try:
                     line = f.readline()

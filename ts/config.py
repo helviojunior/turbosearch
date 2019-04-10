@@ -26,6 +26,10 @@ class Configuration(object):
     restored_uri=''
     restored_paths=[]
     threads_data={}
+    md5_search = False
+    sha1_search = False
+    sha256_search = False
+    hash_upper = False
 
     @staticmethod
     def initialize():
@@ -135,6 +139,19 @@ class Configuration(object):
 
         if args.no_forward_location:
             Configuration.forward_location = False
+
+        if args.md5_search:
+            Configuration.md5_search = True
+
+        if args.sha1_search:
+            Configuration.sha1_search = True
+
+        if args.sha256_search:
+            Configuration.sha256_search = True
+
+        if args.hash_upper:
+            Configuration.hash_upper = True
+
 
         regex = re.compile(
             r'^(?:http|ftp)s?://'  # http:// or https://
