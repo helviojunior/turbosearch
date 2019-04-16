@@ -265,8 +265,12 @@ class Getter:
 
         if status_code in Configuration.ignore_rules:
             if False in Configuration.ignore_rules[status_code]:
+                if Configuration.verbose > 0:
+                    Logger.pl('{*} {O}Ignoring result to location %s with status code %s and size %s{W}' % (url,status_code,size))
                 return
             elif size in Configuration.ignore_rules[status_code]:
+                if Configuration.verbose > 0:
+                    Logger.pl('{*} {O}Ignoring result to location %s with status code %s and size %s{W}' % (url,status_code,size))
                 return
 
         
