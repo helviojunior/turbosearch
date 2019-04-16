@@ -262,6 +262,14 @@ class Getter:
             return ret_ok
 
     def chech_if_rise(self, url, status_code, size, directory_info, check_dir=True):
+
+        if status_code in Configuration.ignore_rules:
+            if False in Configuration.ignore_rules[status_code]:
+                return
+            elif size in Configuration.ignore_rules[status_code]:
+                return
+
+        
         if (status_code == directory_info.dir_not_found) and status_code != 404:
 
             if directory_info.not_found_lenght > 0 and (directory_info.not_found_lenght - 10) <= size <= (directory_info.not_found_lenght + 10):

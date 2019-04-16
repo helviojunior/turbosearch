@@ -30,6 +30,7 @@ class Configuration(object):
     sha1_search = False
     sha256_search = False
     hash_upper = False
+    ignore_rules={}
 
     @staticmethod
     def initialize():
@@ -236,6 +237,43 @@ class Configuration(object):
 
         if Configuration.out_file != '':
             Logger.pl('     {C}output file:{O} %s{W}' % Configuration.out_file)
+
+
+        if args.filter_rules != '':
+            ignore_list = args.filter_rules.split(",")
+            for ignore_line in ignore_list:
+                ignore_line = ignore_line.strip()
+                if ':' in ignore_line:
+                    (i_result,i_size) = ignore_line.split(":")
+                    size=0
+                    res=0
+                    try:
+                        res=int(i_result)
+                    except:
+                        Logger.pl('{!} {R}error: could not convert {O}%s{R} from {O}%s{R} to an integer value {W}\r\n' % (i_result,ignore_line))
+                        Configuration.exit_gracefully(0)
+
+                    try:
+                        size=int(i_size)
+                    except:
+                        Logger.pl('{!} {R}error: could not convert {O}%s{R} from {O}%s{R} to an integer value {W}\r\n' % (i_size,ignore_line))
+                        Configuration.exit_gracefully(0)
+                    
+                    if not res in Configuration.ignore_rules:
+                        Configuration.ignore_rules[res] = []
+                    Configuration.ignore_rules[res].append(size)
+
+                else:
+                    res=0
+                    try:
+                        res=int(ignore_line)
+                    except:
+                        Logger.pl('{!} {R}error: could not convert {O}%s{R} to an integer value {W}\r\n' % (ignore_line))
+                        Configuration.exit_gracefully(0)
+
+                    if not res in Configuration.ignore_rules:
+                        Configuration.ignore_rules[res] = []
+                    Configuration.ignore_rules[res].append(False)
 
 
     @staticmethod

@@ -116,6 +116,14 @@ class Arguments(object):
             dest='no_forward_location',
             help=Color.s('Disable forward to Location response address (default: {G}no{W})'))
 
+        custom.add_argument('--ignore-result',
+            action='store',
+            dest='filter_rules',
+            metavar='[filter]',
+            default='',
+            type=str,
+            help=Color.s('ignore resuts by result code or/and size (ex1: 302 or ex2: 302:172 or ex3: 405,302:172 )'))
+
 
     def _add_wl_args(self, custom):
         custom.add_argument('--md5-search',

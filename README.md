@@ -41,7 +41,7 @@ Usinig **-x** paramter, the tool will do standard search (without extension) + e
 HHHHHH           →→HHH
 HHHHHH           →→→→HH            
 HHHHHH           →→→→→→
-→→-→→→→→→→→→→→→→→→→→→→→→→          Turbo Search v0.0.13 by Helvio Junior
+→→-→→→→→→→→→→→→→→→→→→→→→→          Turbo Search vx.x.x by Helvio Junior
 →→|→→→→→→→→→→→→→→→→→→→→→→→→        automated url finder
 →→-→→→→→→→→→→→→→→→→→→→→→→          https://github.com/helviojunior/turbosearch
 HHHHHH           →→→→→→
@@ -50,27 +50,29 @@ HHHHHH           →→HHH
 
     
 optional arguments:
-  -h, --help             show this help message and exit
+  -h, --help                show this help message and exit
 
 General Setting:
-  -t [target url]        target url (ex: http://10.10.10.10/path)
-  -w [word list]         word list to be tested
-  -T [tasks]             number of connects in parallel (per host, default: 16)
-  -o [output file]       save output to disk (default: none)
-  -x [extensions]        Append each request with this extensions (comma-separated values)
+  -t [target url]           target url (ex: http://10.10.10.10/path)
+  -w [word list]            word list to be tested
+  -T [tasks]                number of connects in parallel (per host, default: 16)
+  -o [output file]          save output to disk (default: none)
+  -x [extensions]           Append each request with this extensions (comma-separated values)
 
 Custom Settings:
-  -R, --restore          restore a previous aborted/crashed session
-  -I, --ignore           ignore an existing restore file (don't wait 10 seconds)
-  -v, --verbose          Shows more options (-h -v). Prints commands and outputs. (default: quiet)
-  --full-log             Print full requested URLs (default: no)
-  --no-forward-location  Disable forward to Location response address (default: no)
+  -R, --restore             restore a previous aborted/crashed session
+  -I, --ignore              ignore an existing restore file (don't wait 10 seconds)
+  -v, --verbose             Shows more options (-h -v). Prints commands and outputs. (default: quiet)
+  --full-log                Print full requested URLs (default: no)
+  --no-forward-location     Disable forward to Location response address (default: no)
+  --ignore-result [filter]  ignore resuts by result code or/and size (ex1: 302 or ex2: 302:172 or ex3: 405,302:172 )
 
 Word List Options:
-  --md5-search           Search for a MD5 Hash version of each word (default: no)
-  --sha1-search          Search for a SHA1 Hash version of each word (default: no)
-  --sha256-search        Search for a SHA256 Hash version of each word (default: no)
-  --hash-upper           In case of Hash Search be enabled, also search by Uppercase of Hash Hex Text (default: no)
+  --md5-search              Search for a MD5 Hash version of each word (default: no)
+  --sha1-search             Search for a SHA1 Hash version of each word (default: no)
+  --sha256-search           Search for a SHA256 Hash version of each word (default: no)
+  --hash-upper              In case of Hash Search be enabled, also search by Uppercase of Hash Hex Text (default: no)
+
 
 
 ```
