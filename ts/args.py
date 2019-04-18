@@ -104,7 +104,7 @@ class Arguments(object):
             dest='proxy',
             metavar='[target proxy]',
             type=str,
-            help=Color.s('target proxy URL (ex: {G}http://10.10.10.10:8080{W})'))
+            help=Color.s('target proxy URL (ex: {G}http://127.0.0.1:8080{W})'))
 
         custom.add_argument('-v',
             '--verbose',
