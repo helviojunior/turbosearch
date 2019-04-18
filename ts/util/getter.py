@@ -41,9 +41,9 @@ class Getter:
 
         requests.packages.urllib3.disable_warnings()
 
-        self.proxy={}
+        Getter.proxy={}
         if Configuration.proxy != '':
-            self.proxy = {
+            Getter.proxy = {
               'http': Configuration.proxy,
               'https': Configuration.proxy,
             }
@@ -88,7 +88,7 @@ class Getter:
                 if not insert and item == self.ingore_until:
                     insert = True
                 if insert:
-                    self.q.put(DirectoryInfo("%s/%s" % (Getter.base_url, item), Getter.dir_not_found))
+                    self.q.put(DirectoryInfo("%s/%s" % (Getter.base_url, item), Getter.dir_not_found, Getter.not_found_lenght))
                 else:
                     self.add_checked()
 
@@ -109,9 +109,9 @@ class Getter:
             if url.endswith('/'):
                 url = url[:-1]
 
-            r1 = requests.get("%s/HrandfileJR" % (url), verify=False, timeout=30, proxies=self.proxy)
+            r1 = requests.get("%s/HrandfileJR" % (url), verify=False, timeout=30, proxies=Getter.proxy)
 
-            r2 = requests.get("%s/HJR%s" % (url, Tools.random_generator(10)), verify=False, timeout=30, proxies=self.proxy)
+            r2 = requests.get("%s/HJR%s" % (url, Tools.random_generator(10)), verify=False, timeout=30, proxies=Getter.proxy)
 
             if r1.status_code == r2.status_code:
                 extensions_not_found["__root__"] =  DirectoryInfo('', r1.status_code, len(r1.text))
@@ -137,9 +137,9 @@ class Getter:
                 if url.endswith('/'):
                     url = url[:-1]
 
-                r1 = requests.get("%s/HrandfileJR%s" % (url, ex), verify=False, timeout=30, proxies=self.proxy)
+                r1 = requests.get("%s/HrandfileJR%s" % (url, ex), verify=False, timeout=30, proxies=Getter.proxy)
 
-                r2 = requests.get(rurl, verify=False, timeout=30, proxies=self.proxy)
+                r2 = requests.get(rurl, verify=False, timeout=30, proxies=Getter.proxy)
 
                 if r1.status_code == r2.status_code:
                     extensions_not_found[ex] = DirectoryInfo('', r1.status_code, len(r1.text))
@@ -228,7 +228,7 @@ class Getter:
         while try_cnt < 5:
             try:
 
-                r = requests.get(url, verify=False, timeout=30, allow_redirects=False, proxies=self.proxy)
+                r = requests.get(url, verify=False, timeout=30, allow_redirects=False, proxies=Getter.proxy)
                 if r is not None and r.status_code > 0:
                     ret_ok = True
 
@@ -285,14 +285,14 @@ class Getter:
         
         if (status_code == directory_info.dir_not_found) and status_code != 404:
 
-            if directory_info.not_found_lenght > 0 and (directory_info.not_found_lenght - 10) <= size <= (directory_info.not_found_lenght + 10):
+            if directory_info.not_found_lenght > 0 and (size <= (directory_info.not_found_lenght - 10) or size >= (directory_info.not_found_lenght + 10)):
                 # E o codigo not found porem com tamanho diferente
                 # esta tecnica visa pegar servidores que sempre retornam o mesmo status code
                 self.raise_url(url, status_code, size)
 
             else:
                 '''Double check'''
-                r2 = requests.get(url + '_', verify=False, timeout=30, allow_redirects=False, proxies=self.proxy)
+                r2 = requests.get(url + '_', verify=False, timeout=30, allow_redirects=False, proxies=Getter.proxy)
                 if status_code != r2.status_code:
                     self.raise_url(url, r2.status_code, size)
                     return
