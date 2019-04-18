@@ -62,6 +62,7 @@ General Setting:
 Custom Settings:
   -R, --restore             restore a previous aborted/crashed session
   -I, --ignore              ignore an existing restore file (don't wait 10 seconds)
+  --proxy [target proxy]    target proxy URL (ex: http://127.0.0.1:8080)
   -v, --verbose             Shows more options (-h -v). Prints commands and outputs. (default: quiet)
   --full-log                Print full requested URLs (default: no)
   --no-forward-location     Disable forward to Location response address (default: no)
@@ -72,7 +73,6 @@ Word List Options:
   --sha1-search             Search for a SHA1 Hash version of each word (default: no)
   --sha256-search           Search for a SHA256 Hash version of each word (default: no)
   --hash-upper              In case of Hash Search be enabled, also search by Uppercase of Hash Hex Text (default: no)
-
 
 
 ```
