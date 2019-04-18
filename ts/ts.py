@@ -75,8 +75,15 @@ class TurboSearch(object):
             Logger.pl(' ')
 
             try:
+                proxy={}
+                if Configuration.proxy != '':
+                    proxy = {
+                      'http': Configuration.proxy,
+                      'https': Configuration.proxy,
+                    }
+                
                 requests.packages.urllib3.disable_warnings()
-                r = requests.get(Configuration.target, verify=False, timeout=10)
+                r = requests.get(Configuration.target, verify=False, timeout=10, proxies=proxy)
 
                 Logger.pl('{+} {W}Connection test againt {C}%s{W} OK! (CODE:%d|SIZE:%d) ' % (Configuration.target, r.status_code, len(r.text)))
 

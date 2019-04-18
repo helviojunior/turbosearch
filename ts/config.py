@@ -31,6 +31,7 @@ class Configuration(object):
     sha256_search = False
     hash_upper = False
     ignore_rules={}
+    proxy=''
 
     @staticmethod
     def initialize():
@@ -153,6 +154,9 @@ class Configuration(object):
         if args.hash_upper:
             Configuration.hash_upper = True
 
+        if args.proxy:
+            Configuration.proxy = args.proxy
+
 
         regex = re.compile(
             r'^(?:http|ftp)s?://'  # http:// or https://
@@ -165,6 +169,12 @@ class Configuration(object):
         if re.match(regex, Configuration.target) is None:
             Color.pl('{!} {R}error: invalid target {O}%s{R}{W}\r\n' % Configuration.target)
             Configuration.exit_gracefully(0)
+
+
+        if Configuration.proxy != '' and re.match(regex, Configuration.proxy) is None:
+            Color.pl('{!} {R}error: invalid proxy {O}%s{R}{W}\r\n' % Configuration.proxy)
+            Configuration.exit_gracefully(0)
+
 
         if not os.path.isfile(Configuration.word_list):
             Color.pl('{!} {R}error: word list file not found {O}%s{R}{W}\r\n' % Configuration.word_list)
@@ -207,6 +217,9 @@ class Configuration(object):
 
 
         Logger.pl('     {C}target:{O} %s{W}' % Configuration.target)
+
+        if Configuration.proxy != '':
+            Logger.pl('     {C}Proxy:{O} %s{W}' % Configuration.proxy)
 
         Logger.pl('     {C}tasks:{O} %s{W}' % Configuration.tasks)
 

@@ -99,6 +99,13 @@ class Arguments(object):
             dest='ignore',
             help=Color.s('ignore an existing restore file (don\'t wait 10 seconds)'))
 
+        custom.add_argument('--proxy',
+            action='store',
+            dest='proxy',
+            metavar='[target proxy]',
+            type=str,
+            help=Color.s('target proxy URL (ex: {G}http://10.10.10.10:8080{W})'))
+
         custom.add_argument('-v',
             '--verbose',
             action='count',
