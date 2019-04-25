@@ -87,7 +87,7 @@ class TurboSearch(object):
 
                 Logger.pl('{+} {W}Connection test againt {C}%s{W} OK! (CODE:%d|SIZE:%d) ' % (Configuration.target, r.status_code, len(r.text)))
 
-                PathGetter.check_content(r);
+                Tools.check_content(r);
 
             except Exception as e:
                 Logger.pl('{+} {R}connectivity check error: {O}%s{W}' % e)
