@@ -311,39 +311,63 @@ class Configuration(object):
                 sha1 = hashlib.sha1()
                 sha256 = hashlib.sha256()
                     
-                for ex in tmp_find_lst:
-                    if ex not in Configuration.text_to_find:
-                        Configuration.text_to_find.append(ex)
+                for fndw in tmp_find_lst:
+                    words = []
+                    words.append(fndw)
                     
-                    if ex.upper() not in Configuration.text_to_find:
-                        Configuration.text_to_find.append(ex.upper())
+                    if fndw.upper() not in words:
+                        words.append(fndw.upper())
+                    if fndw.lower() not in words:
+                        words.append(fndw.lower())                    
+
+                    for ex in words:
+                        if ex not in Configuration.text_to_find:
+                            Configuration.text_to_find.append(ex)
                     
-                    if ex.lower() not in Configuration.text_to_find:
-                        Configuration.text_to_find.append(ex.lower())
+                        md5.update(ex.encode())
+                        hash = md5.hexdigest()
+                        if hash not in Configuration.text_to_find:
+                            Configuration.text_to_find.append(hash)
+                            Configuration.text_to_find.append(hash.upper())
+                            
+                        sha1.update(ex.encode())
+                        hash = sha1.hexdigest()
+                        if hash not in Configuration.text_to_find:
+                            Configuration.text_to_find.append(hash)
+                            Configuration.text_to_find.append(hash.upper())
+                            
+                        sha256.update(ex.encode())
+                        hash = sha256.hexdigest()
+                        if hash not in Configuration.text_to_find:
+                            Configuration.text_to_find.append(hash)
+                            Configuration.text_to_find.append(hash.upper())
+                            
+                        encoded = base64.b64encode(ex.encode()).decode()
+                        encoded = encoded.replace('=','')
+                        if encoded not in Configuration.text_to_find:
+                            Configuration.text_to_find.append(encoded)
                     
-                    md5.update(ex.encode())
-                    hash = md5.hexdigest()
-                    if hash not in Configuration.text_to_find:
-                        Configuration.text_to_find.append(hash)
-                        Configuration.text_to_find.append(hash.upper())
-                        
-                    sha1.update(ex.encode())
-                    hash = sha1.hexdigest()
-                    if hash not in Configuration.text_to_find:
-                        Configuration.text_to_find.append(hash)
-                        Configuration.text_to_find.append(hash.upper())
-                        
-                    sha256.update(ex.encode())
-                    hash = sha256.hexdigest()
-                    if hash not in Configuration.text_to_find:
-                        Configuration.text_to_find.append(hash)
-                        Configuration.text_to_find.append(hash.upper())
-                        
-                    encoded = base64.b64encode(ex.encode()).decode()
-                    encoded = encoded.replace('=','')
-                    if encoded not in Configuration.text_to_find:
-                        Configuration.text_to_find.append(encoded)
-                    
+
+    @staticmethod
+    def variants(word):
+        md5 = hashlib.md5()
+        sha1 = hashlib.sha1()
+        sha256 = hashlib.sha256()    
+        words = []
+        if word not in words:
+            words.append(word)
+        
+        if word.upper() not in words:
+            words.append(word.upper())
+        
+        if word.upper() not in words:
+            words.append(word.lower())
+
+        for ex in words:
+            encoded = base64.b64encode(ex.encode()).decode()
+            encoded = encoded.replace('=','')
+            if encoded not in Configuration.text_to_find:
+                Configuration.text_to_find.append(encoded)
 
     @staticmethod
     def get_banner():
