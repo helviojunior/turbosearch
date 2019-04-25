@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 # -*- coding: UTF-8 -*-
 
-import os, subprocess, socket, re, requests, errno, sys, time, json, signal
+import os, subprocess, socket, re, requests, errno, sys, time, json, signal, base64, hashlib
 
 from .args import Arguments
 from .util.color import Color
@@ -32,6 +32,7 @@ class Configuration(object):
     hash_upper = False
     ignore_rules={}
     proxy=''
+    text_to_find = []
 
     @staticmethod
     def initialize():
@@ -288,6 +289,61 @@ class Configuration(object):
                         Configuration.ignore_rules[res] = []
                     Configuration.ignore_rules[res].append(False)
 
+
+        if args.find != '':
+            tmp_find_lst = []
+            find_list = args.find.split(",")
+            for ex in find_list:
+                ex1 = ex.strip()
+                if ex1 != '' and ex1 not in tmp_find_lst:
+                    tmp_find_lst.append(ex1)
+                    
+            if len(tmp_find_lst) > 0:
+                fnd_txt = ''
+                for ex in tmp_find_lst:
+                    fnd_txt += '(%s)' % ex
+
+            if fnd_txt != '':
+                Logger.pl('     {C}find list:{O} %s{W}' % ext_txt)
+
+            if len(tmp_find_lst) > 0:
+                md5 = hashlib.md5()
+                sha1 = hashlib.sha1()
+                sha256 = hashlib.sha256()
+                    
+                for ex in tmp_find_lst:
+                    if ex not in Configuration.text_to_find:
+                        Configuration.text_to_find.append(ex)
+                    
+                    if ex.upper() not in Configuration.text_to_find:
+                        Configuration.text_to_find.append(ex.upper())
+                    
+                    if ex.lower() not in Configuration.text_to_find:
+                        Configuration.text_to_find.append(ex.lower())
+                    
+                    md5.update(ex.encode())
+                    hash = md5.hexdigest()
+                    if hash not in Configuration.text_to_find:
+                        Configuration.text_to_find.append(hash)
+                        Configuration.text_to_find.append(hash.upper())
+                        
+                    sha1.update(ex.encode())
+                    hash = sha1.hexdigest()
+                    if hash not in Configuration.text_to_find:
+                        Configuration.text_to_find.append(hash)
+                        Configuration.text_to_find.append(hash.upper())
+                        
+                    sha256.update(ex.encode())
+                    hash = sha256.hexdigest()
+                    if hash not in Configuration.text_to_find:
+                        Configuration.text_to_find.append(hash)
+                        Configuration.text_to_find.append(hash.upper())
+                        
+                    encoded = base64.b64encode(ex.encode()).decode()
+                    encoded = encoded.replace('=','')
+                    if encoded not in Configuration.text_to_find:
+                        Configuration.text_to_find.append(encoded)
+                    
 
     @staticmethod
     def get_banner():

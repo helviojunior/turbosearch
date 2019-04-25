@@ -229,6 +229,7 @@ class Getter:
             try:
 
                 r = requests.get(url, verify=False, timeout=30, allow_redirects=False, proxies=Getter.proxy)
+                PathGetter.check_content(r);
                 if r is not None and r.status_code > 0:
                     ret_ok = True
 

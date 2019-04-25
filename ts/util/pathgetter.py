@@ -194,3 +194,22 @@ class PathGetter:
                 time.sleep(10)
         except KeyboardInterrupt:
             pass
+            
+
+    @staticmethod
+    def check_content(result):
+        if result is not None and len(Configuration.text_to_find) > 0:
+            data = '\r\n' + result.request.url + '\r\n'
+            data += '\r\n'.join('{}: {}'.format(k, v) for k, v in result.headers.items())
+            data += '\r\n\r\n'
+            data += result.text
+            data = data.replace('\n','\n      ')
+            for f in Configuration.text_to_find:
+                indexes = [m.start() for m in re.finditer(f, data)]
+                if len(indexes) > 0:
+                    for i in indexes:
+                        Logger.pl('* %s (TEXT:%s|POSITION:%d) ' % (result.request.url, f, i))
+                    Logger.pl_file('--> Start Response: ')
+                    Logger.pl_file(data)
+                    Logger.pl_file('<-- End Response')
+

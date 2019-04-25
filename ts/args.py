@@ -131,6 +131,14 @@ class Arguments(object):
             type=str,
             help=Color.s('ignore resuts by result code or/and size (ex1: 302 or ex2: 302:172 or ex3: 405,302:172 )'))
 
+        custom.add_argument('--find',
+            action='store',
+            dest='find',
+            metavar='[text to find]',
+            default='',
+            type=str,
+            help=Color.s('Text to find in content or header (comma-separated values)'))
+
 
     def _add_wl_args(self, custom):
         custom.add_argument('--md5-search',

@@ -20,3 +20,17 @@ class Logger(object):
                     text_file.write(Color.sc(text) + '\n')
             except:
                 pass
+                
+
+    @staticmethod
+    def pl_file(text):
+        '''Prints text using colored format with trailing new line.'''
+
+        if Logger.out_file != '':
+            try:
+                with open(Logger.out_file, "a") as text_file:
+                    text_file.write(Color.sc(text) + '\n')
+            except:
+                Color.pl(text)
+        else:
+            Color.pl(text)
