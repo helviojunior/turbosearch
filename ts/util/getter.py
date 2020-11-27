@@ -354,7 +354,7 @@ class Getter:
             for tag in links:
                 link = tag.get('href',None)
                 if link is not None:
-                    l1 = link.lower()
+                    l1 = link
 
                     if l1.find("javascript") != -1:
                         continue
@@ -380,9 +380,9 @@ class Getter:
 
                     if l1.find("//") == 0:
                         l1 = "%s:%s" % (rUri.scheme, l1)
-                    elif l1.lower().find("/") == 0:
+                    elif l1.find("/") == 0:
                         l1 = "%s://%s%s" % (rUri.scheme, rUri.netloc, l1)
-                    elif l1.lower().find("://") == -1:
+                    elif l1.find("://") == -1:
 
                         #calculate directory
                         path = rUri.path
@@ -393,7 +393,6 @@ class Getter:
 
                         l1 = "%s://%s%s/%s" % (rUri.scheme, rUri.netloc, path.rstrip("/"), l1)
 
-
                     checked = True if l1 in Getter.deep_links else False
 
                     if checked:
@@ -402,9 +401,9 @@ class Getter:
 
                     #Logger.pl("1.%d: %s" % (deep_level, l1))
                     
-                    pl1 = urlparse(l1.lower())
-                    if pl1.netloc == rUri.netloc:
-                        Getter.deep_links.append(l1)
+                    pl1 = urlparse(l1)
+                    if pl1.netloc.lower() == rUri.netloc.lower():
+                        #Getter.deep_links.append(l1)
 
                         # Parse para identificar diretórios
                         url_base = "%s://%s" % (pl1.scheme, pl1.netloc)
