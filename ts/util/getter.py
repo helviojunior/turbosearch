@@ -379,9 +379,20 @@ class Getter:
                         continue
 
                     if l1.find("//") == 0:
-                        l1 = "%s:%s" % (rUri.scheme, link.lower())
-                    elif link.lower().find("/") == 0:
-                        l1 = "%s://%s%s" % (rUri.scheme, rUri.netloc, link.lower())
+                        l1 = "%s:%s" % (rUri.scheme, l1)
+                    elif l1.lower().find("/") == 0:
+                        l1 = "%s://%s%s" % (rUri.scheme, rUri.netloc, l1)
+                    elif l1.lower().find("://") == -1:
+
+                        #calculate directory
+                        path = rUri.path
+                        if not path.endswith('/'):
+                            parts = path.split("/")
+                            parts = parts[:-1]
+                            path = '/'.join(parts)
+
+                        l1 = "%s://%s%s/%s" % (rUri.scheme, rUri.netloc, path.rstrip("/"), l1)
+
 
                     checked = True if l1 in Getter.deep_links else False
 
