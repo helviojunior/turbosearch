@@ -388,12 +388,13 @@ class Getter:
                     if checked:
                         continue
 
-                    Getter.deep_links.append(l1)
 
                     #Logger.pl("1.%d: %s" % (deep_level, l1))
                     
                     pl1 = urlparse(l1.lower())
                     if pl1.netloc == rUri.netloc:
+                        Getter.deep_links.append(l1)
+
                         # Parse para identificar diretórios
                         url_base = "%s://%s" % (pl1.scheme, pl1.netloc)
                         path = ""
@@ -418,6 +419,7 @@ class Getter:
                     else:
                         i1 = True if l1 not in Getter.deep_links else False
                         if i1:
+                            Getter.deep_links.append(l1)
                             Logger.pl('==> EXTERNAL LINK: %s' % (l1))
                     
                     
