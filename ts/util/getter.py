@@ -234,8 +234,8 @@ class Getter:
 
 
         if not Configuration.full_log:
-            #Tools.clear_line()
-            #print(("Testing [%d/%d]: %s" % (Getter.checked,Getter.total,url)), end='\r', flush=True)
+            Tools.clear_line()
+            print(("Testing [%d/%d]: %s" % (Getter.checked,Getter.total,url)), end='\r', flush=True)
             pass
         
         try_cnt = 0
