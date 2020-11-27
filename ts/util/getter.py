@@ -15,7 +15,6 @@ class Getter:
 
     '''Static variables'''
     path_found = []
-    deep_links = []
     check_himself = False
     dir_not_found = 404
     not_found_lenght = -1
@@ -23,6 +22,7 @@ class Getter:
     total = 0
     ingore_until = ''
     error_count = 0
+    deep_links = []
 
 
     '''Local non-static variables'''
@@ -382,7 +382,7 @@ class Getter:
                         l1 = "%s:%s" % (rUri.scheme, link.lower())
                     elif link.lower().find("/") == 0:
                         l1 = "%s://%s%s" % (rUri.scheme, rUri.netloc, link.lower())
-                    
+
                     checked = True if l1 in Getter.deep_links else False
 
                     if checked:

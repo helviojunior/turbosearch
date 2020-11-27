@@ -25,6 +25,7 @@ class Configuration(object):
     threads_data = None
     restored_uri=''
     restored_paths=[]
+    restored_deep_links=[]
     threads_data={}
     md5_search = False
     sha1_search = False
@@ -84,6 +85,7 @@ class Configuration(object):
                         Configuration.threads_data = restore_data["threads"]
                         Configuration.restored_uri = restore_data["current_path"]
                         Configuration.restored_paths = restore_data["paths"]
+                        Configuration.restored_deep_links = restore_data["deep_links"]
 
                 except Exception as e:
                     Color.pl('{!} {R}error: invalid restore file\r\n')

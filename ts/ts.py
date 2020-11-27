@@ -100,6 +100,7 @@ class TurboSearch(object):
 
             get.added = Configuration.restored_paths
             get.current_uri = Configuration.restored_uri
+            Getter.deep_links = Configuration.restored_deep_links
             
             get.run()
             Logger.pl('     ')

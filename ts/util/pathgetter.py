@@ -174,6 +174,7 @@ class PathGetter:
                     "command" : Configuration.cmd_line,
                     "current_path" : self.current_uri,
                     "paths": self.added,
+                    "deep_links": Getter.deep_links,
                     "threads": self.current_gettter.last 
                      }
 
