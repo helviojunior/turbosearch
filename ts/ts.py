@@ -13,6 +13,7 @@ from .util.logger import Logger
 from .util.process import Process
 from .util.pathgetter import PathGetter
 from .util.tools import Tools
+from .util.getter import Getter, DirectoryInfo
 
 class TurboSearch(object):
 

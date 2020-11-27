@@ -39,16 +39,16 @@ Usinig **-x** paramter, the tool will do standard search (without extension) + e
 ```
 
 HHHHHH           →→HHH
-HHHHHH           →→→→HH            
+HHHHHH           →→→→HH
 HHHHHH           →→→→→→
-→→-→→→→→→→→→→→→→→→→→→→→→→          Turbo Search vx.x.x by Helvio Junior
+→→-→→→→→→→→→→→→→→→→→→→→→→          Turbo Search v0.0.17 by Helvio Junior
 →→|→→→→→→→→→→→→→→→→→→→→→→→→        automated url finder
 →→-→→→→→→→→→→→→→→→→→→→→→→          https://github.com/helviojunior/turbosearch
 HHHHHH           →→→→→→
-HHHHHH           →→→→HH  
+HHHHHH           →→→→HH
 HHHHHH           →→HHH
 
-    
+
 optional arguments:
   -h, --help                show this help message and exit
 
@@ -63,10 +63,12 @@ Custom Settings:
   -R, --restore             restore a previous aborted/crashed session
   -I, --ignore              ignore an existing restore file (don't wait 10 seconds)
   --proxy [target proxy]    target proxy URL (ex: http://127.0.0.1:8080)
+  --deep                    Deep Search: Look for URLs inside of HTML results
   -v, --verbose             Shows more options (-h -v). Prints commands and outputs. (default: quiet)
   --full-log                Print full requested URLs (default: no)
   --no-forward-location     Disable forward to Location response address (default: no)
   --ignore-result [filter]  ignore resuts by result code or/and size (ex1: 302 or ex2: 302:172 or ex3: 405,302:172 )
+  --find [text to find]     Text to find in content or header (comma-separated values)
 
 Word List Options:
   --md5-search              Search for a MD5 Hash version of each word (default: no)

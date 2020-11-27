@@ -106,6 +106,12 @@ class Arguments(object):
             type=str,
             help=Color.s('target proxy URL (ex: {G}http://127.0.0.1:8080{W})'))
 
+        custom.add_argument('--deep',
+            action='store_true',
+            default=False,
+            dest='deep',
+            help=Color.s('Deep Search: Look for URLs inside of HTML results'))
+
         custom.add_argument('-v',
             '--verbose',
             action='count',

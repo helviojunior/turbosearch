@@ -7,11 +7,15 @@ import os, subprocess, socket, re, requests, queue, threading, sys, operator, ti
 
 from ..config import Configuration
 from ..util.logger import Logger
+from bs4 import BeautifulSoup
+from urllib.parse import urlparse
+
 
 class Getter:
 
     '''Static variables'''
     path_found = []
+    deep_links = []
     check_himself = False
     dir_not_found = 404
     not_found_lenght = -1
@@ -62,7 +66,7 @@ class Getter:
         Getter.path_found = []
         Getter.base_url = base_url
 
-        if  Getter.base_url.endswith('/'):
+        if Getter.base_url.endswith('/'):
             Getter.base_url = Getter.base_url [:-1]
 
         (Getter.dir_not_found, Getter.not_found_lenght) = Getter.calc_not_fount(Getter.base_url)
@@ -82,6 +86,9 @@ class Getter:
         if self.ingore_until != '':
             insert = False
 
+        if Configuration.deep and Configuration.target == base_url:
+            self.q.put(DirectoryInfo("%s/" % (Getter.base_url), Getter.dir_not_found, Getter.not_found_lenght))
+                
         Getter.total = len(self.words)
         for item in self.words:
             if self.running and item.strip() != '':
@@ -213,16 +220,23 @@ class Getter:
         return ret_ok
         
 
-    def get_uri(self, url, directory_info, check_dir=True):
+    def get_uri(self, url, directory_info, check_dir=True, deep_level=0):
+
+        if url.endswith('/'):
+            while url.endswith('/'):
+                url = url[:-1]
+            url += "/"
 
         ret_ok = False
         if Configuration.verbose > 4:
             Tools.clear_line()
             Logger.pl('{?} {G}Testing [%d/%d]: {O}%s{W}' % (Getter.checked,Getter.total,url))
 
+
         if not Configuration.full_log:
-            Tools.clear_line()
-            print(("Testing [%d/%d]: %s" % (Getter.checked,Getter.total,url)), end='\r', flush=True)
+            #Tools.clear_line()
+            #print(("Testing [%d/%d]: %s" % (Getter.checked,Getter.total,url)), end='\r', flush=True)
+            pass
         
         try_cnt = 0
         while try_cnt < 5:
@@ -255,6 +269,10 @@ class Getter:
                             Tools.clear_line()
                             Logger.pl('{*} {O}Error forwarding to location %s from url %s: %s{W}' % (location, url, ef))
                         pass
+
+                if deep_level <= 5:
+                    self.deep_link(r, directory_info, check_dir, deep_level)
+
 
                 try_cnt = 4
             except Exception as e:
@@ -328,7 +346,81 @@ class Getter:
             Logger.pl('+ %s (CODE:%d|SIZE:%d) ' % (
                 url, status, len))
 
+    def deep_link(self, result, directory_info, check_dir, deep_level):
+        if Configuration.deep:
+            rUri = urlparse(result.request.url)
+            soup = BeautifulSoup(result.text, "html.parser" )
+            links = soup.find_all('a')
+            for tag in links:
+                link = tag.get('href',None)
+                if link is not None:
+                    l1 = link.lower()
 
+                    if l1.find("javascript") != -1:
+                        continue
+                    if l1.find("aboult:") == 0:
+                        continue
+                    if l1.find("#") == 0:
+                        continue
+                    if l1.find("mail") == 0:
+                        continue
+
+                    if l1.endswith('.pdf'):
+                        continue
+                    if l1.endswith('.exe'):
+                        continue
+                    if l1.endswith('.png'):
+                        continue
+                    if l1.endswith('.jpg'):
+                        continue
+                    if l1.endswith('.gif'):
+                        continue
+                    if l1.endswith('.bin'):
+                        continue
+
+                    if l1.find("//") == 0:
+                        l1 = "%s:%s" % (rUri.scheme, link.lower())
+                    elif link.lower().find("/") == 0:
+                        l1 = "%s://%s%s" % (rUri.scheme, rUri.netloc, link.lower())
+                    
+                    checked = True if l1 in Getter.deep_links else False
+
+                    if checked:
+                        continue
+
+                    Getter.deep_links.append(l1)
+
+                    #Logger.pl("1.%d: %s" % (deep_level, l1))
+                    
+                    pl1 = urlparse(l1.lower())
+                    if pl1.netloc == rUri.netloc:
+                        # Parse para identificar diretórios
+                        url_base = "%s://%s" % (pl1.scheme, pl1.netloc)
+                        path = ""
+                        parts = pl1.path.split("/")
+                        for p in parts:
+                            if p != "":
+                                path += "/" + p
+                                p1 = "%s%s" % (url_base,path)
+                                p2 = "%s%s/" % (url_base,path)
+                                
+                                if pl1.path == path:
+                                    #print(l1, p1)
+                                    if p1 not in Getter.deep_links:
+                                        Getter.deep_links.append(p1)
+                                        self.get_uri(p1, directory_info, check_dir, deep_level + 1)
+                                    
+                                if p.find(".") == -1 and p2 not in Getter.deep_links:
+                                    Getter.deep_links.append(p2)
+                                    self.get_uri(p2, directory_info, check_dir, deep_level + 1)
+
+
+                    else:
+                        i1 = True if l1 not in Getter.deep_links else False
+                        if i1:
+                            Logger.pl('==> EXTERNAL LINK: %s' % (l1))
+                    
+                    
 class DirectoryInfo:
 
     url = ''

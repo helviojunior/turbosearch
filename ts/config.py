@@ -9,7 +9,7 @@ from .util.logger import Logger
 
 class Configuration(object):
     ''' Stores configuration variables and functions for Turbo Search. '''
-    version = '0.0.16'
+    version = '0.0.17'
 
     initialized = False # Flag indicating config has been initialized
     verbose = 0
@@ -30,6 +30,7 @@ class Configuration(object):
     sha1_search = False
     sha256_search = False
     hash_upper = False
+    deep = False
     ignore_rules={}
     proxy=''
     text_to_find = []
@@ -155,6 +156,9 @@ class Configuration(object):
         if args.hash_upper:
             Configuration.hash_upper = True
 
+        if args.deep:
+            Configuration.deep = True
+
         if args.proxy:
             Configuration.proxy = args.proxy
 
@@ -232,6 +236,8 @@ class Configuration(object):
         if Configuration.forward_location:
             Logger.pl('     {C}forward location redirects:{O} yes{W}')
 
+        if Configuration.deep:
+            Logger.pl('     {C}deep links search:{O} yes{W}')
 
         if args.extensions != '':
             ext_list = args.extensions.split(",")

@@ -35,7 +35,6 @@ class PathGetter:
         md5 = hashlib.md5()
         sha1 = hashlib.sha1()
         sha256 = hashlib.sha256()
-        
 
         with open(Configuration.word_list, 'r', encoding="ascii", errors="surrogateescape") as f:
             line = f.readline()
