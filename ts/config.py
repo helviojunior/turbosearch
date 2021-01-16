@@ -35,6 +35,7 @@ class Configuration(object):
     ignore_rules={}
     proxy=''
     text_to_find = []
+    request_method='GET'
 
     @staticmethod
     def initialize():
@@ -164,6 +165,14 @@ class Configuration(object):
         if args.proxy:
             Configuration.proxy = args.proxy
 
+        if args.request_method.upper() == "POST":
+            Configuration.request_method = "POST"
+        elif args.request_method.upper() == "PUT":
+            Configuration.request_method = "PUT"
+        elif args.request_method.upper() == "OPTIONS":
+            Configuration.request_method = "OPTIONS"
+        else:
+            Configuration.request_method = "GET"
 
         regex = re.compile(
             r'^(?:http|ftp)s?://'  # http:// or https://
@@ -232,6 +241,8 @@ class Configuration(object):
 
         if args.verbose:
             Logger.pl('     {C}option:{O} verbosity level %d{W}' % Configuration.verbose)
+
+        Logger.pl('     {C}request method: {O}%s{W}' % Configuration.request_method)
 
         Logger.pl('     {C}word list:{O} %s{W}' % Configuration.word_list)
 

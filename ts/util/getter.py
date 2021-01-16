@@ -104,6 +104,17 @@ class Getter:
 
         return Getter.path_found
 
+    @staticmethod
+    def general_request(url):
+        if Configuration.request_method.upper() == "POST":
+            return requests.post(url, verify=False, timeout=30, data={}, proxies=Getter.proxy)
+        elif Configuration.request_method.upper() == "PUT":
+            return requests.put(url, verify=False, timeout=30, data={}, proxies=Getter.proxy)
+        elif Configuration.request_method.upper() == "OPTIONS":
+            return requests.options(url, verify=False, timeout=30, proxies=Getter.proxy)
+        else:
+            return requests.get(url, verify=False, timeout=30, proxies=Getter.proxy)
+        
 
     @staticmethod
     def calc_not_fount(url):
@@ -116,9 +127,9 @@ class Getter:
             if url.endswith('/'):
                 url = url[:-1]
 
-            r1 = requests.get("%s/HrandfileJR" % (url), verify=False, timeout=30, proxies=Getter.proxy)
+            r1 = Getter.general_request("%s/HrandfileJR" % (url))
 
-            r2 = requests.get("%s/HJR%s" % (url, Tools.random_generator(10)), verify=False, timeout=30, proxies=Getter.proxy)
+            r2 = Getter.general_request("%s/HJR%s" % (url, Tools.random_generator(10)))
 
             if r1.status_code == r2.status_code:
                 extensions_not_found["__root__"] =  DirectoryInfo('', r1.status_code, len(r1.text))
@@ -144,9 +155,9 @@ class Getter:
                 if url.endswith('/'):
                     url = url[:-1]
 
-                r1 = requests.get("%s/HrandfileJR%s" % (url, ex), verify=False, timeout=30, proxies=Getter.proxy)
+                r1 = Getter.general_request("%s/HrandfileJR%s" % (url, ex))
 
-                r2 = requests.get(rurl, verify=False, timeout=30, proxies=Getter.proxy)
+                r2 = Getter.general_request(rurl)
 
                 if r1.status_code == r2.status_code:
                     extensions_not_found[ex] = DirectoryInfo('', r1.status_code, len(r1.text))
@@ -242,7 +253,7 @@ class Getter:
         while try_cnt < 5:
             try:
 
-                r = requests.get(url, verify=False, timeout=30, allow_redirects=False, proxies=Getter.proxy)
+                r = Getter.general_request(url)
                 if r is not None and r.status_code > 0:
                     ret_ok = True
 
@@ -312,14 +323,14 @@ class Getter:
 
             else:
                 '''Double check'''
-                r2 = requests.get(url + '_', verify=False, timeout=30, allow_redirects=False, proxies=Getter.proxy)
+                r2 = Getter.general_request(url + '_', verify=False, timeout=30, allow_redirects=False, proxies=Getter.proxy)
                 if status_code != r2.status_code:
                     self.raise_url(url, r2.status_code, size)
                     return
 
                 '''else:
                     if url.endswith('/') and check_dir:
-                        r2 = requests.get(url[:-1], verify=False, timeout=30)
+                        r2 = Getter.general_request(url[:-1], verify=False, timeout=30)
                         if r.status_code != r2.status_code:
                             self.raise_url(url, r2.status_code, len(r2.text))
                         elif  len(r2.text) - 50 <= len(r.text) <= len(r2.text) + 50:

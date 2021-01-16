@@ -145,6 +145,14 @@ class Arguments(object):
             type=str,
             help=Color.s('Text to find in content or header (comma-separated values)'))
 
+        custom.add_argument('--method',
+            action='store',
+            dest='request_method',
+            metavar='[http method]',
+            default='GET',
+            type=str,
+            help=Color.s('Specify request method (default: {G}GET{W}). Available methods: {G}GET{W}, {G}POST{W}, {G}PUT{W}, {G}OPTIONS{W}'))
+
 
     def _add_wl_args(self, custom):
         custom.add_argument('--md5-search',
