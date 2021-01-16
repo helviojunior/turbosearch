@@ -106,16 +106,23 @@ class Getter:
 
     @staticmethod
     def general_request(url):
-        if Configuration.request_method.upper() == "POST":
-            return requests.post(url, verify=False, timeout=30, data={}, proxies=Getter.proxy)
-        elif Configuration.request_method.upper() == "PUT":
-            return requests.put(url, verify=False, timeout=30, data={}, proxies=Getter.proxy)
-        elif Configuration.request_method.upper() == "OPTIONS":
-            return requests.options(url, verify=False, timeout=30, proxies=Getter.proxy)
-        else:
-            return requests.get(url, verify=False, timeout=30, proxies=Getter.proxy)
-        
 
+        headers = {}
+
+        if Configuration.user_agent:
+            headers = {
+                'User-Agent': Configuration.user_agent
+            }
+
+        if Configuration.request_method.upper() == "POST":
+            return requests.post(url, verify=False, timeout=30, data={}, headers=headers, proxies=Getter.proxy)
+        elif Configuration.request_method.upper() == "PUT":
+            return requests.put(url, verify=False, timeout=30, data={}, headers=headers, proxies=Getter.proxy)
+        elif Configuration.request_method.upper() == "OPTIONS":
+            return requests.options(url, verify=False, timeout=30, headers=headers, proxies=Getter.proxy)
+        else:
+            return requests.get(url, verify=False, timeout=30, headers=headers, proxies=Getter.proxy)
+        
     @staticmethod
     def calc_not_fount(url):
 

@@ -1,7 +1,8 @@
 #!/usr/bin/python3
 # -*- coding: UTF-8 -*-
 
-import os, subprocess, socket, re, requests, errno, sys, time, json, signal, base64, hashlib
+import os, subprocess, socket, re, requests, errno, sys, time, json, signal, base64, hashlib, random
+from pathlib import Path
 
 from .args import Arguments
 from .util.color import Color
@@ -9,7 +10,7 @@ from .util.logger import Logger
 
 class Configuration(object):
     ''' Stores configuration variables and functions for Turbo Search. '''
-    version = '0.0.21'
+    version = '0.0.22'
 
     initialized = False # Flag indicating config has been initialized
     verbose = 0
@@ -36,6 +37,7 @@ class Configuration(object):
     proxy=''
     text_to_find = []
     request_method='GET'
+    user_agent=''
 
     @staticmethod
     def initialize():
@@ -174,6 +176,30 @@ class Configuration(object):
         else:
             Configuration.request_method = "GET"
 
+
+        if args.random_agent:
+            try:
+                with open(str(Path(__file__).parent) + "/resources/user_agents.txt", 'r') as f:
+                    # file opened for writing. write to it here
+                    line = next(f)
+                    for num, aline in enumerate(f, 2):
+                        if random.randrange(num):
+                            continue
+                        if aline.strip("\r\n").strip() == '':
+                            continue
+                        Configuration.user_agent = aline.strip("\r\n").strip()
+                    
+            except IOError as x:
+                if x.errno == errno.EACCES:
+                    Color.pl('{!} {R}error: could not open ./resources/user_agents.txt {O}permission denied{R}{W}\r\n')
+                    Configuration.exit_gracefully(0)
+                elif x.errno == errno.EISDIR:
+                    Color.pl('{!} {R}error: could not open ./resources/user_agents.txt {O}it is an directory{R}{W}\r\n')
+                    Configuration.exit_gracefully(0)
+                else:
+                    Color.pl('{!} {R}error: could not open ./resources/user_agents.txt{W}\r\n')
+                    Configuration.exit_gracefully(0)
+
         regex = re.compile(
             r'^(?:http|ftp)s?://'  # http:// or https://
             r'(?:(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\.)+(?:[A-Z]{2,6}\.?|[A-Z0-9-]{2,}\.?)|'  # domain...
@@ -243,6 +269,9 @@ class Configuration(object):
             Logger.pl('     {C}option:{O} verbosity level %d{W}' % Configuration.verbose)
 
         Logger.pl('     {C}request method: {O}%s{W}' % Configuration.request_method)
+
+        if Configuration.user_agent:
+            Logger.pl('     {C}user agent: {O}%s{W}' % Configuration.user_agent)
 
         Logger.pl('     {C}word list:{O} %s{W}' % Configuration.word_list)
 

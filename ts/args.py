@@ -153,6 +153,12 @@ class Arguments(object):
             type=str,
             help=Color.s('Specify request method (default: {G}GET{W}). Available methods: {G}GET{W}, {G}POST{W}, {G}PUT{W}, {G}OPTIONS{W}'))
 
+        custom.add_argument('--random-agent',
+            action='store_true',
+            default=False,
+            dest='random_agent',
+            help=Color.s('Use randomly selected HTTP User-Agent header value (default: {G}no{W})'))
+
 
     def _add_wl_args(self, custom):
         custom.add_argument('--md5-search',
