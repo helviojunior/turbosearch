@@ -41,7 +41,7 @@ Usinig **-x** paramter, the tool will do standard search (without extension) + e
 HHHHHH           →→HHH
 HHHHHH           →→→→HH
 HHHHHH           →→→→→→
-→→-→→→→→→→→→→→→→→→→→→→→→→          Turbo Search v0.0.17 by Helvio Junior
+→→-→→→→→→→→→→→→→→→→→→→→→→          Turbo Search v0.0.22 by Helvio Junior
 →→|→→→→→→→→→→→→→→→→→→→→→→→→        automated url finder
 →→-→→→→→→→→→→→→→→→→→→→→→→          https://github.com/helviojunior/turbosearch
 HHHHHH           →→→→→→
@@ -69,6 +69,9 @@ Custom Settings:
   --no-forward-location     Disable forward to Location response address (default: no)
   --ignore-result [filter]  ignore resuts by result code or/and size (ex1: 302 or ex2: 302:172 or ex3: 405,302:172 )
   --find [text to find]     Text to find in content or header (comma-separated values)
+  --method [http method]    Specify request method (default: GET). Available methods: GET, POST,
+                            PUT, OPTIONS
+  --random-agent            Use randomly selected HTTP User-Agent header value (default: no)
 
 Word List Options:
   --md5-search              Search for a MD5 Hash version of each word (default: no)
