@@ -12,6 +12,23 @@ Porém quando utilizado o parâmetro **-x** a ferramenta irá realizar a busca p
 
 Sendo assim recomendo fortemente que sempre utilize a busca com o parâmetro -x definido com as extensões mais comuns para a plataforma desejada
 
+## Principais opções
+**--deep**
+Realiza a busca em profundidade na página testada, em outras palavras, lista o HTML da página buscando links presentes no HTML reportando links externos e ja colocando na fila de testes Links internos (do mesmo domínio)
+
+**--random-agent**
+Seleciona um User-Agent randômico
+
+**--ignore-result**
+Possibilidade de ignorar falso-positivo conforme o padr ao definido
+
+
+**--proxy**
+Configuração de proxy (IP/Porta) para envio de 100% das requisições
+
+**--report-to**
+Configuração de proxy (IP/Porta) para que o turbosearch realize uma requisição através deste somente quando tiver um resultado positivo da URL. Em caso de utilização de sofwares que montam arvore do site acessado, e realiza automatizações de teste através desta árvore (como o Buro Pro) essa opç ao enviará para o proxy somente as URLs que deram positivo na identificação, possibilitando manter o log do proxy limpo a acertivo nos testes, sem a necessidade de analizar o log do Turboseach e acessar as URLs novamente através do Burp.
+
 
 # Turbo Search (EN)
 
