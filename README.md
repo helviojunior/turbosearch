@@ -50,34 +50,35 @@ HHHHHH           →→HHH
 
 
 optional arguments:
-  -h, --help                show this help message and exit
+  -h, --help                  show this help message and exit
 
 General Setting:
-  -t [target url]           target url (ex: http://10.10.10.10/path)
-  -w [word list]            word list to be tested
-  -T [tasks]                number of connects in parallel (per host, default: 16)
-  -o [output file]          save output to disk (default: none)
-  -x [extensions]           Append each request with this extensions (comma-separated values)
+  -t [target url]             target url (ex: http://10.10.10.10/path)
+  -w [word list]              word list to be tested
+  -T [tasks]                  number of connects in parallel (per host, default: 16)
+  -o [output file]            save output to disk (default: none)
+  -x [extensions]             Append each request with this extensions (comma-separated values)
 
 Custom Settings:
-  -R, --restore             restore a previous aborted/crashed session
-  -I, --ignore              ignore an existing restore file (don't wait 10 seconds)
-  --proxy [target proxy]    target proxy URL (ex: http://127.0.0.1:8080)
-  --deep                    Deep Search: Look for URLs inside of HTML results
-  -v, --verbose             Shows more options (-h -v). Prints commands and outputs. (default: quiet)
-  --full-log                Print full requested URLs (default: no)
-  --no-forward-location     Disable forward to Location response address (default: no)
-  --ignore-result [filter]  ignore resuts by result code or/and size (ex1: 302 or ex2: 302:172 or ex3: 405,302:172 )
-  --find [text to find]     Text to find in content or header (comma-separated values)
-  --method [http method]    Specify request method (default: GET). Available methods: GET, POST,
-                            PUT, OPTIONS
-  --random-agent            Use randomly selected HTTP User-Agent header value (default: no)
+  -R, --restore               restore a previous aborted/crashed session
+  -I, --ignore                ignore an existing restore file (don't wait 10 seconds)
+  --proxy [target proxy]      target proxy URL (ex: http://127.0.0.1:8080)
+  --report-to [target proxy]  target proxy URL to report only just successful requests (ex: http://127.0.0.1:8080)
+  --deep                      Deep Search: Look for URLs inside of HTML results
+  -v, --verbose               Shows more options (-h -v). Prints commands and outputs. (default: quiet)
+  --full-log                  Print full requested URLs (default: no)
+  --no-forward-location       Disable forward to Location response address (default: no)
+  --ignore-result [filter]    ignore resuts by result code or/and size (ex1: 302 or ex2: 302:172 or ex3: 405,302:172 )
+  --find [text to find]       Text to find in content or header (comma-separated values)
+  --method [http method]      Specify request method (default: GET). Available methods: GET, POST,
+                              PUT, OPTIONS
+  --random-agent              Use randomly selected HTTP User-Agent header value (default: no)
 
 Word List Options:
-  --md5-search              Search for a MD5 Hash version of each word (default: no)
-  --sha1-search             Search for a SHA1 Hash version of each word (default: no)
-  --sha256-search           Search for a SHA256 Hash version of each word (default: no)
-  --hash-upper              In case of Hash Search be enabled, also search by Uppercase of Hash Hex Text (default: no)
+  --md5-search                Search for a MD5 Hash version of each word (default: no)
+  --sha1-search               Search for a SHA1 Hash version of each word (default: no)
+  --sha256-search             Search for a SHA256 Hash version of each word (default: no)
+  --hash-upper                In case of Hash Search be enabled, also search by Uppercase of Hash Hex Text (default: no)
 
 
 ```
