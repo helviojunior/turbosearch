@@ -63,7 +63,7 @@ Custom Settings:
   -R, --restore               restore a previous aborted/crashed session
   -I, --ignore                ignore an existing restore file (don't wait 10 seconds)
   --proxy [target proxy]      target proxy URL (ex: http://127.0.0.1:8080)
-  --report-to [target proxy]  target proxy URL to report only just successful requests (ex: http://127.0.0.1:8080)
+  --report-to [target proxy]  target proxy URL to report only successful requests (ex: http://127.0.0.1:8080)
   --deep                      Deep Search: Look for URLs inside of HTML results
   -v, --verbose               Shows more options (-h -v). Prints commands and outputs. (default: quiet)
   --full-log                  Print full requested URLs (default: no)
