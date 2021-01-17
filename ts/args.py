@@ -106,6 +106,13 @@ class Arguments(object):
             type=str,
             help=Color.s('target proxy URL (ex: {G}http://127.0.0.1:8080{W})'))
 
+        custom.add_argument('--report-to',
+            action='store',
+            dest='report_to',
+            metavar='[target proxy]',
+            type=str,
+            help=Color.s('target proxy URL to report only just successful requests (ex: {G}http://127.0.0.1:8080{W})'))
+
         custom.add_argument('--deep',
             action='store_true',
             default=False,

@@ -94,6 +94,24 @@ class TurboSearch(object):
                 Logger.pl('{+} {R}connectivity check error: {O}%s{W}' % e)
                 Configuration.exit_gracefully(1)
 
+            if Configuration.proxy_report_to != '':
+                try:
+                    proxy={}
+
+                    proxy = {
+                      'http': Configuration.proxy_report_to,
+                      'https': Configuration.proxy_report_to,
+                    }
+                    
+                    requests.packages.urllib3.disable_warnings()
+                    r = requests.get(Configuration.target, verify=False, timeout=10, proxies=proxy)
+
+                    Logger.pl('{+} {W}Connection test againt using report to proxy {C}%s{W} OK! (CODE:%d|SIZE:%d) ' % (Configuration.target, r.status_code, len(r.text)))
+
+                except Exception as e:
+                    Logger.pl('{+} {R}connectivity check error using report to proxy: {O}%s{W}' % e)
+                    Configuration.exit_gracefully(1)
+
             Logger.pl('     ')
 
             Logger.pl('{+} {W}Scanning url {C}%s{W} ' % Configuration.target)

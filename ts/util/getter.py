@@ -105,7 +105,7 @@ class Getter:
         return Getter.path_found
 
     @staticmethod
-    def general_request(url):
+    def general_request(url, proxy=None):
 
         headers = {}
 
@@ -115,13 +115,13 @@ class Getter:
             }
 
         if Configuration.request_method.upper() == "POST":
-            return requests.post(url, verify=False, timeout=30, data={}, headers=headers, proxies=Getter.proxy)
+            return requests.post(url, verify=False, timeout=30, data={}, headers=headers, proxies=(proxy if proxy!=None else Getter.proxy))
         elif Configuration.request_method.upper() == "PUT":
-            return requests.put(url, verify=False, timeout=30, data={}, headers=headers, proxies=Getter.proxy)
+            return requests.put(url, verify=False, timeout=30, data={}, headers=headers, proxies=(proxy if proxy!=None else Getter.proxy))
         elif Configuration.request_method.upper() == "OPTIONS":
-            return requests.options(url, verify=False, timeout=30, headers=headers, proxies=Getter.proxy)
+            return requests.options(url, verify=False, timeout=30, headers=headers, proxies=(proxy if proxy!=None else Getter.proxy))
         else:
-            return requests.get(url, verify=False, timeout=30, headers=headers, proxies=Getter.proxy)
+            return requests.get(url, verify=False, timeout=30, headers=headers, proxies=(proxy if proxy!=None else Getter.proxy))
         
     @staticmethod
     def calc_not_fount(url):
@@ -363,6 +363,20 @@ class Getter:
         else:
             Logger.pl('+ %s (CODE:%d|SIZE:%d) ' % (
                 url, status, len))
+
+        if Configuration.proxy_report_to != '':
+            try:
+                proxy={}
+
+                proxy = {
+                  'http': Configuration.proxy_report_to,
+                  'https': Configuration.proxy_report_to,
+                }
+                
+                Getter.general_request(url, proxy)
+
+            except Exception as e:
+                pass
 
     def deep_link(self, result, directory_info, check_dir, deep_level):
         if Configuration.deep:

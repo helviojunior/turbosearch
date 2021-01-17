@@ -10,7 +10,7 @@ from .util.logger import Logger
 
 class Configuration(object):
     ''' Stores configuration variables and functions for Turbo Search. '''
-    version = '0.0.22'
+    version = '0.0.23'
 
     initialized = False # Flag indicating config has been initialized
     verbose = 0
@@ -35,6 +35,7 @@ class Configuration(object):
     deep = False
     ignore_rules={}
     proxy=''
+    proxy_report_to=''
     text_to_find = []
     request_method='GET'
     user_agent=''
@@ -167,6 +168,9 @@ class Configuration(object):
         if args.proxy:
             Configuration.proxy = args.proxy
 
+        if args.report_to:
+            Configuration.proxy_report_to = args.report_to
+
         if args.request_method.upper() == "POST":
             Configuration.request_method = "POST"
         elif args.request_method.upper() == "PUT":
@@ -212,11 +216,13 @@ class Configuration(object):
             Color.pl('{!} {R}error: invalid target {O}%s{R}{W}\r\n' % Configuration.target)
             Configuration.exit_gracefully(0)
 
-
         if Configuration.proxy != '' and re.match(regex, Configuration.proxy) is None:
             Color.pl('{!} {R}error: invalid proxy {O}%s{R}{W}\r\n' % Configuration.proxy)
             Configuration.exit_gracefully(0)
 
+        if Configuration.proxy_report_to != '' and re.match(regex, Configuration.proxy_report_to) is None:
+            Color.pl('{!} {R}error: invalid report to proxy {O}%s{R}{W}\r\n' % Configuration.proxy_report_to)
+            Configuration.exit_gracefully(0)
 
         if not os.path.isfile(Configuration.word_list):
             Color.pl('{!} {R}error: word list file not found {O}%s{R}{W}\r\n' % Configuration.word_list)
