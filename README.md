@@ -20,7 +20,7 @@ Realiza a busca em profundidade na página testada, em outras palavras, lista o 
 Seleciona um User-Agent randômico
 
 **--ignore-result**
-Possibilidade de ignorar falso-positivo conforme o padr ao definido
+Possibilidade de ignorar falso-positivo conforme o padrão definido
 
 
 **--proxy**
