@@ -82,9 +82,15 @@ class TurboSearch(object):
                       'http': Configuration.proxy,
                       'https': Configuration.proxy,
                     }
+
+                if Configuration.user_agent:
+                    headers = {
+                        'User-Agent': Configuration.user_agent
+                    }
+
                 
                 requests.packages.urllib3.disable_warnings()
-                r = requests.get(Configuration.target, verify=False, timeout=10, proxies=proxy)
+                r = requests.get(Configuration.target, verify=False, timeout=10, headers=headers, proxies=proxy)
 
                 Logger.pl('{+} {W}Connection test againt {C}%s{W} OK! (CODE:%d|SIZE:%d) ' % (Configuration.target, r.status_code, len(r.text)))
 
@@ -103,8 +109,13 @@ class TurboSearch(object):
                       'https': Configuration.proxy_report_to,
                     }
                     
+                    if Configuration.user_agent:
+                        headers = {
+                            'User-Agent': Configuration.user_agent
+                        }
+
                     requests.packages.urllib3.disable_warnings()
-                    r = requests.get(Configuration.target, verify=False, timeout=10, proxies=proxy)
+                    r = requests.get(Configuration.target, verify=False, timeout=10, headers=headers, proxies=proxy)
 
                     Logger.pl('{+} {W}Connection test againt using report to proxy {C}%s{W} OK! (CODE:%d|SIZE:%d) ' % (Configuration.target, r.status_code, len(r.text)))
 
