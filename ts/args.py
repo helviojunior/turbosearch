@@ -165,6 +165,14 @@ class Arguments(object):
             default=False,
             dest='random_agent',
             help=Color.s('Use randomly selected HTTP User-Agent header value (default: {G}no{W})'))
+        
+        custom.add_argument('--header',
+            action='store',
+            dest='header',
+            metavar='[text to find]',
+            default='',
+            type=str,
+            help=Color.s('JSON-formatted header key/value'))
 
 
     def _add_wl_args(self, custom):

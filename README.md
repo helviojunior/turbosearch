@@ -22,6 +22,8 @@ Seleciona um User-Agent randômico
 **--ignore-result**
 Possibilidade de ignorar falso-positivo conforme o padrão definido
 
+**--header**
+Adição de cabeçlhos HTTP personalizados no formato JSON
 
 **--proxy**
 Configuração de proxy (IP/Porta) para envio de 100% das requisições
@@ -58,7 +60,7 @@ Usinig **-x** paramter, the tool will do standard search (without extension) + e
 HHHHHH           →→HHH
 HHHHHH           →→→→HH
 HHHHHH           →→→→→→
-→→-→→→→→→→→→→→→→→→→→→→→→→          Turbo Search v0.0.22 by Helvio Junior
+→→-→→→→→→→→→→→→→→→→→→→→→→          Turbo Search v0.0.24 by Helvio Junior
 →→|→→→→→→→→→→→→→→→→→→→→→→→→        automated url finder
 →→-→→→→→→→→→→→→→→→→→→→→→→          https://github.com/helviojunior/turbosearch
 HHHHHH           →→→→→→
@@ -90,6 +92,7 @@ Custom Settings:
   --method [http method]      Specify request method (default: GET). Available methods: GET, POST,
                               PUT, OPTIONS
   --random-agent              Use randomly selected HTTP User-Agent header value (default: no)
+  --header [text to find]     JSON-formatted header key/value
 
 Word List Options:
   --md5-search                Search for a MD5 Hash version of each word (default: no)

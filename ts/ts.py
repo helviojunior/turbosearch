@@ -83,10 +83,10 @@ class TurboSearch(object):
                       'https': Configuration.proxy,
                     }
 
+                headers = Configuration.user_headers
                 if Configuration.user_agent:
-                    headers = {
-                        'User-Agent': Configuration.user_agent
-                    }
+                    headers['User-Agent'] = Configuration.user_agent
+                    
 
                 
                 requests.packages.urllib3.disable_warnings()
@@ -109,10 +109,10 @@ class TurboSearch(object):
                       'https': Configuration.proxy_report_to,
                     }
                     
+                    headers = Configuration.user_headers
                     if Configuration.user_agent:
-                        headers = {
-                            'User-Agent': Configuration.user_agent
-                        }
+                        headers['User-Agent'] = Configuration.user_agent
+                        
 
                     requests.packages.urllib3.disable_warnings()
                     r = requests.get(Configuration.target, verify=False, timeout=10, headers=headers, proxies=proxy)

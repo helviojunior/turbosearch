@@ -10,7 +10,7 @@ from .util.logger import Logger
 
 class Configuration(object):
     ''' Stores configuration variables and functions for Turbo Search. '''
-    version = '0.0.23'
+    version = '0.0.24'
 
     initialized = False # Flag indicating config has been initialized
     verbose = 0
@@ -39,6 +39,7 @@ class Configuration(object):
     text_to_find = []
     request_method='GET'
     user_agent=''
+    user_headers={}
 
     @staticmethod
     def initialize():
@@ -204,6 +205,39 @@ class Configuration(object):
                     Color.pl('{!} {R}error: could not open ./resources/user_agents.txt{W}\r\n')
                     Configuration.exit_gracefully(0)
 
+        if args.header != '':
+            jData = {}
+            try:
+                jData=json.loads(args.header)
+            except:
+                Logger.pl('{!} {R}error: could not convert header value {O}%s{R} from an JSON object {W}\r\n' % (args.header))
+                Configuration.exit_gracefully(0)
+
+            Configuration.user_headers={}
+            try:
+                for k in jData:
+                    if isinstance(k, str):
+                        if isinstance(jData[k], str):
+                            if k.lower().find("user-agent") != -1:
+                                Configuration.user_agent  = jData[k]
+                            elif k.lower().find("host") != -1:
+                                pass
+                            elif k.lower().find("connection") != -1:
+                                pass
+                            elif k.lower().find("accept") != -1:
+                                pass
+                            elif k.lower().find("accept-encoding") != -1:
+                                pass
+                            else:
+                                Configuration.user_headers[k] = jData[k]
+                        else:
+                            raise Exception("The value of %s id not an String" % k)
+                    else:
+                        raise Exception("%s id not an String" % k)
+            except Exception as e:
+                Logger.pl('{!} {R}error: could parse header data: {R}%s{W}\r\n' % (str(e)))
+                Configuration.exit_gracefully(0)
+
         regex = re.compile(
             r'^(?:http|ftp)s?://'  # http:// or https://
             r'(?:(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\.)+(?:[A-Z]{2,6}\.?|[A-Z0-9-]{2,}\.?)|'  # domain...
@@ -342,7 +376,6 @@ class Configuration(object):
                     if not res in Configuration.ignore_rules:
                         Configuration.ignore_rules[res] = []
                     Configuration.ignore_rules[res].append(False)
-
 
         if args.find != '':
             tmp_find_lst = []

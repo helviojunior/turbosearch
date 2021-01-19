@@ -109,10 +109,10 @@ class Getter:
 
         headers = {}
 
+        headers = Configuration.user_headers
         if Configuration.user_agent:
-            headers = {
-                'User-Agent': Configuration.user_agent
-            }
+            headers['User-Agent'] = Configuration.user_agent
+            
 
         if Configuration.request_method.upper() == "POST":
             return requests.post(url, verify=False, timeout=30, data={}, headers=headers, proxies=(proxy if proxy!=None else Getter.proxy))
