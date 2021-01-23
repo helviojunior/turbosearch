@@ -7,10 +7,11 @@ from pathlib import Path
 from .args import Arguments
 from .util.color import Color
 from .util.logger import Logger
+from .util.database import Database
 
 class Configuration(object):
     ''' Stores configuration variables and functions for Turbo Search. '''
-    version = '0.0.26'
+    version = '0.0.27'
 
     initialized = False # Flag indicating config has been initialized
     verbose = 0
@@ -43,6 +44,7 @@ class Configuration(object):
     case_insensitive=False
     words=[]
     skip_current=False
+    db = None
 
     @staticmethod
     def initialize():
@@ -172,6 +174,9 @@ class Configuration(object):
 
         if args.proxy:
             Configuration.proxy = args.proxy
+
+        if args.statsdb:
+            Configuration.statsdb = args.statsdb
 
         if args.report_to:
             Configuration.proxy_report_to = args.report_to
@@ -388,6 +393,14 @@ class Configuration(object):
                     if not res in Configuration.ignore_rules:
                         Configuration.ignore_rules[res] = []
                     Configuration.ignore_rules[res].append(False)
+
+
+        if Configuration.statsdb:
+            try:
+                Configuration.db = Database()
+            except Exception as e:
+                Logger.pl('{!} {R}error: could not create stats database {R}%s{W}\r\n' % (str(e)))
+                Configuration.exit_gracefully(0)
 
         if args.find != '':
             tmp_find_lst = []

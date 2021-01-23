@@ -396,6 +396,12 @@ class Getter:
             Logger.pl('+ %s (CODE:%d|SIZE:%d) ' % (
                 url, status, len))
 
+        try:
+            if Configuration.db is not None:
+                Configuration.db.insertUri(url, status, len)
+        except:
+            pass
+
         if Configuration.proxy_report_to != '':
             try:
                 proxy={}

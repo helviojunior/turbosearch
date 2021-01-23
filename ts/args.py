@@ -180,6 +180,12 @@ class Arguments(object):
             dest='case_insensitive',
             help=Color.s('Case Insensitive search: put all wordlist in lower case'))
 
+        custom.add_argument('--stats-db',
+            action='store_true',
+            default=False,
+            dest='statsdb',
+            help=Color.s('Save reported URI at SQLite local database called stats.db (default: {G}no{W})'))
+        
 
     def _add_wl_args(self, custom):
         custom.add_argument('--md5-search',
