@@ -34,6 +34,40 @@ Configuração de proxy (IP/Porta) para que o turbosearch realize uma requisiç�
 **--case-insensitive**
 Quando habilitado o turbosearch converte toda a wordlist para minúsculo e ignora palavras duplicadas.
 
+
+## Pular diretório
+Quanto o TurboSearch estiver realizando a busca em um subdiretório e você desejar pular este scan, basta preccionat CTRL + C que será exibido uma mensagem questionando se você deseja pular o diretório ou sair do teste (ambas opções manterão o status do teste atual caso deseje restaurar o teste).
+
+**Exemplo:**
+
+No exemplo abaixo foram encontrados 1 diretórios que é falso positivo (.htpassword), desta forma desejamos ignorá-lo. Quando o TurboSearch iniciar o scan deste diretório é pressionado CTRL + C sendo exibida a mensagem solicitando o que você deseja fazer, basta pressionar “S” e enter que o TurboSearch continuará o teste no próximo diretório.
+
+```
+ [+] Connection test againt http://api1.webapiexploitation.com.br/api OK! (CODE:404|SIZE:143)
+
+ [+] Scanning url http://api1.webapiexploitation.com.br/api
+ [*] Calculated default not found http code for this folder is 404 with content size 154
+==> DIRECTORY: http://api1.webapiexploitation.com.br/api/.htaccess/ (CODE:403|SIZE:153)
+==> DIRECTORY: http://api1.webapiexploitation.com.br/api/v1/ (CODE:200|SIZE:404)
+
+ [+] Entering directory: http://api1.webapiexploitation.com.br/api/.htaccess
+ [*] Calculated default not found http code for this folder is 403 with content size 153
+^C
+how do you want to proceed? [(S)kip current directory/(q)uit]
+s
+
+ [!] skipping current directory
+
+
+ [+] Entering directory: http://api1.webapiexploitation.com.br/api/v1
+ [*] Calculated default not found http code for this folder is 404 with content size 157
+==> DIRECTORY: http://api1.webapiexploitation.com.br/api/v1/.htaccess/ (CODE:403|SIZE:153)
+==> DIRECTORY: http://api1.webapiexploitation.com.br/api/v1/users/ (CODE:200|SIZE:27)
+
+ [+] End time 2021-01-23 03:36:37
+ [+] Finished tests against http://api1.webapiexploitation.com.br/api, exiting
+```
+
 # Turbo Search (EN)
 
 An python application to look for URL based on word list.
@@ -62,7 +96,7 @@ Usinig **-x** paramter, the tool will do standard search (without extension) + e
 HHHHHH           →→HHH
 HHHHHH           →→→→HH
 HHHHHH           →→→→→→
-→→-→→→→→→→→→→→→→→→→→→→→→→          Turbo Search v0.0.25 by Helvio Junior
+→→-→→→→→→→→→→→→→→→→→→→→→→          Turbo Search v0.0.26 by Helvio Junior
 →→|→→→→→→→→→→→→→→→→→→→→→→→→        automated url finder
 →→-→→→→→→→→→→→→→→→→→→→→→→          https://github.com/helviojunior/turbosearch
 HHHHHH           →→→→→→

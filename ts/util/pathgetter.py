@@ -20,6 +20,9 @@ class PathGetter:
     current_uri = ''
     running=True
     duplicated=0
+    last_item=""
+    paused=True
+    skip_current=False
 
     def __init__(self):
         pass
@@ -53,31 +56,32 @@ class PathGetter:
                 if Configuration.case_insensitive:
                     line = line.lower()
 
-                if line not in self.words:
-                    self.words.append(line)
+                if line not in Configuration.words:
+                    Configuration.words.append(line)
+                    self.last_item = line
                 else:
                     self.duplicated+=1
 
                 if Configuration.md5_search:
                     md5.update(line.strip().encode())
                     hash = md5.hexdigest()
-                    self.words.append(hash)
+                    Configuration.words.append(hash)
                     if Configuration.hash_upper:
-                        self.words.append(hash.upper())
+                        Configuration.words.append(hash.upper())
                     
                 if Configuration.sha1_search:
                     sha1.update(line.strip().encode())
                     hash = sha1.hexdigest()
-                    self.words.append(hash)
+                    Configuration.words.append(hash)
                     if Configuration.hash_upper:
-                        self.words.append(hash.upper())
+                        Configuration.words.append(hash.upper())
                     
                 if Configuration.sha256_search:
                     sha256.update(line.strip().encode())
                     hash = sha256.hexdigest()
-                    self.words.append(hash)
+                    Configuration.words.append(hash)
                     if Configuration.hash_upper:
-                        self.words.append(hash.upper())
+                        Configuration.words.append(hash.upper())
 
                     
 
@@ -87,7 +91,7 @@ class PathGetter:
                     pass
 
     def len(self):
-        return len(self.words)
+        return len(Configuration.words)
 
     def permited_char(self, s):
         if s.isalpha():
@@ -103,34 +107,45 @@ class PathGetter:
 
     def run(self):
 
-
         t = threading.Thread(target=self.worker)
         t.daemon = True
         t.start()
 
-
         t_status = threading.Thread(target=self.status_worker)
         t_status.daemon = True
         t_status.start()
+
+        with self.q.mutex:
+            self.q.queue.clear()
 
         if self.current_uri != '':
             insert = False
             for u in self.added:
                 if not insert and u == self.current_uri:
                     insert = True
-                if insert:
+
+                if insert and self.skip_current:
+                    self.skip_current = False
+                elif insert:
                     self.q.put(u)
         else:
             self.added.append(Configuration.target)
             self.q.put(Configuration.target)
 
-        self.q.join()  # block until all tasks are done
-        sys.stdout.write("\033[K")  # Clear to the end of line
 
+        if len(list(self.q.queue)) > 0:
+            self.paused=False
+
+            self.q.join()  # block until all tasks are done
+            sys.stdout.write("\033[K")  # Clear to the end of line
 
     def worker(self):
         try:
             while self.running:
+
+                while self.paused:
+                    time.sleep(0.3)
+
                 item = self.q.get()
 
                 if item != Configuration.target:
@@ -138,7 +153,7 @@ class PathGetter:
                     Logger.pl('{+} {W}Entering directory: {C}%s{W} ' % item)
 
                 self.current_uri = item
-                self.current_gettter = Getter(self.words, False)
+                self.current_gettter = Getter(Configuration.words, False)
                 self.current_gettter.ingore_until = self.ingore_until
                 paths_found = self.current_gettter.run(item)
 
@@ -152,40 +167,71 @@ class PathGetter:
                         self.added.append(u)
                         self.q.put(u)
 
+                if Configuration.verbose > 3:
+                    Logger.pl('{*} {W}Finishing %s{W}' % (item))
+
+
                 self.ingore_until = ''
                 self.q.task_done()
-        except KeyboardInterrupt:
-            pass
+        except KeyboardInterrupt as e:
+            raise e
 
+    def testing_base(self):
+        return self.current_uri == Configuration.target
+
+    def pause(self):
+        self.paused=True
+        self.running=False
+        self.save_status()
+        self.current_gettter.pause()
+        
+        
+    def skip(self):
+        self.ingore_until = ''
+        self.save_status(True)
+        self.running=False
+        self.paused=False
+        self.current_gettter.stop()
+        with self.q.mutex:
+            self.q.queue.clear()
+
+
+    def save_status(self, skip_current=False):
+        paths_found = self.current_gettter.path_found
+
+        for u in paths_found:
+            if u.endswith('/'):
+                u = u[:-1]
+            if u not in self.added:
+                self.added.append(u)
+                self.q.put(u)
+
+
+        dt = { 
+        "command" : Configuration.cmd_line,
+        "current_path" : self.current_uri,
+        "skip_current" : skip_current,
+        "paths": self.added,
+        "deep_links": Getter.deep_links,
+        "threads": self.current_gettter.last 
+         }
+
+        with open("turbosearch.restore", "w") as text_file:
+            text_file.write(json.dumps(dt))
 
     def status_worker(self):
         try:
-            while True:
+            while self.running:
                 try:
                     if self.current_gettter is None:
                         time.sleep(1)
                         continue
 
-                    paths_found = self.current_gettter.path_found
+                    if self.paused:
+                        time.sleep(1)
+                        continue
 
-                    for u in paths_found:
-                        if u.endswith('/'):
-                            u = u[:-1]
-                        if u not in self.added:
-                            self.added.append(u)
-                            self.q.put(u)
-
-
-                    dt = { 
-                    "command" : Configuration.cmd_line,
-                    "current_path" : self.current_uri,
-                    "paths": self.added,
-                    "deep_links": Getter.deep_links,
-                    "threads": self.current_gettter.last 
-                     }
-
-                    with open("turbosearch.restore", "w") as text_file:
-                        text_file.write(json.dumps(dt))
+                    self.save_status()
 
                     if Getter.error_count >= 50:
                         self.current_gettter.stop()

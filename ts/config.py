@@ -10,7 +10,7 @@ from .util.logger import Logger
 
 class Configuration(object):
     ''' Stores configuration variables and functions for Turbo Search. '''
-    version = '0.0.25'
+    version = '0.0.26'
 
     initialized = False # Flag indicating config has been initialized
     verbose = 0
@@ -41,6 +41,8 @@ class Configuration(object):
     user_agent=''
     user_headers={}
     case_insensitive=False
+    words=[]
+    skip_current=False
 
     @staticmethod
     def initialize():
@@ -92,6 +94,7 @@ class Configuration(object):
                         Configuration.restored_uri = restore_data["current_path"]
                         Configuration.restored_paths = restore_data["paths"]
                         Configuration.restored_deep_links = restore_data["deep_links"]
+                        Configuration.skip_current = restore_data.get("skip_current",False)
 
                 except Exception as e:
                     Color.pl('{!} {R}error: invalid restore file\r\n')

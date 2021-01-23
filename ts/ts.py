@@ -63,9 +63,8 @@ class TurboSearch(object):
             2) Attacks each target
         '''
 
-
+        get = PathGetter()
         try:
-            get = PathGetter()
             get.load_wordlist()
 
             now = time.time()
@@ -89,8 +88,6 @@ class TurboSearch(object):
                 headers = Configuration.user_headers
                 if Configuration.user_agent:
                     headers['User-Agent'] = Configuration.user_agent
-                    
-
                 
                 requests.packages.urllib3.disable_warnings()
                 r = requests.get(Configuration.target, verify=False, timeout=10, headers=headers, proxies=proxy)
@@ -130,17 +127,8 @@ class TurboSearch(object):
 
             Logger.pl('{+} {W}Scanning url {C}%s{W} ' % Configuration.target)
 
-            get.added = Configuration.restored_paths
-            get.current_uri = Configuration.restored_uri
             Getter.deep_links = Configuration.restored_deep_links
-            
-            get.run()
-            Logger.pl('     ')
-
-            
-            if os.path.exists("turbosearch.restore"): 
-                os.remove("turbosearch.restore")
-
+   
         except Exception as e:
             Color.pl("\n{!} {R}Error: {O}%s" % str(e))
             if Configuration.verbose > 0 or True:
@@ -152,8 +140,71 @@ class TurboSearch(object):
                 err = err.replace('  File', '{W}{D}File')
                 err = err.replace('  Exception: ', '{R}Exception: {O}')
                 Color.pl(err)
-        except KeyboardInterrupt:
-            Color.pl('\n{!} {O}interrupted{W}\n')
+
+        testing = True
+        while(testing):
+            try:
+                get.current_uri = Configuration.restored_uri
+                get.added = Configuration.restored_paths
+                get.skip_current = Configuration.skip_current
+
+                Configuration.skip_current = False
+
+                get.run()
+                Logger.pl('     ')
+
+                if os.path.exists("turbosearch.restore"): 
+                    os.remove("turbosearch.restore")
+
+                testing = False
+            except Exception as e:
+                Color.pl("\n{!} {R}Error: {O}%s" % str(e))
+                if Configuration.verbose > 0 or True:
+                    Color.pl('\n{!} {O}Full stack trace below')
+                    from traceback import format_exc
+                    Color.p('\n{!}    ')
+                    err = format_exc().strip()
+                    err = err.replace('\n', '\n{W}{!} {W}   ')
+                    err = err.replace('  File', '{W}{D}File')
+                    err = err.replace('  Exception: ', '{R}Exception: {O}')
+                    Color.pl(err)
+                    testing = False
+            except KeyboardInterrupt:
+                #Color.pl('\n{!} {O}interrupted{W}\n')
+                get.pause() # save status and pause the test
+                Configuration.restored_uri = get.current_uri
+                Configuration.restored_paths = get.added
+
+                Tools.clear_line()
+                print(" ")
+
+                if get.testing_base():
+                    Color.pl('\n{!} {O}interrupted{W}\n')
+                    testing = False
+                else:
+                    Color.pl("how do you want to proceed? [({O}S{W}){G}kip{W} current directory/({O}q{W}){G}uit{W}]")
+
+                    try:
+                        c = input()
+                        while (c):
+                            if c.lower() == 's':
+                                Color.pl('\n{!} {O}skipping current directory{W}\n')
+                                get.skip()
+                                Configuration.skip_current = True
+                                get = PathGetter()
+                                break
+                            elif  c.lower() == 'q':
+                                Color.pl('\n{!} {O}interrupted{W}\n')
+                                testing = False
+                                break
+                            else:
+                                Color.pl("how do you want to proceed? [({O}S{W}){G}kip{W} current directory/({O}q{W}){G}uit{W}]")
+
+                            c = input()
+
+                    except KeyboardInterrupt:
+                        Color.pl('\n{!} {O}interrupted{W}\n')
+                        testing = False
 
 
         now = time.time()

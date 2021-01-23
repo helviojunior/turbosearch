@@ -32,6 +32,7 @@ class Getter:
     last = {}
     running=True
     proxy={}
+    paused=False
 
     def __init__(self, words_list, check_himself = True):
         self.words = words_list
@@ -55,6 +56,9 @@ class Getter:
 
         pass
 
+    def pause(self):
+        Getter.paused=True
+
     def add_checked(self):
         if Getter.checked < Getter.total:
             Getter.checked += 1
@@ -63,6 +67,8 @@ class Getter:
         self.running=False
 
     def run(self, base_url):
+        Getter.paused = False
+        self.running=True
         Getter.path_found = []
         Getter.base_url = base_url
 
@@ -86,6 +92,9 @@ class Getter:
         if self.ingore_until != '':
             insert = False
 
+        with self.q.mutex:
+            self.q.queue.clear()
+
         if Configuration.deep and Configuration.target == base_url:
             self.q.put(DirectoryInfo("%s/" % (Getter.base_url), Getter.dir_not_found, Getter.not_found_lenght))
                 
@@ -99,7 +108,17 @@ class Getter:
                 else:
                     self.add_checked()
 
-        self.q.join()  # block until all tasks are done
+        #self.q.join()  # block until all tasks are done
+
+        while(self.running):
+            if len(self.q.queue) > 0:
+
+                if Configuration.verbose > 5:
+                    Logger.pl('{?} {G}Queue len: {O}%s{W}' % len(self.q.queue))
+
+                time.sleep(0.3)
+            else:
+                self.running=False
         Tools.clear_line()
 
         return Getter.path_found
@@ -112,8 +131,7 @@ class Getter:
         headers = Configuration.user_headers
         if Configuration.user_agent:
             headers['User-Agent'] = Configuration.user_agent
-            
-
+        
         if Configuration.request_method.upper() == "POST":
             return requests.post(url, verify=False, timeout=30, data={}, headers=headers, proxies=(proxy if proxy!=None else Getter.proxy))
         elif Configuration.request_method.upper() == "PUT":
@@ -138,7 +156,7 @@ class Getter:
 
             r2 = Getter.general_request("%s/HJR%s" % (url, Tools.random_generator(10)))
 
-            if r1.status_code == r2.status_code:
+            if r1 is not None and r2 is not None and r1.status_code == r2.status_code:
                 extensions_not_found["__root__"] =  DirectoryInfo('', r1.status_code, len(r1.text))
             else:
                 extensions_not_found["__root__"] = DirectoryInfo('', 404, -1)
@@ -151,7 +169,7 @@ class Getter:
 
 
         if Configuration.verbose > 4:
-            Logger.pl('{?} {G}Checking not found: %s {O}%s - %d{W}' % (url, "__root__", extensions_not_found["__root__"]))
+            Logger.pl('{?} {G}Checking not found: %s {O}%s - %s{W}' % (url, "__root__", extensions_not_found["__root__"]))
 
 
         for ex in Configuration.extensions:
@@ -166,7 +184,7 @@ class Getter:
 
                 r2 = Getter.general_request(rurl)
 
-                if r1.status_code == r2.status_code:
+                if r1 is not None and r2 is not None and r1.status_code == r2.status_code:
                     extensions_not_found[ex] = DirectoryInfo('', r1.status_code, len(r1.text))
                 else:
                     extensions_not_found[ex] = DirectoryInfo('', 404, -1)
@@ -205,19 +223,29 @@ class Getter:
     def worker(self, index):
         try:
             while self.running:
-                item = self.q.get()
-                ret_ok = self.do_work(item)
-                if ret_ok:
-                    text = item.url.replace(Getter.base_url,"").lstrip("/").lstrip()
-                    if not text == '':
-                        self.last[index] = text
-                    Getter.error_count = 0
-                else:
-                    Getter.error_count += 1
 
-                self.q.task_done()
-        except KeyboardInterrupt:
-            pass
+                while Getter.paused:
+                    time.sleep(1)
+                    if not self.running:
+                        return
+
+                item = self.q.get()
+                try:
+                    ret_ok = self.do_work(item)
+                    if ret_ok:
+                        text = item.url.replace(Getter.base_url,"").lstrip("/").lstrip()
+                        if not text == '':
+                            self.last[index] = text
+                        Getter.error_count = 0
+                    else:
+                        Getter.error_count += 1
+                except KeyboardInterrupt as e:
+                    raise e
+                finally:
+                    self.q.task_done()
+
+        except KeyboardInterrupt as e:
+            raise e
 
     def do_work(self, directory_info):
 
@@ -239,6 +267,9 @@ class Getter:
         
 
     def get_uri(self, url, directory_info, check_dir=True, deep_level=0):
+
+        if Getter.paused or not self.running:
+            return
 
         if url.endswith('/'):
             while url.endswith('/'):
@@ -298,6 +329,7 @@ class Getter:
                 Tools.clear_line()
                 if Configuration.verbose > 1:
                     Logger.pl('{*} {O}Error loading %s: %s{W}' % (url, e))
+                    sys.exit(0)
                 elif Configuration.verbose > 0:
                     Logger.pl('{*} {O}Error loading %s{W}' % url)
                 pass
@@ -330,14 +362,14 @@ class Getter:
 
             else:
                 '''Double check'''
-                r2 = Getter.general_request(url + '_', verify=False, timeout=30, allow_redirects=False, proxies=Getter.proxy)
-                if status_code != r2.status_code:
+                r2 = Getter.general_request(url + '_')
+                if r2 is not None and status_code != r2.status_code:
                     self.raise_url(url, r2.status_code, size)
                     return
 
                 '''else:
                     if url.endswith('/') and check_dir:
-                        r2 = Getter.general_request(url[:-1], verify=False, timeout=30)
+                        r2 = Getter.general_request(url[:-1])
                         if r.status_code != r2.status_code:
                             self.raise_url(url, r2.status_code, len(r2.text))
                         elif  len(r2.text) - 50 <= len(r.text) <= len(r2.text) + 50:
