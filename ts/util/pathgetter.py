@@ -19,6 +19,7 @@ class PathGetter:
     current_gettter = None
     current_uri = ''
     running=True
+    duplicated=0
 
     def __init__(self):
         pass
@@ -44,13 +45,18 @@ class PathGetter:
                 if line.endswith('\r'):
                     line = line[:-1]
 
-                line = ''.join(filter(self.permited_char, line))
+                line = ''.join(filter(self.permited_char, line)).strip()
 
                 if self.ingore_until == '' and line in self.last_start:
                     self.ingore_until = line     
 
-                self.words.append(line.strip())
+                if Configuration.case_insensitive:
+                    line = line.lower()
 
+                if line not in self.words:
+                    self.words.append(line)
+                else:
+                    self.duplicated+=1
 
                 if Configuration.md5_search:
                     md5.update(line.strip().encode())

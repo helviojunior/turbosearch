@@ -174,6 +174,12 @@ class Arguments(object):
             type=str,
             help=Color.s('JSON-formatted header key/value'))
 
+        custom.add_argument('--ci', '--case-insensitive',
+            action='store_true',
+            default=False,
+            dest='case_insensitive',
+            help=Color.s('Case Insensitive search: put all wordlist in lower case'))
+
 
     def _add_wl_args(self, custom):
         custom.add_argument('--md5-search',

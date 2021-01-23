@@ -72,7 +72,10 @@ class TurboSearch(object):
             ts = int(now)
             timestamp = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
             Logger.pl('     {C}start time {O}%s{W}' % timestamp)
-            Logger.pl('     {C}generated {O}%d{C} words{W}' % get.len())
+            if get.duplicated > 0:
+                Logger.pl('     {C}duplicate {O}%d{C} words, duplicates ignored {O}%d{C} words{W}' % (get.len(), get.duplicated))
+            else:
+                Logger.pl('     {C}duplicate {O}%d{C} words{W}' % get.len())
             Logger.pl(' ')
 
             try:

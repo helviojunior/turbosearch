@@ -10,7 +10,7 @@ from .util.logger import Logger
 
 class Configuration(object):
     ''' Stores configuration variables and functions for Turbo Search. '''
-    version = '0.0.24'
+    version = '0.0.25'
 
     initialized = False # Flag indicating config has been initialized
     verbose = 0
@@ -40,6 +40,7 @@ class Configuration(object):
     request_method='GET'
     user_agent=''
     user_headers={}
+    case_insensitive=False
 
     @staticmethod
     def initialize():
@@ -181,6 +182,8 @@ class Configuration(object):
         else:
             Configuration.request_method = "GET"
 
+        if args.case_insensitive:
+            Configuration.case_insensitive = args.case_insensitive
 
         if args.random_agent:
             try:
@@ -320,6 +323,12 @@ class Configuration(object):
 
         if Configuration.deep:
             Logger.pl('     {C}deep links search:{O} yes{W}')
+
+        if Configuration.case_insensitive:
+            Logger.pl('     {C}case insensitive search:{O} yes{W}')
+        else:
+            Logger.pl('     {C}case insensitive search:{O} no{W}')
+
 
         if args.extensions != '':
             ext_list = args.extensions.split(",")
