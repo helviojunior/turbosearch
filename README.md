@@ -31,6 +31,8 @@ Configuração de proxy (IP/Porta) para envio de 100% das requisições
 **--report-to**
 Configuração de proxy (IP/Porta) para que o turbosearch realize uma requisição através deste somente quando tiver um resultado positivo da URL. Em caso de utilização de sofwares que montam arvore do site acessado, e realiza automatizações de teste através desta árvore (como o Burp Pro) essa opçãao enviará para o proxy somente as URLs que deram positivo na identificação, possibilitando manter o log do proxy limpo a acertivo nos testes, sem a necessidade de analizar o log do Turboseach e acessar as URLs novamente através do Burp.
 
+**--case-insensitive**
+Quando habilitado o turbosearch converte toda a wordlist para minúsculo e ignora palavras duplicadas.
 
 # Turbo Search (EN)
 
@@ -60,7 +62,7 @@ Usinig **-x** paramter, the tool will do standard search (without extension) + e
 HHHHHH           →→HHH
 HHHHHH           →→→→HH
 HHHHHH           →→→→→→
-→→-→→→→→→→→→→→→→→→→→→→→→→          Turbo Search v0.0.24 by Helvio Junior
+→→-→→→→→→→→→→→→→→→→→→→→→→          Turbo Search v0.0.25 by Helvio Junior
 →→|→→→→→→→→→→→→→→→→→→→→→→→→        automated url finder
 →→-→→→→→→→→→→→→→→→→→→→→→→          https://github.com/helviojunior/turbosearch
 HHHHHH           →→→→→→
@@ -93,6 +95,7 @@ Custom Settings:
                               PUT, OPTIONS
   --random-agent              Use randomly selected HTTP User-Agent header value (default: no)
   --header [text to find]     JSON-formatted header key/value
+  --ci, --case-insensitive    Case Insensitive search: put all wordlist in lower case
 
 Word List Options:
   --md5-search                Search for a MD5 Hash version of each word (default: no)
