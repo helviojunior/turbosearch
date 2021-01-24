@@ -124,7 +124,7 @@ class Getter:
         return Getter.path_found
 
     @staticmethod
-    def general_request(url, proxy=None):
+    def general_request(url, proxy=None, force_method=None):
 
         headers = {}
 
@@ -132,11 +132,15 @@ class Getter:
         if Configuration.user_agent:
             headers['User-Agent'] = Configuration.user_agent
         
-        if Configuration.request_method.upper() == "POST":
+        method=Configuration.request_method.upper()
+        if force_method is not None:
+            method = force_method.upper()
+
+        if method == "POST":
             return requests.post(url, verify=False, timeout=30, data={}, headers=headers, proxies=(proxy if proxy!=None else Getter.proxy))
-        elif Configuration.request_method.upper() == "PUT":
+        elif method == "PUT":
             return requests.put(url, verify=False, timeout=30, data={}, headers=headers, proxies=(proxy if proxy!=None else Getter.proxy))
-        elif Configuration.request_method.upper() == "OPTIONS":
+        elif method == "OPTIONS":
             return requests.options(url, verify=False, timeout=30, headers=headers, proxies=(proxy if proxy!=None else Getter.proxy))
         else:
             return requests.get(url, verify=False, timeout=30, headers=headers, proxies=(proxy if proxy!=None else Getter.proxy))

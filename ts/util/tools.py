@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 # -*- coding: UTF-8 -*-
 
-import string, random, sys
+import string, random, sys, re
 
 class Tools:
 
@@ -16,7 +16,6 @@ class Tools:
     @staticmethod
     def clear_line():
         sys.stdout.write("\033[K")  # Clear to the end of line
-
 
 
     @staticmethod
@@ -39,3 +38,16 @@ class Tools:
         except:
             pass
 
+
+    @staticmethod     
+    def permited_char(s):
+        if s.isalpha():
+            return True
+        elif bool(re.match("^[A-Za-z0-9_-]*$", s)):
+            return True
+        elif s == ".":
+            return True
+        elif s == "/":
+            return True
+        else:
+            return False

@@ -14,6 +14,7 @@ from .util.process import Process
 from .util.pathgetter import PathGetter
 from .util.tools import Tools
 from .util.getter import Getter, DirectoryInfo
+from .util.robots import Robots
 
 class TurboSearch(object):
 
@@ -89,7 +90,6 @@ class TurboSearch(object):
                 if Configuration.user_agent:
                     headers['User-Agent'] = Configuration.user_agent
                 
-                requests.packages.urllib3.disable_warnings()
                 r = requests.get(Configuration.target, verify=False, timeout=10, headers=headers, proxies=proxy)
 
                 Logger.pl('{+} {W}Connection test againt {C}%s{W} OK! (CODE:%d|SIZE:%d) ' % (Configuration.target, r.status_code, len(r.text)))
@@ -128,7 +128,13 @@ class TurboSearch(object):
             Logger.pl('{+} {W}Scanning url {C}%s{W} ' % Configuration.target)
 
             Getter.deep_links = Configuration.restored_deep_links
-   
+
+            # Realiza a leitura do robots.txt antes 
+            rob = Robots(Configuration.target)
+
+            Configuration.words = rob.getUriList() + rob.getWordList() + Configuration.words
+
+
         except Exception as e:
             Color.pl("\n{!} {R}Error: {O}%s" % str(e))
             if Configuration.verbose > 0 or True:
@@ -246,6 +252,8 @@ class TurboSearch(object):
 
 
 def run():
+    requests.packages.urllib3.disable_warnings()
+
     o = TurboSearch()
     o.print_banner()
 

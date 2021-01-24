@@ -48,7 +48,7 @@ class PathGetter:
                 if line.endswith('\r'):
                     line = line[:-1]
 
-                line = ''.join(filter(self.permited_char, line)).strip()
+                line = ''.join(filter(Tools.permited_char, line)).strip()
 
                 if self.ingore_until == '' and line in self.last_start:
                     self.ingore_until = line     
@@ -93,17 +93,6 @@ class PathGetter:
     def len(self):
         return len(Configuration.words)
 
-    def permited_char(self, s):
-        if s.isalpha():
-            return True
-        elif bool(re.match("^[A-Za-z0-9_-]*$", s)):
-            return True
-        elif s == ".":
-            return True
-        elif s == "/":
-            return True
-        else:
-            return False
 
     def run(self):
 

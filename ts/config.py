@@ -11,7 +11,7 @@ from .util.database import Database
 
 class Configuration(object):
     ''' Stores configuration variables and functions for Turbo Search. '''
-    version = '0.0.27'
+    version = '0.0.28'
 
     initialized = False # Flag indicating config has been initialized
     verbose = 0
@@ -45,6 +45,7 @@ class Configuration(object):
     words=[]
     skip_current=False
     db = None
+    norobots = False
 
     @staticmethod
     def initialize():
@@ -192,6 +193,9 @@ class Configuration(object):
 
         if args.case_insensitive:
             Configuration.case_insensitive = args.case_insensitive
+
+        if args.norobots:
+            Configuration.norobots = args.norobots
 
         if args.random_agent:
             try:

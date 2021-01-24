@@ -186,6 +186,12 @@ class Arguments(object):
             dest='statsdb',
             help=Color.s('Save reported URI at SQLite local database called stats.db (default: {G}no{W})'))
         
+        custom.add_argument('--no-robots',
+            action='store_true',
+            default=False,
+            dest='norobots',
+            help=Color.s('Not look for robots.txt (default: {G}no{W})'))
+        
 
     def _add_wl_args(self, custom):
         custom.add_argument('--md5-search',
