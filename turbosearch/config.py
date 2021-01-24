@@ -8,10 +8,11 @@ from .args import Arguments
 from .util.color import Color
 from .util.logger import Logger
 from .util.database import Database
+from .version import __version__
 
 class Configuration(object):
     ''' Stores configuration variables and functions for Turbo Search. '''
-    version = '0.1.0'
+    version = '0.0.0'
 
     initialized = False # Flag indicating config has been initialized
     verbose = 0
@@ -62,7 +63,6 @@ class Configuration(object):
 
         Configuration.verbose = 0 # Verbosity level.
         Configuration.print_stack_traces = True
-
 
         # Overwrite config values with arguments (if defined)
         Configuration.load_from_arguments()
@@ -489,6 +489,9 @@ class Configuration(object):
     @staticmethod
     def get_banner():
             """ Displays ASCII art of the highest caliber.  """
+
+            Configuration.version = str(__version__)
+
             return '''\
 
 {G}HHHHHH{W}           {R}→→{G}HHH{W}

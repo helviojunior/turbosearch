@@ -4,6 +4,42 @@ Esta é uma ferramenta de busca (estilo brute-force) baseada em uma lista de pal
 
 A Ferramenta foi desenvolvida em Python, tem seu código fonte aberto e suporta multi-threading, ou seja, diversas conexões simultâneas, agilizando o processo de busca.
 
+## Instalação
+
+Você pode instalar a última versão do TurboSearch diretamente do repositório do GitHub
+
+```
+pip install git+https://github.com/helviojunior/turbosearch.git#egg=turbosearch
+```
+
+Ou clonando o repositório localmente:
+
+
+```
+git clone https://github.com/helviojunior/turbosearch/
+```
+
+Se você deseja utilizar o TurboSearch de qualquer local do seu sistema operacional para utilizar o pip3 para realizar a instalação:
+
+
+```
+cd turbosearch
+pip3 install .
+ou
+python3 -m pip install .
+```
+
+
+Para desinstalar:
+
+
+```
+pip3 uninstall turbosearch -y
+ou
+python3 -m pip uninstall turbosearch -y
+```
+
+
 ## Informações gerais
 
 Quando NÃO utilizado o parâmetro **-x** a ferramenta realizará a busca com base na lista de palavras, mas não colocando nenhuma extensão as requisições.
@@ -74,6 +110,35 @@ An python application to look for URL based on word list.
 
 This application supports multi-threading requests.
 
+## Installation
+
+You can download the latest version of TurboSearch by cloning the GitHub repository:
+
+```
+git clone https://github.com/helviojunior/turbosearch/
+```
+
+If you would like to run TurboSearch from anywhere in your system you can install it with pip3:
+
+
+```
+cd turbosearch
+pip3 install .
+ou
+python3 -m pip install .
+```
+
+
+To uninstall it:
+
+
+```
+pip3 uninstall turbosearch -y
+ou
+python3 -m pip uninstall turbosearch -y
+```
+
+
 ## General informations
 
 When you no use **-x** paramter this tool will search url based on wordlist, but without extensions.
@@ -96,7 +161,7 @@ Usinig **-x** paramter, the tool will do standard search (without extension) + e
 HHHHHH           →→HHH
 HHHHHH           →→→→HH
 HHHHHH           →→→→→→
-→→-→→→→→→→→→→→→→→→→→→→→→→          Turbo Search v0.0.28 by Helvio Junior
+→→-→→→→→→→→→→→→→→→→→→→→→→          Turbo Search v0.1.0 by Helvio Junior
 →→|→→→→→→→→→→→→→→→→→→→→→→→→        automated url finder
 →→-→→→→→→→→→→→→→→→→→→→→→→          https://github.com/helviojunior/turbosearch
 HHHHHH           →→→→→→
