@@ -51,6 +51,12 @@ class Robots(object):
                         print(e)
                         pass
 
+                try:
+                    if Configuration.db is not None:
+                        Configuration.db.insertUri(url1, r1.status_code, len(r1.text))
+                except:
+                    pass
+
             url2 = "%s://%s%s/robots.txt" % (rUri.scheme, rUri.netloc, "/" + rUri.path.strip("/"))
             url2 = url2.replace("//robots.txt", "/robots.txt")
             if url1 != url2:
@@ -71,6 +77,12 @@ class Robots(object):
 
                         except Exception as e:
                             pass
+
+                    try:
+                        if Configuration.db is not None:
+                            Configuration.db.insertUri(url1, r1.status_code, len(r1.text))
+                    except:
+                        pass
 
             self.parse()
         except Exception as e:
