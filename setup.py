@@ -4,7 +4,7 @@
 from setuptools import setup, find_packages
 
 version = {}
-with open('ts/version.py') as f:
+with open('turbosearch/version.py') as f:
     exec(f.read(), version)
 
 setup(name='turbosearch',
