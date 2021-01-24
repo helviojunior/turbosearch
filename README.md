@@ -96,7 +96,7 @@ Usinig **-x** paramter, the tool will do standard search (without extension) + e
 HHHHHH           →→HHH
 HHHHHH           →→→→HH
 HHHHHH           →→→→→→
-→→-→→→→→→→→→→→→→→→→→→→→→→          Turbo Search v0.0.27 by Helvio Junior
+→→-→→→→→→→→→→→→→→→→→→→→→→          Turbo Search v0.0.28 by Helvio Junior
 →→|→→→→→→→→→→→→→→→→→→→→→→→→        automated url finder
 →→-→→→→→→→→→→→→→→→→→→→→→→          https://github.com/helviojunior/turbosearch
 HHHHHH           →→→→→→
@@ -131,6 +131,7 @@ Custom Settings:
   --header [text to find]     JSON-formatted header key/value
   --ci, --case-insensitive    Case Insensitive search: put all wordlist in lower case
   --stats-db                  Save reported URI at SQLite local database called stats.db (default: no)
+  --no-robots                 Not look for robots.txt (default: no)
 
 Word List Options:
   --md5-search                Search for a MD5 Hash version of each word (default: no)
