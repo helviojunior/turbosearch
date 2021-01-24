@@ -9,7 +9,7 @@ A Ferramenta foi desenvolvida em Python, tem seu código fonte aberto e suporta 
 Você pode instalar a última versão do TurboSearch diretamente do repositório do GitHub
 
 ```
-pip install git+https://github.com/helviojunior/turbosearch.git#egg=turbosearch
+pip3 install git+https://github.com/helviojunior/turbosearch.git#egg=turbosearch
 ```
 
 Ou clonando o repositório localmente:
@@ -116,7 +116,7 @@ You can install the latest version of TurboSearch by using the GitHub repository
 
 
 ```
-pip install git+https://github.com/helviojunior/turbosearch.git#egg=turbosearch
+pip3 install git+https://github.com/helviojunior/turbosearch.git#egg=turbosearch
 ```
 
 
@@ -170,7 +170,7 @@ Usinig **-x** paramter, the tool will do standard search (without extension) + e
 HHHHHH           →→HHH
 HHHHHH           →→→→HH
 HHHHHH           →→→→→→
-→→-→→→→→→→→→→→→→→→→→→→→→→          Turbo Search v0.1.0 by Helvio Junior
+→→-→→→→→→→→→→→→→→→→→→→→→→          Turbo Search v0.1.3 by Helvio Junior
 →→|→→→→→→→→→→→→→→→→→→→→→→→→        automated url finder
 →→-→→→→→→→→→→→→→→→→→→→→→→          https://github.com/helviojunior/turbosearch
 HHHHHH           →→→→→→
