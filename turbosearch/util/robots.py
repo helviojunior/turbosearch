@@ -31,8 +31,8 @@ class Robots(object):
         try:
             Logger.pl('{+} {W}Getting informations from /robots.txt at {C}%s{W} ' % rUri.netloc)
 
-            l1 = "%s://%s/robots.txt" % (rUri.scheme, rUri.netloc)
-            r1 = Getter.general_request(l1, None, "GET")
+            url1 = "%s://%s/robots.txt" % (rUri.scheme, rUri.netloc)
+            r1 = Getter.general_request(url1, None, "GET")
             if r1 is not None and r1.status_code == 200 and len(r1.text) > 0:
                 self.robots_txt += str(r1.text)
 
@@ -45,29 +45,32 @@ class Robots(object):
                           'https': Configuration.proxy_report_to,
                         }
                         
-                        Getter.general_request(url, proxy)
+                        Getter.general_request(url1, proxy, "GET")
 
                     except Exception as e:
+                        print(e)
                         pass
 
-            l1 = "%s://%s%s/%s" % (rUri.scheme, rUri.netloc, rUri.path.rstrip("/"), "/robots.txt")
-            r1 = Getter.general_request(l1, None, "GET")
-            if r1 is not None and r1.status_code == 200 and len(r1.text) > 0:
-                self.robots_txt += str(r1.text)
-                
-                if Configuration.proxy_report_to != '':
-                    try:
-                        proxy={}
+            url2 = "%s://%s%s/robots.txt" % (rUri.scheme, rUri.netloc, "/" + rUri.path.strip("/"))
+            url2 = url2.replace("//robots.txt", "/robots.txt")
+            if url1 != url2:
+                r1 = Getter.general_request(url2, None, "GET")
+                if r1 is not None and r1.status_code == 200 and len(r1.text) > 0:
+                    self.robots_txt += str(r1.text)
+                    
+                    if Configuration.proxy_report_to != '':
+                        try:
+                            proxy={}
 
-                        proxy = {
-                          'http': Configuration.proxy_report_to,
-                          'https': Configuration.proxy_report_to,
-                        }
-                        
-                        Getter.general_request(url, proxy)
+                            proxy = {
+                              'http': Configuration.proxy_report_to,
+                              'https': Configuration.proxy_report_to,
+                            }
+                            
+                            Getter.general_request(url2, proxy, "GET")
 
-                    except Exception as e:
-                        pass
+                        except Exception as e:
+                            pass
 
             self.parse()
         except Exception as e:
