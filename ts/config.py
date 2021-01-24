@@ -45,6 +45,7 @@ class Configuration(object):
     words=[]
     skip_current=False
     db = None
+    statsdb=False
     norobots = False
 
     @staticmethod
