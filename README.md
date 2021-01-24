@@ -215,3 +215,9 @@ Word List Options:
 
 
 ```
+
+# Ferramentas relacionadas
+
+O Luiz Carmo criou uma ferramenta (Web Hunter Screen) que realiza o acesso automatizado as URLs e cria um ScreenShoot de cada página. A ferramenta está preparada para ler o arquivo de dados gerado pelo ```TurboSearch``` com a opção **--stats-db** e realizar os ScreenShoots de todas as URLs apontadas pelo TurboSearch.
+
+URL: https://github.com/lgcarmo/WebHunterScreen
