@@ -79,7 +79,7 @@ class Robots(object):
         if len(self.word_list) > 0 or len(self.uri_list) > 0:
             Logger.pl('{+} {W}Loaded {O}%s{W} path(es) and {O}%s{W} unique word(s) from /robots.txt' % (len(self.uri_list), len(self.word_list)))
             for p in self.uri_list:
-                Logger.pl('==> PATH: /%s' % (p))
+                Logger.pl('==> ENTRY: /%s' % (p))
         
         Logger.pl(" ")
 
