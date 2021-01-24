@@ -112,7 +112,16 @@ This application supports multi-threading requests.
 
 ## Installation
 
-You can download the latest version of TurboSearch by cloning the GitHub repository:
+You can install the latest version of TurboSearch by using the GitHub repository:
+
+
+```
+pip install git+https://github.com/helviojunior/turbosearch.git#egg=turbosearch
+```
+
+
+
+Or uou can download the latest version of TurboSearch by cloning the GitHub repository:
 
 ```
 git clone https://github.com/helviojunior/turbosearch/
