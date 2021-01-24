@@ -80,7 +80,7 @@ class Robots(object):
 
                     try:
                         if Configuration.db is not None:
-                            Configuration.db.insertUri(url1, r1.status_code, len(r1.text))
+                            Configuration.db.insertUri(url2, r1.status_code, len(r1.text))
                     except:
                         pass
 
