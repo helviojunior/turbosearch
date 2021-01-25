@@ -34,7 +34,7 @@ class TurboSearch(object):
 
     def dependency_check(self):
         ''' Check that required programs are installed '''
-        required_apps = ['ip', 'awk', 'cut']
+        required_apps = []
         optional_apps = []
         missing_required = False
         missing_optional = False
