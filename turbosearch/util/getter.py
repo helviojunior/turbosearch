@@ -358,7 +358,6 @@ class Getter:
                     Logger.pl('{*} {O}Ignoring result to location %s with status code %s and size %s{W}' % (url,status_code,size))
                 return
 
-        
         if (status_code == directory_info.dir_not_found) and status_code != 404:
 
             if directory_info.not_found_lenght > 0 and (size <= (directory_info.not_found_lenght - 10) or size >= (directory_info.not_found_lenght + 10)):
@@ -370,7 +369,8 @@ class Getter:
                 '''Double check'''
                 r2 = Getter.general_request(url + '_')
                 if r2 is not None and status_code != r2.status_code:
-                    self.raise_url(url, r2.status_code, size)
+                    #self.raise_url(url, r2.status_code, size)
+                    self.raise_url(url, status_code, size)
                     return
 
                 '''else:
