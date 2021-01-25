@@ -43,6 +43,7 @@ class Getter:
         Getter.dir_not_found = 404
         Getter.not_found_lenght = -1
         Getter.path_found = []
+        Getter.running=True
 
         requests.packages.urllib3.disable_warnings()
 
@@ -64,11 +65,11 @@ class Getter:
             Getter.checked += 1
 
     def stop(self):
-        self.running=False
+        Getter.running=False
 
     def run(self, base_url):
         Getter.paused = False
-        self.running=True
+        Getter.running=True
         Getter.path_found = []
         Getter.base_url = base_url
 
@@ -98,11 +99,12 @@ class Getter:
         if Configuration.deep and Configuration.target == base_url:
             self.q.put(DirectoryInfo("%s/" % (Getter.base_url), Getter.dir_not_found, Getter.not_found_lenght))
                 
-        Getter.total = len(self.words)
+        Getter.total = len(self.words)    
         for item in self.words:
-            if self.running and item.strip() != '':
+            if Getter.running and item.strip() != '':
                 if not insert and item == self.ingore_until:
                     insert = True
+
                 if insert:
                     self.q.put(DirectoryInfo("%s/%s" % (Getter.base_url, item), Getter.dir_not_found, Getter.not_found_lenght))
                 else:
@@ -110,7 +112,7 @@ class Getter:
 
         #self.q.join()  # block until all tasks are done
 
-        while(self.running):
+        while(Getter.running):
             if len(self.q.queue) > 0:
 
                 if Configuration.verbose > 5:
@@ -118,7 +120,7 @@ class Getter:
 
                 time.sleep(0.3)
             else:
-                self.running=False
+                Getter.running=False
         Tools.clear_line()
 
         return Getter.path_found
@@ -226,11 +228,11 @@ class Getter:
 
     def worker(self, index):
         try:
-            while self.running:
+            while Getter.running:
 
                 while Getter.paused:
                     time.sleep(1)
-                    if not self.running:
+                    if not Getter.running:
                         return
 
                 item = self.q.get()
@@ -272,7 +274,7 @@ class Getter:
 
     def get_uri(self, url, directory_info, check_dir=True, deep_level=0):
 
-        if Getter.paused or not self.running:
+        if Getter.paused or not Getter.running:
             return
 
         if url.endswith('/'):
@@ -301,7 +303,7 @@ class Getter:
 
                 Tools.check_content(r);
 
-                if Configuration.full_log:
+                if Configuration.full_log or Configuration.verbose > 4:
                     self.raise_url(url, r.status_code, len(r.text))
                 else:
                     self.chech_if_rise(url, r.status_code, len(r.text), directory_info, check_dir)
