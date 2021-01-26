@@ -181,7 +181,7 @@ Script prepares stats.db with only statistics of the used words
 The stats will be output at CSV format with only word and hit count
 
 If you want to contribute with top hits wordlist, please send the output CSV File
-to helvio_junior [at] hotmial [dot] com
+to helvio_junior [at] hotmail [dot] com
 {W}
 
     ''' % version
