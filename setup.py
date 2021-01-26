@@ -17,6 +17,6 @@ setup(name='turbosearch',
       install_requires=['bs4>=0.0.1', 'requests>=2.23.0'],
       entry_points= { 'console_scripts': [
         'turbosearch=turbosearch.turbosearch:run',
-        'turbosearch-stats=turbosearch.turbosearch_stats:run',
+        'turbosearch_stats=turbosearch.turbosearch_stats:run',
         ]}
       )
