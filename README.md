@@ -253,6 +253,9 @@ create,2
 robots.txt,1
 ```
 
+Após a geração deste arquivo, caso deseje contribuir com a WordList PT-BR envie para helvio_junior [at] hotmail [dot] com
+
+
 # Ferramentas relacionadas
 
 O Luiz Carmo criou uma ferramenta (Web Hunter Screen) que realiza o acesso automatizado as URLs e cria um ScreenShoot de cada página. A ferramenta está preparada para ler o arquivo de dados gerado pelo ```TurboSearch``` com a opção **--stats-db** e realizar os ScreenShoots de todas as URLs apontadas pelo TurboSearch.
