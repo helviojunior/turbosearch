@@ -13,7 +13,9 @@ class Database(object):
     def __init__(self, auto_create = True, db_name=None):
 
         if db_name is None:
-            dbName = "stats.db"
+            self.dbName = "stats.db"
+        else:
+            self.dbName = db_name
 
         if not os.path.isfile(self.dbName):
             if auto_create:
@@ -68,10 +70,15 @@ class Database(object):
             Color.pl('{!} {R}Error inserting data:{O} %s{W}' % str(e))
         pass
 
-    def clearStatsL2(self):
+    def clearSummarized(self):
         conn = sqlite3.connect(self.dbName)
-        cursor = conn.cursor()
 
+        cursor = conn.cursor()
+        cursor.execute("""
+        delete from [summarized_l1];
+        """)
+
+        cursor = conn.cursor()
         cursor.execute("""
         delete from [summarized_l2];
         """)
@@ -111,7 +118,7 @@ class Database(object):
         cursor = conn.cursor()
 
         cursor.execute("""
-        select distinct uri from [stats];
+        select distinct uri from [stats] where result_code = 200;
         """)
 
         data = cursor.fetchall()

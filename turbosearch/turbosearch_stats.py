@@ -16,6 +16,7 @@ from .version import __version__
 
 class Preparer:
 
+    extensions = ["action", "ashx", "asmx", "asp", "aspx", "asx", "atom", "axd", "ccss", "cfm", "cfml", "cgi", "class", "cs", "css", "dll", "do", "gif", "hss", "htm", "html", "java", "jhtml", "jpeg", "jpg", "js", "json", "jsp", "jspx", "kt", "less", "pcss", "php", "php3", "php4", "phtml", "pl", "png", "py", "rb", "rhtml", "rss", "sass", "shtml", "svg", "swf", "wss", "xhtml", "xhtml", "xml", "yaws"]
     version = "0.0.0"
     db = None
 
@@ -26,9 +27,22 @@ class Preparer:
         hash_object = hashlib.sha1(domain.encode('UTF-8'))
         return hash_object.hexdigest()
 
+    def getExtension(self, text):
+        tmp = text.strip(".")
+        if '.' not in tmp:
+            return ''
+
+        return str(tmp.split(".")[-1:][0])
+
+
     def prepare(self):
         self.db = Database(False, Configuration.stats_file)
         self.db.createDB()
+
+        print(" ")
+        Logger.pl('{+} {G}Step 1: {O}Getting all uris{W}')
+
+        self.db.clearSummarized()
 
         stats = self.db.selectStats()
         for uri in stats:
@@ -36,15 +50,31 @@ class Preparer:
             hash = self.sha1Has(rUri.netloc)
             self.db.insertStatsL1(hash, rUri.path)
             
-        self.db.clearStatsL2()
-
+        Logger.pl('{+} {G}Step 2: {O}Getting all unique paths{W}')
         paths = self.db.selectStatsL1()
+
+        Logger.pl('{+} {G}Step 3: {O}Summarizing{W}')
         for path in paths:
             parts = path.strip("/").split("/")
             for p in parts:
-                self.db.insertStatsL2(p.strip())
+                pa = p.strip() 
+                if pa != '':
+                    ext = self.getExtension(pa).lower()
+                    if ext != '':
+                        if ext not in self.extensions:
+                            self.db.insertStatsL2(pa)
+                    else:
+                        self.db.insertStatsL2(pa)
+                    
+                if '.' in pa:
+                    parts2 = pa.strip(".").split(".")
+                    for p2 in parts2:
+                        pa2 = p2.strip() 
+                        if pa2 != '' and pa2 not in self.extensions:
+                            self.db.insertStatsL2(pa2)
 
         lines = 0
+        Logger.pl('{+} {G}Step 4: {O}Generatting stats{W}')
         with open(Configuration.out_file, "a") as text_file:
             text_file.write("word,hits" + '\n')
             hits = self.db.selectStatsL2()
