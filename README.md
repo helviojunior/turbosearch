@@ -216,6 +216,43 @@ Word List Options:
 
 ```
 
+# Contribuição
+Estamos com uma frente de trabalho para criação de WordLists customizadas e focadas no mercado brasileiro, então se você atua no mercado brasileiro e deseja contribuir com o projeto o TurboSearch conta com você.
+
+Desde a release 0.1.10 o TurboSearch conta com outro comando criado especificamente para criar um arquivo CSV com as palavras que mais tiveram positivo em seus testes.
+
+**Nota:** Nenhuma informação ou dado é enviado automaticamente para nós, sendo assim será necessário o envio manual.
+
+
+### Passo 1 - Geração do stats.db durante o teste
+
+Primeiro processo necessário é a utilização do parâmetro ```--stats-db``` durante a realização dos seus testes. Com este parâmetro o TurboSearch irá criar, no mesmo diretório de execução, um arquivo SQLite de nome stats.db com todas as URLs encontradas no seu teste.
+
+### Passo 2 - Sumarização
+
+Para evitar o envio de informações confidencias, o TurboSearch conta com um novo comando para sumarização dos dados do teste. O comando pode ser executado com uma das opções abaixo:
+
+```
+python3 turbosearch_stats.py -s stats.db -o sumarizado.csv
+
+#ou, caso você tenha instalado o TurboSearch com o pip
+turbosearch_stats -s stats.db -o sumarizado.csv
+```
+
+Coma execução deste comando será gerado um arquivo CSV com somente as palavras e quantidade de vezes que apareceram nos testes, conforme exemplo abaixo:
+
+```
+word,hits
+api,18
+v1,18
+users,17
+verify,9
+profile,2
+list,2
+create,2
+robots.txt,1
+```
+
 # Ferramentas relacionadas
 
 O Luiz Carmo criou uma ferramenta (Web Hunter Screen) que realiza o acesso automatizado as URLs e cria um ScreenShoot de cada página. A ferramenta está preparada para ler o arquivo de dados gerado pelo ```TurboSearch``` com a opção **--stats-db** e realizar os ScreenShoots de todas as URLs apontadas pelo TurboSearch.
