@@ -89,6 +89,10 @@ class Database(object):
 
     def insertStatsL2(self, word):
         try:
+
+            if word is None or word.strip() == "":
+                return;
+
             conn = sqlite3.connect(self.dbName)
             cursor = conn.cursor()
 
