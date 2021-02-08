@@ -65,7 +65,7 @@ Adição de cabeçlhos HTTP personalizados no formato JSON
 Configuração de proxy (IP/Porta) para envio de 100% das requisições
 
 **--report-to**
-Configuração de proxy (IP/Porta) para que o turbosearch realize uma requisição através deste somente quando tiver um resultado positivo da URL. Em caso de utilização de sofwares que montam arvore do site acessado, e realiza automatizações de teste através desta árvore (como o Burp Pro) essa opçãao enviará para o proxy somente as URLs que deram positivo na identificação, possibilitando manter o log do proxy limpo a acertivo nos testes, sem a necessidade de analizar o log do Turboseach e acessar as URLs novamente através do Burp.
+Configuração de proxy (IP/Porta) para que o turbosearch realize uma requisição através deste somente quando tiver um resultado positivo da URL. Em caso de utilização de sofwares que montam arvore do site acessado, e realiza automatizações de teste através desta árvore (como o Burp Pro) essa opção enviará para o proxy somente as URLs que deram positivo na identificação, possibilitando manter o log do proxy limpo a acertivo nos testes, sem a necessidade de analizar o log do Turboseach e acessar as URLs novamente através do Burp.
 
 **--case-insensitive**
 Quando habilitado o turbosearch converte toda a wordlist para minúsculo e ignora palavras duplicadas.

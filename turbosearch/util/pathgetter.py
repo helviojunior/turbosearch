@@ -104,6 +104,7 @@ class PathGetter:
         t_status.daemon = True
         t_status.start()
 
+        count = 0
         with self.q.mutex:
             self.q.queue.clear()
 
@@ -116,13 +117,16 @@ class PathGetter:
                 if insert and self.skip_current:
                     self.skip_current = False
                 elif insert:
+                    count += 1
                     self.q.put(u)
         else:
+            count += 1
             self.added.append(Configuration.target)
             self.q.put(Configuration.target)
 
 
-        if len(list(self.q.queue)) > 0:
+        #if len(list(self.q.queue)) > 0:
+        if (count > 0):
             self.paused=False
 
             self.q.join()  # block until all tasks are done

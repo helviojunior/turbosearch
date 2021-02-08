@@ -14,6 +14,7 @@ setup(name='turbosearch',
       author_email='helvio_junior@hotmail.com',
       url='https://github.com/helviojunior/turbosearch',
       packages=find_packages(),
+      package_data={'turbosearch': ['resources/*']},
       install_requires=['bs4>=0.0.1', 'requests>=2.23.0'],
       entry_points= { 'console_scripts': [
         'turbosearch=turbosearch.turbosearch:run',

@@ -200,6 +200,7 @@ class Configuration(object):
 
         if args.random_agent:
             try:
+                
                 with open(str(Path(__file__).parent) + "/resources/user_agents.txt", 'r') as f:
                     # file opened for writing. write to it here
                     line = next(f)
