@@ -32,7 +32,7 @@ class Robots(object):
             Logger.pl('{+} {W}Getting informations from /robots.txt at {C}%s{W} ' % rUri.netloc)
 
             url1 = "%s://%s/robots.txt" % (rUri.scheme, rUri.netloc)
-            r1 = Getter.general_request(url1, None, "GET")
+            r1 = Getter.general_request(url1, Configuration.proxy, "GET")
             if r1 is not None and r1.status_code == 200 and len(r1.text) > 0:
                 self.robots_txt += str(r1.text)
 
@@ -60,7 +60,7 @@ class Robots(object):
             url2 = "%s://%s%s/robots.txt" % (rUri.scheme, rUri.netloc, "/" + rUri.path.strip("/"))
             url2 = url2.replace("//robots.txt", "/robots.txt")
             if url1 != url2:
-                r1 = Getter.general_request(url2, None, "GET")
+                r1 = Getter.general_request(url2, Configuration.proxy, "GET")
                 if r1 is not None and r1.status_code == 200 and len(r1.text) > 0:
                     self.robots_txt += str(r1.text)
                     
