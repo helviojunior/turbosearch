@@ -2,6 +2,9 @@
 # -*- coding: UTF-8 -*-
 
 import sys
+import colorama
+from colorama import Fore, Back, Style
+colorama.init()
 
 class Color(object):
     ''' Helper object for easily printing colored text to the terminal. '''
