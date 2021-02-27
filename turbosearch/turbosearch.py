@@ -78,6 +78,7 @@ class TurboSearch(object):
                 Logger.pl('     {C}duplicate {O}%d{C} words{W}' % get.len())
             Logger.pl(' ')
 
+            Logger.pl('{+} {W}Conectivity checker{W}')
             try:
                 proxy={}
                 if Configuration.proxy != '':
@@ -97,7 +98,12 @@ class TurboSearch(object):
                 Tools.check_content(r);
 
             except Exception as e:
-                Logger.pl('{+} {R}connectivity check error: {O}%s{W}' % e)
+                if Configuration.proxy != '':
+                    Logger.pl('{!} {R}Error connecting to url {O}%s{R} using proxy {O}%s{W}' % (Configuration.target, Configuration.proxy))
+                else:
+                    Logger.pl('{!} {R}Error connecting to url {O}%s{R} without proxy{W}' % (Configuration.target))
+                
+                Logger.pl('{!} {O}Error: {R}%s{W}' % e)
                 Configuration.exit_gracefully(1)
 
             if Configuration.proxy_report_to != '':
@@ -120,8 +126,10 @@ class TurboSearch(object):
                     Logger.pl('{+} {W}Connection test againt using report to proxy {C}%s{W} OK! (CODE:%d|SIZE:%d) ' % (Configuration.target, r.status_code, len(r.text)))
 
                 except Exception as e:
-                    Logger.pl('{+} {R}connectivity check error using report to proxy: {O}%s{W}' % e)
+                    Logger.pl('{!} {R}Error connecting to url {O}%s{R} using {G}report to{R} proxy {O}%s{W}' % (Configuration.target, Configuration.proxy_report_to))
+                    Logger.pl('{!} {O}Error: {R}%s{W}' % e)
                     Configuration.exit_gracefully(1)
+
 
             Logger.pl('     ')
 
