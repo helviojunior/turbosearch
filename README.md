@@ -1,4 +1,4 @@
-[![ReadTheDocs](https://readthedocs.org/projects/turbosearch/badge/?version=latest)](https://turbosearch.readthedocs.io/en/latest/) [![Python 3](https://img.shields.io/badge/Python-3-green.svg)](https://github.com/helviojunior/turbosearch) 
+[![ReadTheDocs](https://readthedocs.org/projects/turbosearch/badge/?version=latest)](https://turbosearch.readthedocs.io/en/latest/) [![Python 3](https://img.shields.io/badge/Python-3-green.svg)](https://github.com/helviojunior/turbosearch) [![GitHub contributors](https://img.shields.io/github/contributors/helviojunior/turbosearch)](https://github.com/helviojunior/turbosearch/graphs/contributors/)
 
 # Turbo Search (PT-BR)
 
