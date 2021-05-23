@@ -1,6 +1,6 @@
 # TurboSearch #
 
-[![ReadTheDocs](https://readthedocs.org/projects/turbosearch/badge/?version=master)](https://turbosearch.readthedocs.org/en/master/) [![Python 3](https://img.shields.io/badge/Python-3-green.svg)](https://github.com/helviojunior/turbosearch) 
+[![ReadTheDocs](https://readthedocs.org/projects/turbosearch/badge/?version=latest)](https://turbosearch.readthedocs.io/en/latest/) [![Python 3](https://img.shields.io/badge/Python-3-green.svg)](https://github.com/helviojunior/turbosearch) 
 
 `TurboSearch` é uma ferramenta de busca (estilo brute-force) baseada em uma lista de palavras. 
 
