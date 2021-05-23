@@ -4,7 +4,7 @@
 
 `TurboSearch` é uma ferramenta de busca (estilo brute-force) baseada em uma lista de palavras. 
 
-![turbosearch-help](help.png)
+![turbosearch-help](help.jpg)
 
 O `TurboSearch` inclui as seguintes funcionalidades:
 
