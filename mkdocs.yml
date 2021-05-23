@@ -1,4 +1,11 @@
 site_name: TurboSearch
-theme: readthedocs
+theme: 
+  name: readthedocs
+  locale: en
+  language: en
 nav:
 - Home: index.md
+- Português:
+  - Overview: pt/index.md
+- English:
+  - Overview: en/index.md
