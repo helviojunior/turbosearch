@@ -1,0 +1,5 @@
+site_name: TurboSearch
+theme: readthedocs
+- language: en
+nav:
+- Home: index.md
