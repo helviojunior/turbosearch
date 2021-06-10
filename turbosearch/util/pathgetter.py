@@ -62,6 +62,8 @@ class PathGetter:
                         self.last_item = line
                     else:
                         self.duplicated+=1
+                else:
+                    Configuration.words.append(line)
 
                 if Configuration.md5_search:
                     md5.update(line.strip().encode())
