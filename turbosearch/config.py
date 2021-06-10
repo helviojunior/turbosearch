@@ -48,6 +48,7 @@ class Configuration(object):
     db = None
     statsdb=False
     norobots = False
+    nudupcheck = False
 
     @staticmethod
     def initialize():
@@ -182,6 +183,9 @@ class Configuration(object):
 
         if args.report_to:
             Configuration.proxy_report_to = args.report_to
+
+        if args.nudupcheck:
+            Configuration.nudupcheck = True
 
         if args.request_method.upper() == "POST":
             Configuration.request_method = "POST"

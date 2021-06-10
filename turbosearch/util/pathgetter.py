@@ -56,11 +56,12 @@ class PathGetter:
                 if Configuration.case_insensitive:
                     line = line.lower()
 
-                if line not in Configuration.words:
-                    Configuration.words.append(line)
-                    self.last_item = line
-                else:
-                    self.duplicated+=1
+                if not Configuration.nudupcheck:
+                    if line not in Configuration.words:
+                        Configuration.words.append(line)
+                        self.last_item = line
+                    else:
+                        self.duplicated+=1
 
                 if Configuration.md5_search:
                     md5.update(line.strip().encode())

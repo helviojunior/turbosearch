@@ -218,6 +218,13 @@ class Arguments(object):
             dest='hash_upper',
             help=Color.s('In case of Hash Search be enabled, also search by Uppercase of Hash Hex Text (default: {G}no{W})'))
 
+        custom.add_argument('--no-dupcheck',
+            action='store_true',
+            default=False,
+            dest='nudupcheck',
+            help=Color.s('Do not check duplicate words in wordlist. Use in case of big wordlists (default: {G}False{W})'))
+
+
 
 '''
 if __name__ == '__main__':
