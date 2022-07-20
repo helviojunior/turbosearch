@@ -53,7 +53,7 @@ O TurboSearch  has an extensive and up-to-date [documentation](https://turbosear
 HHHHHH           →→HHH
 HHHHHH           →→→→HH
 HHHHHH           →→→→→→
-→→-→→→→→→→→→→→→→→→→→→→→→→          Turbo Search v0.1.15 by Helvio Junior
+→→-→→→→→→→→→→→→→→→→→→→→→→          Turbo Search v0.1.22 by Helvio Junior
 →→|→→→→→→→→→→→→→→→→→→→→→→→→        automated url finder
 →→-→→→→→→→→→→→→→→→→→→→→→→          https://github.com/helviojunior/turbosearch
 HHHHHH           →→→→→→
@@ -83,7 +83,7 @@ Custom Settings:
   --ignore-result [filter]    ignore resuts by result code or/and size (ex1: 302 or ex2: 302:172 or ex3: 405,302:172 )
   --find [text to find]       Text to find in content or header (comma-separated values)
   --method [http method]      Specify request method (default: GET). Available methods: GET, POST,
-                              PUT, OPTIONS
+                              PUT, OPTIONS, all
   --random-agent              Use randomly selected HTTP User-Agent header value (default: no)
   --header [text to find]     JSON-formatted header key/value
   --ci, --case-insensitive    Case Insensitive search: put all wordlist in lower case
@@ -95,6 +95,7 @@ Word List Options:
   --sha1-search               Search for a SHA1 Hash version of each word (default: no)
   --sha256-search             Search for a SHA256 Hash version of each word (default: no)
   --hash-upper                In case of Hash Search be enabled, also search by Uppercase of Hash Hex Text (default: no)
+  --no-dupcheck               Do not check duplicate words in wordlist. Use in case of big wordlists (default: False)
 
 
 ```
