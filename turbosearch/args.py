@@ -158,7 +158,7 @@ class Arguments(object):
             metavar='[http method]',
             default='GET',
             type=str,
-            help=Color.s('Specify request method (default: {G}GET{W}). Available methods: {G}GET{W}, {G}POST{W}, {G}PUT{W}, {G}OPTIONS{W}'))
+            help=Color.s('Specify request method (default: {G}GET{W}). Available methods: {G}GET{W}, {G}POST{W}, {G}PUT{W}, {G}OPTIONS{W}, {G}all{W}'))
 
         custom.add_argument('--random-agent',
             action='store_true',

@@ -39,6 +39,7 @@ class Configuration(object):
     proxy=''
     proxy_report_to=''
     text_to_find = []
+    available_methods=['GET', 'POST', 'PUT', 'OPTIONS']
     request_method='GET'
     user_agent=''
     user_headers={}
@@ -193,6 +194,8 @@ class Configuration(object):
             Configuration.request_method = "PUT"
         elif args.request_method.upper() == "OPTIONS":
             Configuration.request_method = "OPTIONS"
+        elif args.request_method.upper() == "ALL":
+            Configuration.request_method = "ALL"
         else:
             Configuration.request_method = "GET"
 

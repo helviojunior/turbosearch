@@ -79,9 +79,9 @@ class Getter:
         (Getter.dir_not_found, Getter.not_found_lenght) = Getter.calc_not_fount(Getter.base_url)
 
         if Getter.not_found_lenght > 0:
-            Logger.pl('{*} {W}Calculated default not found http code for this folder is {O}%d{W} with content size {O}%d{W}' % (Getter.dir_not_found, Getter.not_found_lenght))
+            Logger.pl('{*} {W}Calculated default not found http code, using GET, for this folder is {O}%d{W} with content size {O}%d{W}' % (Getter.dir_not_found, Getter.not_found_lenght))
         else:
-            Logger.pl('{*} {W}Calculated default not found http code for this folder is {O}%d{W} with no content' % (Getter.dir_not_found))
+            Logger.pl('{*} {W}Calculated default not found http code, using GET, for this folder is {O}%d{W} with no content' % (Getter.dir_not_found))
 
         for i in range(Configuration.tasks):
             self.last[i] = ''
@@ -261,9 +261,9 @@ class Getter:
             Logger.pl('{?} {G}Starting worker to: {O}%s{W}' % directory_info.url)
 
 
-        ret_ok =False  
+        ret_ok = False  
         if not Getter.check_himself and directory_info.url == Getter.base_url:
-            pass
+            ret_ok = True
         else:
             ret_ok = self.get_uri("%s/" % (directory_info.url), directory_info)
         for ex in Configuration.extensions:
@@ -271,8 +271,25 @@ class Getter:
 
         return ret_ok
         
-
     def get_uri(self, url, directory_info, check_dir=True, deep_level=0):
+
+        if Getter.paused or not Getter.running:
+            return
+
+        ret_ok = False 
+        method=Configuration.request_method.upper()
+        if method == "ALL":
+            for m in Configuration.available_methods:
+                r1 = self.get_uri_internal(url, directory_info, check_dir, deep_level, m)
+                if r1:
+                    ret_ok = True
+        else:
+            ret_ok = self.get_uri_internal(url, directory_info, check_dir, deep_level)
+
+        return ret_ok
+
+
+    def get_uri_internal(self, url, directory_info, check_dir=True, deep_level=0, force_method=None):
 
         if Getter.paused or not Getter.running:
             return
@@ -297,16 +314,16 @@ class Getter:
         while try_cnt < 5:
             try:
 
-                r = Getter.general_request(url)
+                r = Getter.general_request(url, force_method=force_method)
                 if r is not None and r.status_code > 0:
                     ret_ok = True
 
                 Tools.check_content(r);
 
                 if Configuration.full_log or Configuration.verbose > 4:
-                    self.raise_url(url, r.status_code, len(r.text))
+                    self.raise_url(url, r.status_code, len(r.text), r.request.method)
                 else:
-                    self.chech_if_rise(url, r.status_code, len(r.text), directory_info, check_dir)
+                    self.chech_if_rise(url, r.status_code, len(r.text), r.request.method, directory_info, check_dir)
 
                 if Configuration.forward_location and (r.status_code == 302 or r.status_code == 301):
                     location = ''
@@ -346,7 +363,7 @@ class Getter:
 
             return ret_ok
 
-    def chech_if_rise(self, url, status_code, size, directory_info, check_dir=True):
+    def chech_if_rise(self, url, status_code, size, method, directory_info, check_dir=True):
 
         if status_code in Configuration.ignore_rules:
             if False in Configuration.ignore_rules[status_code]:
@@ -363,14 +380,14 @@ class Getter:
             if directory_info.not_found_lenght > 0 and (size <= (directory_info.not_found_lenght - 10) or size >= (directory_info.not_found_lenght + 10)):
                 # E o codigo not found porem com tamanho diferente
                 # esta tecnica visa pegar servidores que sempre retornam o mesmo status code
-                self.raise_url(url, status_code, size)
+                self.raise_url(url, status_code, size, method)
 
             else:
                 '''Double check'''
                 r2 = Getter.general_request(url + '_')
                 if r2 is not None and status_code != r2.status_code:
                     #self.raise_url(url, r2.status_code, size)
-                    self.raise_url(url, status_code, size)
+                    self.raise_url(url, status_code, size, method)
                     return
 
                 '''else:
@@ -386,14 +403,14 @@ class Getter:
             #    tmp_nf = Getter.calc_not_fount(url)
             #    self.chech_if_rise(url, status_code, size, tmp_nf, False)
             #else:
-            self.raise_url(url, status_code, size)
+            self.raise_url(url, status_code, size, method)
 
-    def raise_url(self, url, status, len):
+    def raise_url(self, url, status, len, method):
 
         if url.endswith('/'):
             '''if status == 403:'''
-            Logger.pl('==> DIRECTORY: %s (CODE:%d|SIZE:%d)' % (
-            url, status, len))
+            Logger.pl('==> DIRECTORY: %s (METHOD:%s|CODE:%d|SIZE:%d)' % (
+            url, method, status, len))
             Getter.path_found.append(url)
             '''else:
             Logger.pl('==> DIRECTORY: %s ' % url)
