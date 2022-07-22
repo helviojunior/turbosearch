@@ -53,7 +53,7 @@ O TurboSearch  has an extensive and up-to-date [documentation](https://turbosear
 HHHHHH           →→HHH
 HHHHHH           →→→→HH
 HHHHHH           →→→→→→
-→→-→→→→→→→→→→→→→→→→→→→→→→          Turbo Search v0.1.22 by Helvio Junior
+→→-→→→→→→→→→→→→→→→→→→→→→→          Turbo Search v0.1.23 by Helvio Junior
 →→|→→→→→→→→→→→→→→→→→→→→→→→→        automated url finder
 →→-→→→→→→→→→→→→→→→→→→→→→→          https://github.com/helviojunior/turbosearch
 HHHHHH           →→→→→→
@@ -85,7 +85,7 @@ Custom Settings:
   --method [http method]      Specify request method (default: GET). Available methods: GET, POST,
                               PUT, OPTIONS, all
   --random-agent              Use randomly selected HTTP User-Agent header value (default: no)
-  --header [text to find]     JSON-formatted header key/value
+  --header [headers]          JSON-formatted header key/value (ex: '{"PHPSESSID":"gvksi1cmjl2kqgntqof19sh823"}')
   --ci, --case-insensitive    Case Insensitive search: put all wordlist in lower case
   --stats-db                  Save reported URI at SQLite local database called stats.db (default: no)
   --no-robots                 Not look for robots.txt (default: no)

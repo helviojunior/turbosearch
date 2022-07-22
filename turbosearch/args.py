@@ -169,10 +169,10 @@ class Arguments(object):
         custom.add_argument('--header',
             action='store',
             dest='header',
-            metavar='[text to find]',
+            metavar='[headers]',
             default='',
             type=str,
-            help=Color.s('JSON-formatted header key/value'))
+            help=Color.s('JSON-formatted header key/value (ex: {G}\'{"PHPSESSID":"gvksi1cmjl2kqgntqof19sh823"}\'{W})'))
 
         custom.add_argument('--ci', '--case-insensitive',
             action='store_true',
