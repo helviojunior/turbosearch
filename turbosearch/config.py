@@ -288,7 +288,7 @@ class Configuration(object):
 
         if Configuration.out_file != '':
             try:
-                with open(Configuration.out_file, 'a') as f:
+                with open(Configuration.out_file, 'ab') as f:
                     # file opened for writing. write to it here
                     Logger.out_file = Configuration.out_file
                     f.write(Color.sc(Configuration.get_banner()) + '\n')
