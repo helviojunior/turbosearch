@@ -53,7 +53,7 @@ O TurboSearch  has an extensive and up-to-date [documentation](https://turbosear
 HHHHHH           →→HHH
 HHHHHH           →→→→HH
 HHHHHH           →→→→→→
-→→-→→→→→→→→→→→→→→→→→→→→→→          Turbo Search v0.1.23 by Helvio Junior
+→→-→→→→→→→→→→→→→→→→→→→→→→          Turbo Search v0.1.25 by Helvio Junior
 →→|→→→→→→→→→→→→→→→→→→→→→→→→        automated url finder
 →→-→→→→→→→→→→→→→→→→→→→→→→          https://github.com/helviojunior/turbosearch
 HHHHHH           →→→→→→
@@ -74,6 +74,7 @@ General Setting:
 Custom Settings:
   -R, --restore               restore a previous aborted/crashed session
   -I, --ignore                ignore an existing restore file (don't wait 10 seconds)
+  -D, --double-path           multiply a payload set to search 2 path levels (ex: word1/word2)
   --proxy [target proxy]      target proxy URL (ex: http://127.0.0.1:8080)
   --report-to [target proxy]  target proxy URL to report only successful requests (ex: http://127.0.0.1:8080)
   --deep                      Deep Search: Look for URLs inside of HTML results
@@ -83,7 +84,8 @@ Custom Settings:
   --ignore-result [filter]    ignore resuts by result code or/and size (ex1: 302 or ex2: 302:172 or ex3: 405,302:172 )
   --find [text to find]       Text to find in content or header (comma-separated values)
   --method [http method]      Specify request method (default: GET). Available methods: GET, POST,
-                              PUT, OPTIONS, all
+                              PUT, PATCH, HEAD, OPTIONS, all or comma-separated
+                              values
   --random-agent              Use randomly selected HTTP User-Agent header value (default: no)
   --header [headers]          JSON-formatted header key/value (ex: '{"PHPSESSID":"gvksi1cmjl2kqgntqof19sh823"}')
   --ci, --case-insensitive    Case Insensitive search: put all wordlist in lower case
