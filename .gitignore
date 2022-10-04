@@ -28,6 +28,11 @@
 *.log
 *.sqlite
 
+
+# Restore File #
+######################
+*.restore
+
 # OS generated files #
 ######################
 .DS_Store
