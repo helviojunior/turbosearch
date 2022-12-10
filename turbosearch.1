@@ -6,7 +6,7 @@
 .SH NAME
 \fBturbosearch \fP- wordlist url search tool
 \fB
-.SH SYNOPSIS
+.SH OPTIONS
 .nf
 .fam C
  \fBturbosearch\fP [\fIOPTION\fP]
@@ -173,14 +173,15 @@ Utilization samples:
 .PP
 .nf
 .fam C
-  ./turbosearch.py -t http://10.10.10.10/ -w /usr/share/dirb/wordlists/big.txt
-  ./turbosearch.py -t http://10.10.10.10/ -w /usr/share/dirb/wordlists/big.txt -x .html,.xml,.php,.txt
-  ./turbosearch.py -t http://10.10.10.10/ -w /usr/share/dirb/
+    turbosearch -t http://10.10.10.10/ -w /usr/share/dirb/wordlists/big.txt
+    turbosearch -t http://10.10.10.10/ -w /usr/share/dirb/wordlists/big.txt -x .html,.xml,.php,.txt
+    turbosearch -t http://10.10.10.10/ -w /usr/share/dirb/
 
 .fam T
 .fi
-.SH REPORTING BUGS
-To report a bug please visit \fBturbosearch\fP issues tracking system at:
-https://github.com/helviojunior/\fBturbosearch\fP/issues
 .SH AUTHORS
 Written by Hélvio Junior (aka M4v3r1ck) <helvio_junior@hotmail.com>
+
+This manual page was written by Josenilson Ferreira da Silva <nilsonfsilva@hotmail.com>
+.PP
+for the Debian project (but may be used by others).
