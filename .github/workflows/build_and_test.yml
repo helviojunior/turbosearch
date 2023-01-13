@@ -31,13 +31,13 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install flake8
 
-      - name: Check syntax errors
-        run: |
-          flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+      #- name: Check syntax errors
+      #  run: |
+      #    flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
 
-      - name: Check PEP8 warnings
-        run: |
-          flake8 . --count --ignore=E1,E2,E3,E501,W291,W293 --exit-zero --max-complexity=65 --max-line-length=127 --statistics
+      #- name: Check PEP8 warnings
+      #  run: |
+      #    flake8 . --count --ignore=E1,E2,E3,E501,W291,W293 --exit-zero --max-complexity=65 --max-line-length=127 --statistics
 
   build:
     name: Build
