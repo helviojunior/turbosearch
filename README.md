@@ -11,7 +11,7 @@ A Ferramenta foi desenvolvida em Python, tem seu código fonte aberto e suporta 
 Você pode instalar (ou atualizar para) a última versão do TurboSearch diretamente do repositório do GitHub
 
 ```
-pip3 install --upgrade git+https://github.com/helviojunior/turbosearch.git#egg=turbosearch
+pip3 install --upgrade turbosearch
 ```
 
 ## Documentação
