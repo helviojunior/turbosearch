@@ -1,7 +1,7 @@
 # GitHub Action workflow to build and run TurboSearch's tests
 #
 
-name: Build TurboSearch
+name: Build TurboSearch (Test)
 
 on:
     push:
