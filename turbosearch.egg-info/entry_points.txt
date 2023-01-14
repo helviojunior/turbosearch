@@ -1,4 +1,0 @@
-[console_scripts]
-turbosearch = turbosearch.turbosearch:run
-turbosearch_stats = turbosearch.turbosearch_stats:run
-
