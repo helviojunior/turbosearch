@@ -106,9 +106,9 @@ jobs:
 
       - name: Change Package version
         run: |
-          oldv=$(grep -oE '[0-9\.]+' knowsmore/version.py)
+          oldv=$(grep -oE '[0-9\.]+' turbosearch/version.py)
           current=$(date '+%Y%m%d%H%M%S')
-          echo "__version__ = '${oldv}-${current}'" > knowsmore/version.py
+          echo "__version__ = '${oldv}-${current}'" > turbosearch/version.py
 
       - name: Build artifact
         run: |
