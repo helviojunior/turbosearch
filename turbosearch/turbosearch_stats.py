@@ -11,7 +11,7 @@ from .util.process import Process
 from .util.pathgetter import PathGetter
 from .util.tools import Tools
 from .util.database import Database
-from .version import __version__
+from .__meta__ import __version__
 
 
 class Preparer:
