@@ -7,10 +7,10 @@ The build version is auto update by local git hook at .git/hooks/pre-push with t
 #!/bin/bash
 
 build=$(printf '0x%x' $(date +%s))
-meta=$(cat knowsmore/__meta__.py | sed "s/__build__.*/__build__ = "${build}"/")
-echo "$meta" > knowsmore/__meta__.py
+meta=$(cat turbosearch/__meta__.py | sed "s/__build__.*/__build__ = "${build}"/")
+echo "$meta" > turbosearch/__meta__.py
 
-git add ./knowsmore/__meta__.py
+git add ./turbosearch/__meta__.py
 git commit -m "Update build version"
 
 '''
@@ -28,7 +28,7 @@ requires = [
 meta = {}
 here = os.path.abspath(os.path.dirname(__file__))
 
-with open('knowsmore/__meta__.py') as f:
+with open('turbosearch/__meta__.py') as f:
     exec(f.read(), meta)
 
 with open("README.md", "r", encoding="utf-8") as f:
