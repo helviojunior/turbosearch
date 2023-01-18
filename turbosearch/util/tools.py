@@ -2,6 +2,7 @@
 # -*- coding: UTF-8 -*-
 
 import string, random, sys, re
+from urllib.parse import urlparse
 
 class Tools:
 
