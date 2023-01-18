@@ -31,13 +31,7 @@ class Robots(object):
         try:
             Logger.pl('{+} {W}Getting informations from /robots.txt at {C}%s{W} ' % rUri.netloc)
 
-            proxy1={}
-
-            if Configuration.proxy != '':
-                proxy1 = {
-                  'http': Configuration.proxy,
-                  'https': Configuration.proxy,
-                }
+            proxy1=Tools.get_proxy(Configuration.proxy)
 
             url1 = "%s://%s/robots.txt" % (rUri.scheme, rUri.netloc)
             r1 = Getter.general_request(url1, proxy1, "GET")
@@ -46,12 +40,7 @@ class Robots(object):
 
                 if Configuration.proxy_report_to != '':
                     try:
-                        proxy={}
-
-                        proxy = {
-                          'http': Configuration.proxy_report_to,
-                          'https': Configuration.proxy_report_to,
-                        }
+                        proxy=Tools.get_proxy(Configuration.proxy_report_to)
                         
                         Getter.general_request(url1, proxy, "GET")
 
@@ -74,12 +63,7 @@ class Robots(object):
                     
                     if Configuration.proxy_report_to != '':
                         try:
-                            proxy={}
-
-                            proxy = {
-                              'http': Configuration.proxy_report_to,
-                              'https': Configuration.proxy_report_to,
-                            }
+                            proxy=Tools.get_proxy(Configuration.proxy_report_to)
                             
                             Getter.general_request(url2, proxy, "GET")
 

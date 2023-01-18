@@ -47,12 +47,7 @@ class Getter:
 
         requests.packages.urllib3.disable_warnings()
 
-        Getter.proxy={}
-        if Configuration.proxy != '':
-            Getter.proxy = {
-              'http': Configuration.proxy,
-              'https': Configuration.proxy,
-            }
+        Getter.proxy=proxy=Tools.get_proxy(Configuration.proxy)
         
 
         pass
@@ -432,12 +427,7 @@ class Getter:
 
         if Configuration.proxy_report_to != '':
             try:
-                proxy={}
-
-                proxy = {
-                  'http': Configuration.proxy_report_to,
-                  'https': Configuration.proxy_report_to,
-                }
+                proxy=Tools.get_proxy(Configuration.proxy_report_to)
                 
                 Getter.general_request(url, proxy)
 

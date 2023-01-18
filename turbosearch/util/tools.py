@@ -38,6 +38,17 @@ class Tools:
         except:
             pass
 
+    @staticmethod     
+    def get_proxy(proxy_uri):
+        if proxy_uri is None or proxy_uri.strip() == '':
+            return {}
+
+        u_proxy = urlparse(proxy_uri)
+        proxy = {
+              'http': f'{u_proxy.scheme}://{u_proxy.netloc}',
+              'https': f'{u_proxy.scheme}://{u_proxy.netloc}',
+            }
+        return proxy
 
     @staticmethod     
     def permited_char(s):

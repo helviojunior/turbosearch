@@ -80,13 +80,8 @@ class TurboSearch(object):
 
             Logger.pl('{+} {W}Conectivity checker{W}')
             try:
-                proxy={}
-                if Configuration.proxy != '':
-                    proxy = {
-                      'http': Configuration.proxy,
-                      'https': Configuration.proxy,
-                    }
-
+                proxy=Tools.get_proxy(Configuration.proxy)
+                
                 headers = Configuration.user_headers
                 if Configuration.user_agent:
                     headers['User-Agent'] = Configuration.user_agent
@@ -108,12 +103,7 @@ class TurboSearch(object):
 
             if Configuration.proxy_report_to != '':
                 try:
-                    proxy={}
-
-                    proxy = {
-                      'http': Configuration.proxy_report_to,
-                      'https': Configuration.proxy_report_to,
-                    }
+                    proxy=proxy=Tools.get_proxy(Configuration.proxy_report_to)
                     
                     headers = Configuration.user_headers
                     if Configuration.user_agent:
