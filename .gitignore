@@ -48,4 +48,4 @@ tmtagsHistory
 *.sublime-workspace
 .bundle
 *.egg-info
-build/
+build
