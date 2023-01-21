@@ -54,7 +54,10 @@ setup(
     author_email=meta["__author_email__"],
     url=meta["__url__"],
     packages=find_packages(),
-    package_data={"": ["LICENSE", "turbosearch/resources/*", "resources/*"] + extra_files},
+    package_data={
+        "": ["LICENSE"],
+        "turbosearch": ["resources/*"]
+        },
     include_package_data=True,
     python_requires=">=3.8, <4",
     install_requires=requires,
