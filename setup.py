@@ -34,6 +34,15 @@ with open('turbosearch/__meta__.py') as f:
 with open("README.md", "r", encoding="utf-8") as f:
     readme = f.read()
 
+def package_files(directory):
+    paths = []
+    for (path, directories, filenames) in os.walk(directory):
+        for filename in filenames:
+            paths.append(os.path.join('..', path, filename))
+    return paths
+
+extra_files = package_files('turbosearch/resources')
+
 setup(
     name=meta["__title__"],
     version=meta["__version__"],
@@ -44,7 +53,7 @@ setup(
     author_email=meta["__author_email__"],
     url=meta["__url__"],
     packages=find_packages(),
-    package_data={"": ["LICENSE"], 'turbosearch': ['resources/*']},
+    package_data={"": ["LICENSE", 'turbosearch/resources/*']},
     include_package_data=True,
     python_requires=">=3.8, <4",
     install_requires=requires,
