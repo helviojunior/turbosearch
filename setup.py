@@ -55,7 +55,7 @@ setup(
     url=meta["__url__"],
     packages=find_packages(),
     package_data={
-        "": ["LICENSE"],
+        "": ["LICENSE", "*.txt"],
         "turbosearch": ["resources/*"]
         },
     include_package_data=True,
