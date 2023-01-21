@@ -34,15 +34,7 @@ with open('turbosearch/__meta__.py') as f:
 with open("README.md", "r", encoding="utf-8") as f:
     readme = f.read()
 
-def package_files(directory):
-    paths = []
-    for (path, directories, filenames) in os.walk(directory):
-        for filename in filenames:
-            paths.append(os.path.join('..', path, filename))
-    return paths
-
-extra_files = package_files('turbosearch/resources')
-#print(extra_files)
+#If you use both include_package_data and package_data, files specified with package_data will not be automatically included in sdists; you must instead list them in your MANIFEST.in
 
 setup(
     name=meta["__title__"],
@@ -58,7 +50,7 @@ setup(
         "": ["LICENSE", "*.txt"],
         "turbosearch": ["resources/*"]
         },
-    include_package_data=True,
+    #include_package_data=True,
     python_requires=">=3.8, <4",
     install_requires=requires,
     license=meta["__license__"],
