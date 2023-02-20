@@ -16,20 +16,21 @@ git commit -m "Update build version"
 '''
 
 import os
+import sys
 from setuptools import setup, find_packages
-
-requires = [
-    'bs4>=0.0.1', 
-    'requests>=2.23.0', 
-    'colorama', 
-    'requests[socks]'
-]
 
 meta = {}
 here = os.path.abspath(os.path.dirname(__file__))
 
 with open('turbosearch/__meta__.py') as f:
     exec(f.read(), meta)
+
+with open("requirements.txt", "r", encoding="utf-8") as f:
+    requires = f.read().splitlines()
+    if not requires:
+        print("Unable to read requirements from the requirements.txt file"
+              "That indicates this copy of the source code is incomplete.")
+        sys.exit(2)
 
 with open("README.md", "r", encoding="utf-8") as f:
     readme = f.read()
