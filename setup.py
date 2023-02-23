@@ -22,7 +22,7 @@ from setuptools import setup, find_packages
 meta = {}
 here = os.path.abspath(os.path.dirname(__file__))
 
-with open(f"{here}turbosearch/__meta__.py") as f:
+with open(f"{here}/turbosearch/__meta__.py") as f:
     exec(f.read(), meta)
 
 with open(f"{here}/requirements.txt", "r", encoding="utf-8") as f:
