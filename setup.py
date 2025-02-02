@@ -51,7 +51,7 @@ setup(
         "": ["LICENSE", "*.txt"],
         "turbosearch": ["resources/*"]
         },
-    data_files=[('', ['requirements.txt', 'resources/*'])],
+    data_files=[('', ['requirements.txt'])],
     #include_package_data=True,
     python_requires=">=3.8, <4",
     install_requires=requires,
