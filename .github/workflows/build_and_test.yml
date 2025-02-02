@@ -104,7 +104,7 @@ jobs:
 
       - name: Install Python dependencies
         run: |
-          apt -y install python3-venv pipx
+          sudo apt -y install python3-venv pipx
 
       - name: Install test
         run: |
