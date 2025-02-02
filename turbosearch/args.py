@@ -151,6 +151,14 @@ class Arguments(object):
             type=str,
             help=Color.s('ignore resuts by result code or/and size (ex1: 302 or ex2: 302:172 or ex3: 405,302:172 )'))
 
+        custom.add_argument('--stop-on',
+            action='store',
+            dest='stop_on',
+            metavar='[filter]',
+            default='',
+            type=str,
+            help=Color.s('stop on receive resuts by result code or/and size (ex1: 302 or ex2: 302:172 or ex3: 405,302:172 )'))
+
         custom.add_argument('--find',
             action='store',
             dest='find',

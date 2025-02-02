@@ -365,6 +365,16 @@ class Getter:
 
     def chech_if_rise(self, url, status_code, size, method, directory_info, check_dir=True):
 
+        if status_code in Configuration.stop_on:
+            if False in Configuration.stop_on[status_code]:
+                Logger.pl('{!} {R}Stopping test: location %s with status code %s and size %s{W}' % (
+                    url, status_code, size))
+                raise KeyboardInterrupt()
+            elif size in Configuration.stop_on[status_code]:
+                Logger.pl('{!} {R}Stopping test: location %s with status code %s and size %s{W}' % (
+                    url, status_code, size))
+                raise KeyboardInterrupt()
+
         if status_code in Configuration.ignore_rules:
             if False in Configuration.ignore_rules[status_code]:
                 if Configuration.verbose > 0:
