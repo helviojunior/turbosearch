@@ -121,7 +121,7 @@ class Getter:
         return Getter.path_found
 
     @staticmethod
-    def general_request(url, proxy=None, force_method=None):
+    def general_request(url, proxy=None, force_method=None, forward_location=None):
 
         headers = {}
 
@@ -137,29 +137,36 @@ class Getter:
         else:
             method = force_method.upper()
 
+        if forward_location is None:
+            forward_location = Configuration.forward_location
+        elif Configuration.forward_location is False:
+            forward_location = False
+        else:
+            forward_location = True
+
         if method == "POST":
             return requests.post(url, verify=False, timeout=30, data={}, headers=headers,
-                                 allow_redirects=Configuration.forward_location,
+                                 allow_redirects=forward_location,
                                  proxies=(proxy if proxy is not None else Getter.proxy))
         elif method == "PUT":
             return requests.put(url, verify=False, timeout=30, data={}, headers=headers,
-                                allow_redirects=Configuration.forward_location,
+                                allow_redirects=forward_location,
                                 proxies=(proxy if proxy is not None else Getter.proxy))
         elif method == "OPTIONS":
             return requests.options(url, verify=False, timeout=30, headers=headers,
-                                    allow_redirects=Configuration.forward_location,
+                                    allow_redirects=forward_location,
                                     proxies=(proxy if proxy is not None else Getter.proxy))
         elif method == "HEAD":
             return requests.head(url, verify=False, timeout=30, headers=headers,
-                                 allow_redirects=Configuration.forward_location,
+                                 allow_redirects=forward_location,
                                  proxies=(proxy if proxy is not None else Getter.proxy))
         elif method == "PATCH":
             return requests.patch(url, verify=False, timeout=30, headers=headers,
-                                  allow_redirects=Configuration.forward_location,
+                                  allow_redirects=forward_location,
                                   proxies=(proxy if proxy is not None else Getter.proxy))
         else:
             return requests.get(url, verify=False, timeout=30, headers=headers,
-                                allow_redirects=Configuration.forward_location,
+                                allow_redirects=forward_location,
                                 proxies=(proxy if proxy is not None else Getter.proxy))
         
     @staticmethod
@@ -300,7 +307,6 @@ class Getter:
     
         return ret_ok
 
-
     def get_uri_internal(self, url, directory_info, check_dir=True, deep_level=0, force_method=None):
 
         if Getter.paused or not Getter.running:
@@ -316,7 +322,6 @@ class Getter:
             Tools.clear_line()
             Logger.pl('{?} {G}Testing [%d/%d]: {O}%s{W}' % (Getter.checked,Getter.total,url))
 
-
         if not Configuration.full_log:
             Tools.clear_line()
             print(("Testing [%d/%d]: %s" % (Getter.checked,Getter.total,url)), end='\r', flush=True)
@@ -330,7 +335,7 @@ class Getter:
                 if r is not None and r.status_code > 0:
                     ret_ok = True
 
-                Tools.check_content(r);
+                Tools.check_content(r)
 
                 if Configuration.full_log or Configuration.verbose > 4:
                     self.raise_url(url, r.status_code, len(r.text), r.request.method)
@@ -345,7 +350,12 @@ class Getter:
                         if Configuration.verbose > 0:
                             Logger.pl('{*} {O}Forwarding to location %s from url %s{W}' % (location, url))
 
-                        self.get_uri(location, DirectoryInfo(location, directory_info.dir_not_found, directory_info.not_found_lenght), check_dir)
+                        self.get_uri(location,
+                                     DirectoryInfo(
+                                         location,
+                                         directory_info.dir_not_found,
+                                         directory_info.not_found_lenght),
+                                     check_dir)
 
                     except Exception as ef:
 
@@ -356,7 +366,6 @@ class Getter:
 
                 if deep_level <= 5:
                     self.deep_link(r, directory_info, check_dir, deep_level)
-
 
                 try_cnt = 4
             except Exception as e:
@@ -370,7 +379,7 @@ class Getter:
                 pass
 
             if try_cnt >= 3:
-                time.sleep( 0.2 * (try_cnt+1))
+                time.sleep(0.2 * (try_cnt+1))
             try_cnt = try_cnt+1
 
             return ret_ok

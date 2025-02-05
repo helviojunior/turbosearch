@@ -331,7 +331,6 @@ class Configuration(object):
                 Logger.pl('{!} {R}error: could not open word list file {W}\r\n')
                 Configuration.exit_gracefully(0)
 
-
         Logger.pl('     {C}target:{O} %s{W}' % Configuration.target)
 
         if Configuration.proxy != '':
@@ -354,6 +353,8 @@ class Configuration(object):
 
         if Configuration.forward_location:
             Logger.pl('     {C}forward location redirects:{O} yes{W}')
+        else:
+            Logger.pl('     {C}forward location redirects:{O} no{W}')
 
         if Configuration.deep:
             Logger.pl('     {C}deep links search:{O} yes{W}')
