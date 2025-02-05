@@ -139,7 +139,7 @@ class Getter:
 
         if forward_location is None:
             forward_location = Configuration.forward_location
-        elif Configuration.forward_location is False:
+        elif forward_location is False:
             forward_location = False
         else:
             forward_location = True
