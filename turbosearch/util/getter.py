@@ -331,7 +331,7 @@ class Getter:
         while try_cnt < 5:
             try:
 
-                r = Getter.general_request(url, force_method=force_method)
+                r = Getter.general_request(url, force_method=force_method, forward_location=False)
                 if r is not None and r.status_code > 0:
                     ret_ok = True
 
