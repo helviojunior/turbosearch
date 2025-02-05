@@ -138,17 +138,23 @@ class Getter:
             method = force_method.upper()
 
         if method == "POST":
-            return requests.post(url, verify=False, timeout=30, data={}, headers=headers, proxies=(proxy if proxy!=None else Getter.proxy))
+            return requests.post(url, verify=False, timeout=30, data={}, headers=headers, allow_redirects=False,
+                                 proxies=(proxy if proxy is not None else Getter.proxy))
         elif method == "PUT":
-            return requests.put(url, verify=False, timeout=30, data={}, headers=headers, proxies=(proxy if proxy!=None else Getter.proxy))
+            return requests.put(url, verify=False, timeout=30, data={}, headers=headers,
+                                proxies=(proxy if proxy is not None else Getter.proxy))
         elif method == "OPTIONS":
-            return requests.options(url, verify=False, timeout=30, headers=headers, proxies=(proxy if proxy!=None else Getter.proxy))
+            return requests.options(url, verify=False, timeout=30, headers=headers, allow_redirects=False,
+                                    proxies=(proxy if proxy is not None else Getter.proxy))
         elif method == "HEAD":
-            return requests.head(url, verify=False, timeout=30, headers=headers, proxies=(proxy if proxy!=None else Getter.proxy))
+            return requests.head(url, verify=False, timeout=30, headers=headers, allow_redirects=False,
+                                 proxies=(proxy if proxy is not None else Getter.proxy))
         elif method == "PATCH":
-            return requests.patch(url, verify=False, timeout=30, headers=headers, proxies=(proxy if proxy!=None else Getter.proxy))
+            return requests.patch(url, verify=False, timeout=30, headers=headers, allow_redirects=False,
+                                  proxies=(proxy if proxy is not None else Getter.proxy))
         else:
-            return requests.get(url, verify=False, timeout=30, headers=headers, proxies=(proxy if proxy!=None else Getter.proxy))
+            return requests.get(url, verify=False, timeout=30, headers=headers, allow_redirects=False,
+                                proxies=(proxy if proxy is not None else Getter.proxy))
         
     @staticmethod
     def calc_not_fount(url):
