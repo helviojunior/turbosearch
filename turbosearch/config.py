@@ -363,7 +363,6 @@ class Configuration(object):
         else:
             Logger.pl('     {C}case insensitive search:{O} no{W}')
 
-
         if args.extensions != '':
             ext_list = args.extensions.split(",")
             for ex in ext_list:
