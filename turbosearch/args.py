@@ -207,6 +207,11 @@ class Arguments(object):
             dest='norobots',
             help=Color.s('Not look for robots.txt (default: {G}no{W})'))
         
+        custom.add_argument('--ip',
+            action='store_true',
+            default=False,
+            dest='get_ip',
+            help=Color.s('Get current external IP (default: {G}no{W})'))
 
     def _add_wl_args(self, custom):
         custom.add_argument('--md5-search',

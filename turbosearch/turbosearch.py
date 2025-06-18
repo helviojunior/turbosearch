@@ -103,7 +103,7 @@ class TurboSearch(object):
 
             if Configuration.proxy_report_to != '':
                 try:
-                    proxy=proxy=Tools.get_proxy(Configuration.proxy_report_to)
+                    proxy=Tools.get_proxy(Configuration.proxy_report_to)
                     
                     headers = Configuration.user_headers
                     if Configuration.user_agent:
@@ -119,6 +119,18 @@ class TurboSearch(object):
                     Logger.pl('{!} {R}Error connecting to url {O}%s{R} using {G}report to{R} proxy {O}%s{W}' % (Configuration.target, Configuration.proxy_report_to))
                     Logger.pl('{!} {O}Error: {R}%s{W}' % e)
                     Configuration.exit_gracefully(1)
+
+
+            if Configuration.get_ip:
+                proxy=Tools.get_proxy(Configuration.proxy)
+                r = requests.get("https://ifconfig.me/ip", verify=False, timeout=10, headers=headers, proxies=proxy)
+                Logger.pl('{+} {W}Current IP {C}%s{W} OK! (CODE:%d|SIZE:%d) ' % (r.text, r.status_code, len(r.text)))
+
+                if Configuration.proxy_report_to != '':
+                    proxy=Tools.get_proxy(Configuration.proxy_report_to)
+                    r = requests.get("https://ifconfig.me/ip", verify=False, timeout=10, headers=headers, proxies=proxy)
+                    Logger.pl('{+} {W}Current IP (report to proxy) {C}%s{W} OK! (CODE:%d|SIZE:%d) ' % (r.text, r.status_code, len(r.text)))
+
 
 
             Logger.pl('     ')

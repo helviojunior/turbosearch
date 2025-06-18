@@ -52,6 +52,7 @@ class Configuration(object):
     norobots = False
     nudupcheck = False
     doublepath = False
+    get_ip = False
 
     @staticmethod
     def initialize():
@@ -193,6 +194,8 @@ class Configuration(object):
         if args.nudupcheck:
             Configuration.nudupcheck = True
 
+        if args.get_ip:
+            Configuration.get_ip = True
 
         if args.request_method != '':
             if args.request_method.upper().strip() == "ALL":
@@ -523,7 +526,7 @@ class Configuration(object):
                         encoded = encoded.replace('=','')
                         if encoded not in Configuration.text_to_find:
                             Configuration.text_to_find.append(encoded)
-                    
+ 
 
     @staticmethod
     def variants(word):
