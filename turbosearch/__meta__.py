@@ -1,4 +1,4 @@
-__version__ = '0.1.35'
+__version__ = '0.1.36'
 __title__ = "turbosearch"
 __description__ = "The most powerfull Automated url finder/crawler."
 __url__ = "https://github.com/helviojunior/turbosearch"
