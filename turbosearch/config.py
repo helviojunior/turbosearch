@@ -226,6 +226,7 @@ class Configuration(object):
         if args.norobots:
             Configuration.norobots = args.norobots
 
+        Configuration.user_agent = 'github.com/helviojunior/turbosearch Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Chrome/126.0.0.0 Safari/537.36'
         if args.random_agent:
             try:
                 
@@ -354,7 +355,7 @@ class Configuration(object):
 
         Logger.pl('     {C}request method(s): {O}%s{W}' % ', '.join(Configuration.request_methods))
 
-        if Configuration.user_agent:
+        if Configuration.user_agent and 'turbosearch' not in Configuration.user_agent:
             Logger.pl('     {C}user agent: {O}%s{W}' % Configuration.user_agent)
 
         Logger.pl('     {C}word list:{O} %s{W}' % Configuration.word_list)
