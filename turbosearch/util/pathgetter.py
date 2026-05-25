@@ -3,7 +3,12 @@
 
 from ..util.tools import Tools
 
-import os, subprocess, socket, re, queue, threading, sys, time, json, hashlib
+import queue
+import threading
+import sys
+import time
+import json
+import hashlib
 
 from ..config import Configuration
 from ..util.logger import Logger
@@ -33,7 +38,7 @@ class PathGetter:
             try:
                 for i in Configuration.threads_data:
                     self.last_start.append(Configuration.threads_data[i])
-            except:
+            except Exception:
                 pass
 
         md5 = hashlib.md5()
@@ -88,7 +93,7 @@ class PathGetter:
 
                 try:
                     line = f.readline()
-                except:
+                except Exception:
                     pass
 
         if Configuration.doublepath:

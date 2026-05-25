@@ -1,7 +1,6 @@
 #!/usr/bin/python3
 # -*- coding: UTF-8 -*-
 
-import sys
 from ..util.color import Color
 
 class Logger(object):
@@ -18,7 +17,7 @@ class Logger(object):
             try:
                 with open(Logger.out_file, "a") as text_file:
                     text_file.write(Color.sc(text) + '\n')
-            except:
+            except Exception:
                 pass
                 
 
@@ -30,7 +29,7 @@ class Logger(object):
             try:
                 with open(Logger.out_file, "a") as text_file:
                     text_file.write(Color.sc(text) + '\n')
-            except:
+            except Exception:
                 Color.pl(text)
         else:
             Color.pl(text)

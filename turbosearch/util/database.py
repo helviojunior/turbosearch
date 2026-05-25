@@ -1,9 +1,8 @@
 #!/usr/bin/python3
 # -*- coding: UTF-8 -*-
 
-import sys, os.path
+import os.path
 import sqlite3
-import string, base64
 
 from .color import Color
 
@@ -91,7 +90,7 @@ class Database(object):
         try:
 
             if word is None or word.strip() == "":
-                return;
+                return
 
             conn = sqlite3.connect(self.dbName)
             cursor = conn.cursor()

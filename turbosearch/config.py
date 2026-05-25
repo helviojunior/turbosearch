@@ -1,7 +1,16 @@
 #!/usr/bin/python3
 # -*- coding: UTF-8 -*-
 
-import os, subprocess, socket, re, requests, errno, sys, time, json, signal, base64, hashlib, random
+import os
+import re
+import errno
+import sys
+import time
+import json
+import signal
+import base64
+import hashlib
+import random
 from pathlib import Path
 
 from .args import Arguments
@@ -76,7 +85,6 @@ class Configuration(object):
     @staticmethod
     def load_from_arguments():
         ''' Sets configuration values based on Argument.args object '''
-        from .args import Arguments
 
         config_check = 0
 
@@ -105,7 +113,7 @@ class Configuration(object):
                         Configuration.restored_deep_links = restore_data["deep_links"]
                         Configuration.skip_current = restore_data.get("skip_current",False)
 
-                except Exception as e:
+                except Exception:
                     Color.pl('{!} {R}error: invalid restore file\r\n')
                     raise
 
@@ -223,7 +231,7 @@ class Configuration(object):
                 
                 with open(str(Path(__file__).parent) + "/resources/user_agents.txt", 'r') as f:
                     # file opened for writing. write to it here
-                    line = next(f)
+                    next(f)
                     for num, aline in enumerate(f, 2):
                         if random.randrange(num):
                             continue
@@ -246,7 +254,7 @@ class Configuration(object):
             jData = {}
             try:
                 jData=json.loads(args.header)
-            except:
+            except Exception:
                 Logger.pl('{!} {R}error: could not convert header value {O}%s{R} from an JSON object {W}\r\n' % (args.header))
                 Configuration.exit_gracefully(0)
 
@@ -396,17 +404,17 @@ class Configuration(object):
                     res=0
                     try:
                         res=int(i_result)
-                    except:
+                    except Exception:
                         Logger.pl('{!} {R}error: could not convert {O}%s{R} from {O}%s{R} to an integer value {W}\r\n' % (i_result,ignore_line))
                         Configuration.exit_gracefully(0)
 
                     try:
                         size=int(i_size)
-                    except:
+                    except Exception:
                         Logger.pl('{!} {R}error: could not convert {O}%s{R} from {O}%s{R} to an integer value {W}\r\n' % (i_size,ignore_line))
                         Configuration.exit_gracefully(0)
                     
-                    if not res in Configuration.ignore_rules:
+                    if res not in Configuration.ignore_rules:
                         Configuration.ignore_rules[res] = []
                     Configuration.ignore_rules[res].append(size)
 
@@ -414,11 +422,11 @@ class Configuration(object):
                     res=0
                     try:
                         res=int(ignore_line)
-                    except:
+                    except Exception:
                         Logger.pl('{!} {R}error: could not convert {O}%s{R} to an integer value {W}\r\n' % (ignore_line))
                         Configuration.exit_gracefully(0)
 
-                    if not res in Configuration.ignore_rules:
+                    if res not in Configuration.ignore_rules:
                         Configuration.ignore_rules[res] = []
                     Configuration.ignore_rules[res].append(False)
 
@@ -432,7 +440,7 @@ class Configuration(object):
                     res = 0
                     try:
                         res = int(i_result)
-                    except:
+                    except Exception:
                         Logger.pl(
                             '{!} {R}error: could not convert {O}%s{R} from {O}%s{R} to an integer value {W}\r\n' % (
                             i_result, stop_line))
@@ -440,13 +448,13 @@ class Configuration(object):
 
                     try:
                         size = int(i_size)
-                    except:
+                    except Exception:
                         Logger.pl(
                             '{!} {R}error: could not convert {O}%s{R} from {O}%s{R} to an integer value {W}\r\n' % (
                             i_size, stop_line))
                         Configuration.exit_gracefully(0)
 
-                    if not res in Configuration.stop_on:
+                    if res not in Configuration.stop_on:
                         Configuration.stop_on[res] = []
                     Configuration.stop_on[res].append(size)
 
@@ -454,12 +462,12 @@ class Configuration(object):
                     res = 0
                     try:
                         res = int(stop_line)
-                    except:
+                    except Exception:
                         Logger.pl(
                             '{!} {R}error: could not convert {O}%s{R} to an integer value {W}\r\n' % (stop_line))
                         Configuration.exit_gracefully(0)
 
-                    if not res in Configuration.stop_on:
+                    if res not in Configuration.stop_on:
                         Configuration.stop_on[res] = []
                     Configuration.stop_on[res].append(False)
 
@@ -530,9 +538,6 @@ class Configuration(object):
 
     @staticmethod
     def variants(word):
-        md5 = hashlib.md5()
-        sha1 = hashlib.sha1()
-        sha256 = hashlib.sha256()    
         words = []
         if word not in words:
             words.append(word)
@@ -602,7 +607,7 @@ class Configuration(object):
         result += Color.s('{W}%s------------------{W}\n' % ('-' * max_len))
 
         for (key,val) in sorted(Configuration.__dict__.items()):
-            if key.startswith('__') or type(val) == staticmethod or val is None:
+            if key.startswith('__') or isinstance(val, staticmethod) or val is None:
                 continue
             result += Color.s("{G}%s {W} {C}%s{W}\n" % (key.ljust(max_len),val))
         return result

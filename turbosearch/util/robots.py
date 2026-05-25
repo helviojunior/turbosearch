@@ -1,12 +1,10 @@
 #!/usr/bin/python3
 # -*- coding: UTF-8 -*-
 
-import sys, os.path, re
-import string, base64
+import re
 from urllib.parse import urlparse
 
 from .getter import Getter
-from .color import Color
 from .logger import Logger
 from .tools import Tools
 from ..config import Configuration
@@ -51,7 +49,7 @@ class Robots(object):
                 try:
                     if Configuration.db is not None:
                         Configuration.db.insertUri(url1, r1.status_code, len(r1.text))
-                except:
+                except Exception:
                     pass
 
             url2 = "%s://%s%s/robots.txt" % (rUri.scheme, rUri.netloc, "/" + rUri.path.strip("/"))
@@ -67,13 +65,13 @@ class Robots(object):
                             
                             Getter.general_request(url2, proxy, "GET")
 
-                        except Exception as e:
+                        except Exception:
                             pass
 
                     try:
                         if Configuration.db is not None:
                             Configuration.db.insertUri(url2, r1.status_code, len(r1.text))
-                    except:
+                    except Exception:
                         pass
 
             self.parse()

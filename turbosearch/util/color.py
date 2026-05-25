@@ -3,7 +3,6 @@
 
 import sys
 import colorama
-from colorama import Fore, Back, Style
 colorama.init()
 
 class Color(object):

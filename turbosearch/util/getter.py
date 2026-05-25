@@ -3,7 +3,12 @@
 
 from ..util.tools import Tools
 
-import os, subprocess, socket, re, requests, queue, threading, sys, operator, time, json
+import requests
+import queue
+import threading
+import sys
+import operator
+import time
 
 from ..config import Configuration
 from ..util.logger import Logger
@@ -47,7 +52,7 @@ class Getter:
 
         requests.packages.urllib3.disable_warnings()
 
-        Getter.proxy=proxy=Tools.get_proxy(Configuration.proxy)
+        Getter.proxy = Tools.get_proxy(Configuration.proxy)
         
 
         pass
@@ -453,7 +458,7 @@ class Getter:
         try:
             if Configuration.db is not None:
                 Configuration.db.insertUri(url, status, len)
-        except:
+        except Exception:
             pass
 
         if Configuration.proxy_report_to != '':
@@ -462,7 +467,7 @@ class Getter:
                 
                 Getter.general_request(url, proxy)
 
-            except Exception as e:
+            except Exception:
                 pass
 
     def deep_link(self, result, directory_info, check_dir, deep_level):

@@ -3,7 +3,8 @@
 
 from .util.color import Color
 
-import argparse, sys, os
+import argparse
+import sys
 
 class Arguments(object):
     ''' Holds arguments used by the Turbo Search '''

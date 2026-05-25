@@ -7,13 +7,17 @@ except (ValueError, ImportError) as e:
     raise Exception('You may need to run TurboSearch from the root directory (which includes README.md)', e)
 
 
-import sys, datetime, time, os, requests
+import sys
+import datetime
+import time
+import os
+import requests
 from .util.color import Color
 from .util.logger import Logger
 from .util.process import Process
 from .util.pathgetter import PathGetter
 from .util.tools import Tools
-from .util.getter import Getter, DirectoryInfo
+from .util.getter import Getter
 from .util.robots import Robots
 
 class TurboSearch(object):
@@ -90,7 +94,7 @@ class TurboSearch(object):
 
                 Logger.pl('{+} {W}Connection test againt {C}%s{W} OK! (CODE:%d|SIZE:%d) ' % (Configuration.target, r.status_code, len(r.text)))
 
-                Tools.check_content(r);
+                Tools.check_content(r)
 
             except Exception as e:
                 if Configuration.proxy != '':
@@ -255,7 +259,7 @@ class TurboSearch(object):
         prompt = Color.s('{+} type {G}c{W} to {G}continue{W}' +
                          ' or {R}s{W} to {R}stop{W}: ')
 
-        if raw_input(prompt).lower().startswith('s'):
+        if input(prompt).lower().startswith('s'):
             return False
         else:
             return True

@@ -1,8 +1,14 @@
 #!/usr/bin/python3
 # -*- coding: UTF-8 -*-
 
-import string, random, sys, re
+import string
+import random
+import sys
+import re
 from urllib.parse import urlparse
+
+from ..config import Configuration
+from .logger import Logger
 
 class Tools:
 
@@ -36,7 +42,7 @@ class Tools:
                         Logger.pl_file('--> Start Response: ')
                         Logger.pl_file(data)
                         Logger.pl_file('<-- End Response')
-        except:
+        except Exception:
             pass
 
     @staticmethod     

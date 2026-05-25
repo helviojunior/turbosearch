@@ -1,15 +1,14 @@
 #!/usr/bin/python3
 # -*- coding: UTF-8 -*-
 
-import sys, datetime, time, os
+import sys
+import os
+import errno
 from urllib.parse import urlparse
 import hashlib
 
 from .util.color import Color
 from .util.logger import Logger
-from .util.process import Process
-from .util.pathgetter import PathGetter
-from .util.tools import Tools
 from .util.database import Database
 from .__meta__ import __version__
 
@@ -101,7 +100,7 @@ class Configuration(object):
     @staticmethod
     def load_from_arguments():
         ''' Sets configuration values based on Argument.args object '''
-        import getopt, argparse
+        import argparse
 
 
         parser = argparse.ArgumentParser()
@@ -147,7 +146,7 @@ class Configuration(object):
             Configuration.exit_gracefully(0)
 
         try:
-            with open(Configuration.out_file, 'a') as f:
+            with open(Configuration.out_file, 'a') as _:
                 # file opened for writing. write to it here
                 pass
         except IOError as x:
