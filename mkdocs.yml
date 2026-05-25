@@ -7,5 +7,7 @@ nav:
 - Home: index.md
 - Português:
   - Overview: pt/index.md
+  - Parâmetros: pt/parameters.md
 - English:
   - Overview: en/index.md
+  - Parameters: en/parameters.md
