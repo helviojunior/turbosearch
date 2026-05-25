@@ -49,3 +49,7 @@ tmtagsHistory
 .bundle
 *.egg-info
 build
+
+# Claude #
+######################
+.claude
